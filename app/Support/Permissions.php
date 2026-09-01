@@ -53,7 +53,7 @@ final class Permissions
         'operations' => [
             'crew', 'crew-documents', 'crew-assignments', 'crew-payouts',
             'vendors', 'vendor-categories', 'purchase-orders',
-            'management-agreements', 'maintenance-schedules', 'maintenance-logs',
+            'management-agreements', 'maintenance', 'maintenance-schedules', 'maintenance-logs',
             'certificates', 'owner-statements',
         ],
 

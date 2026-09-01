@@ -88,7 +88,7 @@ final class Roles
                     'incidents', 'damage-reports', 'booking-guests', 'guest-manifests',
                     'crew', 'crew-documents', 'crew-assignments',
                     'vendors', 'vendor-categories', 'purchase-orders',
-                    'maintenance-schedules', 'maintenance-logs', 'certificates',
+                    'maintenance', 'maintenance-schedules', 'maintenance-logs', 'certificates',
                     'handovers', 'management-agreements',
                 ]),
                 Permissions::crud(['tasks', 'notes', 'activities', 'documents', 'saved-views', 'communications']),

@@ -67,6 +67,10 @@ class AppServiceProvider extends ServiceProvider
             'survey' => Models\Survey::class,
             'transaction' => Models\Transaction::class,
             'handover' => Models\Handover::class,
+            'management_agreement' => Models\ManagementAgreement::class,
+            'certificate' => Models\Certificate::class,
+            'maintenance_job' => Models\MaintenanceJob::class,
+            'owner_statement' => Models\OwnerStatement::class,
         ]);
 
         /*

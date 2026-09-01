@@ -53,6 +53,10 @@ class AuthServiceProvider extends ServiceProvider
         Models\Survey::class => Policies\SurveyPolicy::class,
         Models\Transaction::class => Policies\TransactionPolicy::class,
         Models\Handover::class => Policies\HandoverPolicy::class,
+        Models\ManagementAgreement::class => Policies\ManagementAgreementPolicy::class,
+        Models\Certificate::class => Policies\CertificatePolicy::class,
+        Models\MaintenanceJob::class => Policies\MaintenanceJobPolicy::class,
+        Models\OwnerStatement::class => Policies\OwnerStatementPolicy::class,
     ];
 
     public function boot(): void

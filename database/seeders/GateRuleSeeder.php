@@ -21,7 +21,6 @@ class GateRuleSeeder extends Seeder
 {
     /** Rules whose conditions depend on tables that arrive in later phases. */
     private const PENDING_PHASES = [
-        'charter.dispatch.certificates',
         'soft.weather.unchecked',
         'soft.option_hold.expiring',
     ];

@@ -147,11 +147,12 @@ final class Navigation
                 ],
             ],
             [
-                'key' => 'management', 'label' => 'Management', 'icon' => 'management', 'route' => 'management.yachts', 'permission' => 'management-agreements.view',
+                'key' => 'management', 'label' => 'Management', 'icon' => 'management', 'route' => 'management.agreements.index', 'permission' => 'management-agreements.view',
                 'children' => [
-                    ['key' => 'management-yachts', 'label' => 'Managed Yachts', 'route' => 'management.yachts', 'permission' => 'management-agreements.view'],
                     ['key' => 'management-agreements', 'label' => 'Agreements', 'route' => 'management.agreements.index', 'permission' => 'management-agreements.view'],
-                    ['key' => 'management-maintenance', 'label' => 'Technical', 'route' => 'management.maintenance-schedules.index', 'permission' => 'maintenance-schedules.view'],
+                    ['key' => 'management-maintenance', 'label' => 'Maintenance', 'route' => 'management.maintenance.index', 'permission' => 'maintenance.view'],
+                    ['key' => 'management-certificates', 'label' => 'Certificates', 'route' => 'management.certificates.index', 'permission' => 'certificates.view'],
+                    ['key' => 'management-compliance', 'label' => 'Certificate Expiry', 'route' => 'management.certificates.expiry', 'permission' => 'certificates.view'],
                     ['key' => 'management-po', 'label' => 'Purchase Orders', 'route' => 'management.purchase-orders.index', 'permission' => 'purchase-orders.view'],
                     ['key' => 'management-statements', 'label' => 'Owner Financials', 'route' => 'management.owner-statements.index', 'permission' => 'owner-statements.view'],
                 ],

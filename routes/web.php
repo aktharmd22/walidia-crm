@@ -65,6 +65,7 @@ require __DIR__.'/modules/fleet.php';
 require __DIR__.'/modules/charter.php';
 require __DIR__.'/modules/brokerage.php';
 require __DIR__.'/modules/operations.php';
+require __DIR__.'/modules/management.php';
 require __DIR__.'/modules/finance.php';
 require __DIR__.'/modules/documents.php';
 require __DIR__.'/modules/engine.php';
