@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Database\Factories\GateOverrideFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +13,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * The Override Register. Append-only: no route in this application
  * updates or deletes a row here.
+ *
+ * @property CarbonImmutable|null $created_at
+ * @property string $subject_type
+ * @property string $reason
+ * @property list<array<string, mixed>>|null $failed_conditions
+ * @property-read GateRule|null $rule
+ * @property-read User|null $user
  */
 class GateOverride extends Model
 {
@@ -23,12 +31,12 @@ class GateOverride extends Model
     public $timestamps = false;
 
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return ['failed_conditions' => 'array', 'created_at' => 'datetime'];
-    }
+    protected $casts = [
+        'failed_conditions' => 'array',
+        'created_at' => 'datetime',
+    ];
 
     /** @return BelongsTo<GateRule, $this> */
     public function rule(): BelongsTo

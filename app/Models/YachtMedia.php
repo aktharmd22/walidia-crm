@@ -70,11 +70,12 @@ class YachtMedia extends Model
 
     protected $guarded = ['id'];
 
-    /** @return array<string, string> */
-    protected function casts(): array
-    {
-        return ['is_public' => 'boolean'];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'is_public' => 'boolean',
+    ];
 
     /** @return BelongsTo<Yacht, $this> */
     public function yacht(): BelongsTo

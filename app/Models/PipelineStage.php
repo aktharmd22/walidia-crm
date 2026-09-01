@@ -59,10 +59,13 @@ class PipelineStage extends Model implements Auditable
 
     protected $guarded = ['id'];
 
-    protected function casts(): array
-    {
-        return ['is_won' => 'boolean', 'is_lost' => 'boolean'];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'is_won' => 'boolean',
+        'is_lost' => 'boolean',
+    ];
 
     /** @return BelongsTo<Pipeline, $this> */
     public function pipeline(): BelongsTo

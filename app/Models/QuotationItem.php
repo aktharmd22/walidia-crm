@@ -16,20 +16,22 @@ use OwenIt\Auditing\Contracts\Auditable;
  */
 class QuotationItem extends Model implements Auditable
 {
-    /** @use HasFactory<QuotationItemFactory> */
     use AuditableTrait;
 
+    /** @use HasFactory<QuotationItemFactory> */
     use HasFactory;
 
     protected $guarded = ['id'];
 
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return ['quantity' => 'decimal:2', 'unit_price' => 'decimal:2', 'tax_amount' => 'decimal:2', 'line_total' => 'decimal:2'];
-    }
+    protected $casts = [
+        'quantity' => 'decimal:2',
+        'unit_price' => 'decimal:2',
+        'tax_amount' => 'decimal:2',
+        'line_total' => 'decimal:2',
+    ];
 
     /** @return BelongsTo<Quotation, $this> */
     public function quotation(): BelongsTo

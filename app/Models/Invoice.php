@@ -6,8 +6,10 @@ namespace App\Models;
 
 use App\Models\Concerns\HasReference;
 use App\Models\Concerns\TracksBlame;
+use Carbon\CarbonImmutable;
 use Database\Factories\InvoiceFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,6 +25,20 @@ use OwenIt\Auditing\Contracts\Auditable;
  * Once issued it is never edited or deleted: it is voided and credited, because
  * a tax invoice number is a promise to the authority as much as to the client
  * (D-013). The number itself is gapless and never reissued.
+ *
+ * @property CarbonImmutable|null $issue_date
+ * @property CarbonImmutable|null $due_date
+ * @property CarbonImmutable|null $issued_at
+ * @property string $status
+ * @property string $type
+ * @property string $currency
+ * @property string $tax_treatment
+ * @property string|null $reference
+ * @property numeric $total
+ * @property numeric $subtotal
+ * @property numeric $tax_amount
+ * @property numeric $amount_paid
+ * @property-read Collection<int, InvoiceItem> $items
  */
 class Invoice extends Model implements Auditable
 {
@@ -41,29 +57,35 @@ class Invoice extends Model implements Auditable
     protected array $auditExclude = ['buyer_trn'];
 
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'issue_date' => 'date',
-            'due_date' => 'date',
-            'exchange_rate' => 'decimal:6',
-            'subtotal' => 'decimal:2',
-            'discount' => 'decimal:2',
-            'tax_amount' => 'decimal:2',
-            'total' => 'decimal:2',
-            'amount_paid' => 'decimal:2',
-            'amount_due' => 'decimal:2',
-            'issued_at' => 'datetime',
-            'voided_at' => 'datetime',
-            'buyer_trn' => 'encrypted',
-        ];
-    }
+    protected $casts = [
+        'issue_date' => 'date',
+        'due_date' => 'date',
+        'exchange_rate' => 'decimal:6',
+        'subtotal' => 'decimal:2',
+        'discount' => 'decimal:2',
+        'tax_amount' => 'decimal:2',
+        'total' => 'decimal:2',
+        'amount_paid' => 'decimal:2',
+        'amount_due' => 'decimal:2',
+        'issued_at' => 'datetime',
+        'voided_at' => 'datetime',
+        'buyer_trn' => 'encrypted',
+    ];
 
     public function sequenceKey(): string
     {
         return $this->type === 'credit_note' ? 'credit_note' : 'invoice';
+    }
+
+    /**
+     * A draft never consumes a number: the sequence has to stay gapless, and a
+     * draft that is abandoned would otherwise leave a hole in it.
+     */
+    public function assignsReferenceOnCreate(): bool
+    {
+        return false;
     }
 
     /* ── relations ──────────────────────────────────────────────────────── */

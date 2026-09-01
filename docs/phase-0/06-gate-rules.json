@@ -15,7 +15,11 @@
       "severity": "hard",
       "sort_order": 10,
       "conditions": [
-        { "check": "proposal.accepted", "params": {}, "message_en": "The client has not accepted a proposal yet." }
+        {
+          "check": "proposal.accepted",
+          "params": {},
+          "message_en": "The client has not accepted a proposal yet."
+        }
       ],
       "block_message_en": "Availability cannot be locked until a proposal is accepted.",
       "resolution_route": "charter.proposals.show",
@@ -30,11 +34,17 @@
       "name_en": "Generate charter contract",
       "subject_type": "booking",
       "trigger_type": "action",
-      "action_key": "bookings.contract.generate",
+      "action_key": "bookings.generate-contract",
       "severity": "hard",
       "sort_order": 20,
       "conditions": [
-        { "check": "kyc.verified", "params": { "expiry_months": 24 }, "message_en": "Client KYC documents are not uploaded and verified." }
+        {
+          "check": "kyc.verified",
+          "params": {
+            "expiry_months": 24
+          },
+          "message_en": "Client KYC documents are not uploaded and verified."
+        }
       ],
       "block_message_en": "A contract cannot be generated until KYC is verified.",
       "resolution_route": "clients.kyc",
@@ -54,7 +64,13 @@
       "severity": "hard",
       "sort_order": 30,
       "conditions": [
-        { "check": "payment.deposit_cleared", "params": { "schedule_label": "deposit" }, "message_en": "Finance has not confirmed the deposit as received and cleared." }
+        {
+          "check": "payment.deposit_cleared",
+          "params": {
+            "schedule_label": "deposit"
+          },
+          "message_en": "Finance has not confirmed the deposit as received and cleared."
+        }
       ],
       "block_message_en": "Operational Release requires a cleared deposit confirmed by Finance.",
       "resolution_route": "finance.payment-schedules.show",
@@ -69,12 +85,22 @@
       "name_en": "Dispatch crew or vendors",
       "subject_type": "crew_assignment",
       "trigger_type": "action",
-      "action_key": "crew.dispatch",
+      "action_key": "crew-assignments.dispatch",
       "severity": "hard",
       "sort_order": 40,
       "conditions": [
-        { "check": "booking.operational_release", "params": {}, "message_en": "Operational Release has not been granted for this booking." },
-        { "check": "crew.documents_valid", "params": { "within_days": 0 }, "message_en": "An assigned crew member has an expired document." }
+        {
+          "check": "booking.operational_release",
+          "params": {},
+          "message_en": "Operational Release has not been granted for this booking."
+        },
+        {
+          "check": "crew.documents_valid",
+          "params": {
+            "within_days": 0
+          },
+          "message_en": "An assigned crew member has an expired document."
+        }
       ],
       "block_message_en": "Crew and vendors cannot be dispatched before Operational Release.",
       "resolution_route": "charter.bookings.show",
@@ -93,8 +119,20 @@
       "severity": "hard",
       "sort_order": 50,
       "conditions": [
-        { "check": "guests.identity_verified", "params": { "allow_lead_only": false }, "message_en": "Guest ID verification is incomplete." },
-        { "check": "checklist.item_complete", "params": { "item_key": "safety_briefing" }, "message_en": "The safety briefing has not been logged." }
+        {
+          "check": "guests.identity_verified",
+          "params": {
+            "allow_lead_only": false
+          },
+          "message_en": "Guest ID verification is incomplete."
+        },
+        {
+          "check": "checklist.item_complete",
+          "params": {
+            "item_key": "safety_briefing"
+          },
+          "message_en": "The safety briefing has not been logged."
+        }
       ],
       "block_message_en": "Guests cannot board until IDs are verified and the safety briefing is logged.",
       "resolution_route": "charter.day",
@@ -109,11 +147,15 @@
       "name_en": "Release security deposit",
       "subject_type": "security_deposit",
       "trigger_type": "action",
-      "action_key": "deposits.release",
+      "action_key": "security-deposits.release",
       "severity": "hard",
       "sort_order": 60,
       "conditions": [
-        { "check": "damage.inspection_closed", "params": {}, "message_en": "The damage inspection is still open." }
+        {
+          "check": "damage.inspection_closed",
+          "params": {},
+          "message_en": "The damage inspection is still open."
+        }
       ],
       "block_message_en": "The security deposit cannot be released until the damage inspection is closed.",
       "resolution_route": "charter.damage-reports.show",
@@ -129,14 +171,23 @@
       "subject_type": "booking",
       "trigger_type": "transition",
       "trigger_field": "status",
-      "trigger_from": ["confirmed"],
+      "trigger_from": [
+        "confirmed"
+      ],
       "trigger_to": "in_progress",
       "severity": "hard",
       "sort_order": 70,
       "conditions": [
         {
           "check": "yacht.certificates_valid",
-          "params": { "types": ["registration", "insurance", "safety"], "date_field": "starts_at" },
+          "params": {
+            "types": [
+              "registration",
+              "insurance",
+              "safety"
+            ],
+            "date_field": "starts_at"
+          },
           "message_en": "A required vessel certificate is not valid on the charter date."
         }
       ],
@@ -154,13 +205,23 @@
       "subject_type": "viewing",
       "trigger_type": "transition",
       "trigger_field": "status",
-      "trigger_from": ["requested"],
+      "trigger_from": [
+        "requested"
+      ],
       "trigger_to": "scheduled",
       "severity": "hard",
       "sort_order": 80,
       "conditions": [
-        { "check": "nda.signed", "params": {}, "message_en": "No signed NDA is on file for this buyer and listing." },
-        { "check": "buyer.identity_verified", "params": {}, "message_en": "Buyer ID verification is not complete." }
+        {
+          "check": "nda.signed",
+          "params": {},
+          "message_en": "No signed NDA is on file for this buyer and listing."
+        },
+        {
+          "check": "buyer.identity_verified",
+          "params": {},
+          "message_en": "Buyer ID verification is not complete."
+        }
       ],
       "block_message_en": "A viewing cannot be scheduled until the NDA is signed and the buyer's ID is verified.",
       "resolution_route": "brokerage.ndas.show",
@@ -176,12 +237,18 @@
       "subject_type": "offer",
       "trigger_type": "transition",
       "trigger_field": "status",
-      "trigger_from": ["draft"],
+      "trigger_from": [
+        "draft"
+      ],
       "trigger_to": "submitted",
       "severity": "hard",
       "sort_order": 90,
       "conditions": [
-        { "check": "offer.proof_of_funds", "params": {}, "message_en": "This listing requires proof of funds, and none is recorded for the buyer." }
+        {
+          "check": "offer.proof_of_funds",
+          "params": {},
+          "message_en": "This listing requires proof of funds, and none is recorded for the buyer."
+        }
       ],
       "block_message_en": "This listing requires proof of funds before an offer can be submitted.",
       "resolution_route": "clients.documents",
@@ -196,12 +263,23 @@
       "name_en": "Initiate ownership transfer",
       "subject_type": "transaction",
       "trigger_type": "action",
-      "action_key": "transactions.transfer",
+      "action_key": "transactions.transfer-ownership",
       "severity": "hard",
       "sort_order": 100,
       "conditions": [
-        { "check": "transaction.funds_cleared", "params": {}, "message_en": "The final payment has not cleared and been reconciled." },
-        { "check": "aml.cleared", "params": { "threshold": 1000000, "currency": "AED" }, "message_en": "AML screening is required above the threshold and is not clear." }
+        {
+          "check": "transaction.funds_cleared",
+          "params": {},
+          "message_en": "The final payment has not cleared and been reconciled."
+        },
+        {
+          "check": "aml.cleared",
+          "params": {
+            "threshold": 1000000,
+            "currency": "AED"
+          },
+          "message_en": "AML screening is required above the threshold and is not clear."
+        }
       ],
       "block_message_en": "Ownership transfer requires cleared, reconciled final payment.",
       "resolution_route": "finance.payments.index",
@@ -217,13 +295,23 @@
       "subject_type": "deal",
       "trigger_type": "transition",
       "trigger_field": "stage",
-      "trigger_from": ["*"],
+      "trigger_from": [
+        "*"
+      ],
       "trigger_to": "closed_won",
       "severity": "hard",
       "sort_order": 110,
       "conditions": [
-        { "check": "payouts.issued", "params": {}, "message_en": "Not all payouts have been issued." },
-        { "check": "receipts.generated", "params": {}, "message_en": "Not every cleared payment has a receipt." }
+        {
+          "check": "payouts.issued",
+          "params": {},
+          "message_en": "Not all payouts have been issued."
+        },
+        {
+          "check": "receipts.generated",
+          "params": {},
+          "message_en": "Not every cleared payment has a receipt."
+        }
       ],
       "block_message_en": "A deal cannot be closed until all payouts are issued and all receipts are generated.",
       "resolution_route": "finance.closure",
@@ -233,24 +321,33 @@
       "requires_reason": true,
       "is_active": true
     },
-
     {
       "key": "soft.itinerary.missing",
       "name_en": "Itinerary missing",
       "subject_type": "booking",
       "trigger_type": "transition",
       "trigger_field": "status",
-      "trigger_from": ["*"],
+      "trigger_from": [
+        "*"
+      ],
       "trigger_to": "confirmed",
       "severity": "soft",
       "sort_order": 200,
       "conditions": [
-        { "check": "itinerary.present", "params": {}, "message_en": "No itinerary has been added to this booking." }
+        {
+          "check": "itinerary.present",
+          "params": {},
+          "message_en": "No itinerary has been added to this booking."
+        }
       ],
       "block_message_en": "Confirmed without an itinerary.",
       "resolution_route": "charter.bookings.show",
       "resolution_label": "Add itinerary",
-      "creates_task": { "title": "Add itinerary", "role": "operations", "due_offset_hours": 24 },
+      "creates_task": {
+        "title": "Add itinerary",
+        "role": "operations",
+        "due_offset_hours": 24
+      },
       "is_active": true
     },
     {
@@ -262,12 +359,22 @@
       "severity": "soft",
       "sort_order": 210,
       "conditions": [
-        { "check": "weather.checked", "params": { "within_hours": 48 }, "message_en": "No marine forecast has been pulled for the departure marina." }
+        {
+          "check": "weather.checked",
+          "params": {
+            "within_hours": 48
+          },
+          "message_en": "No marine forecast has been pulled for the departure marina."
+        }
       ],
       "block_message_en": "Departure is within 48 hours and no weather check is on file.",
       "resolution_route": "charter.bookings.show",
       "resolution_label": "Run weather check",
-      "creates_task": { "title": "Run marine weather check", "role": "operations", "due_offset_hours": 6 },
+      "creates_task": {
+        "title": "Run marine weather check",
+        "role": "operations",
+        "due_offset_hours": 6
+      },
       "is_active": true
     },
     {
@@ -279,12 +386,20 @@
       "severity": "soft",
       "sort_order": 220,
       "conditions": [
-        { "check": "manifest.complete", "params": {}, "message_en": "Fewer guests are listed on the manifest than were booked." }
+        {
+          "check": "manifest.complete",
+          "params": {},
+          "message_en": "Fewer guests are listed on the manifest than were booked."
+        }
       ],
       "block_message_en": "The guest manifest is incomplete.",
       "resolution_route": "charter.bookings.manifest",
       "resolution_label": "Open manifest",
-      "creates_task": { "title": "Complete guest manifest", "role": "operations", "due_offset_hours": 24 },
+      "creates_task": {
+        "title": "Complete guest manifest",
+        "role": "operations",
+        "due_offset_hours": 24
+      },
       "is_active": true
     },
     {
@@ -296,12 +411,22 @@
       "severity": "soft",
       "sort_order": 230,
       "conditions": [
-        { "check": "crew.documents_valid", "params": { "within_days": 30 }, "message_en": "A crew document expires within 30 days." }
+        {
+          "check": "crew.documents_valid",
+          "params": {
+            "within_days": 30
+          },
+          "message_en": "A crew document expires within 30 days."
+        }
       ],
       "block_message_en": "Crew documentation is expiring.",
       "resolution_route": "crew.expiry",
       "resolution_label": "Open crew expiry",
-      "creates_task": { "title": "Renew crew document", "role": "operations", "due_offset_hours": 168 },
+      "creates_task": {
+        "title": "Renew crew document",
+        "role": "operations",
+        "due_offset_hours": 168
+      },
       "is_active": true
     },
     {
@@ -313,12 +438,22 @@
       "severity": "soft",
       "sort_order": 240,
       "conditions": [
-        { "check": "listing.agreement_active", "params": { "expiring_days": 30 }, "message_en": "The listing agreement expires within 30 days." }
+        {
+          "check": "listing.agreement_active",
+          "params": {
+            "expiring_days": 30
+          },
+          "message_en": "The listing agreement expires within 30 days."
+        }
       ],
       "block_message_en": "This listing agreement is expiring.",
       "resolution_route": "brokerage.listing-agreements.show",
       "resolution_label": "Open agreement",
-      "creates_task": { "title": "Renew listing agreement", "role": "sales", "due_offset_hours": 168 },
+      "creates_task": {
+        "title": "Renew listing agreement",
+        "role": "sales",
+        "due_offset_hours": 168
+      },
       "is_active": true
     },
     {
@@ -330,12 +465,45 @@
       "severity": "soft",
       "sort_order": 250,
       "conditions": [
-        { "check": "option_hold.valid", "params": { "warn_hours": 24 }, "message_en": "This option hold expires within 24 hours." }
+        {
+          "check": "option_hold.valid",
+          "params": {
+            "warn_hours": 24
+          },
+          "message_en": "This option hold expires within 24 hours."
+        }
       ],
       "block_message_en": "An option hold is about to lapse.",
       "resolution_route": "charter.bookings.show",
       "resolution_label": "Open booking",
-      "creates_task": { "title": "Confirm or release option hold", "role": "sales", "due_offset_hours": 4 },
+      "creates_task": {
+        "title": "Confirm or release option hold",
+        "role": "sales",
+        "due_offset_hours": 4
+      },
+      "is_active": true
+    },
+    {
+      "key": "charter.cost_sheet.close",
+      "name_en": "Close the charter cost sheet",
+      "subject_type": "booking",
+      "trigger_type": "action",
+      "action_key": "cost-sheets.close",
+      "severity": "hard",
+      "sort_order": 115,
+      "conditions": [
+        {
+          "check": "receipts.generated",
+          "params": {},
+          "message_en": "Not every cleared payment has a receipt."
+        }
+      ],
+      "block_message_en": "The cost sheet cannot be closed until every cleared payment has a receipt.",
+      "resolution_route": "finance.payments.index",
+      "resolution_label": "Open payments",
+      "is_overridable": true,
+      "override_permission": "gates.override",
+      "requires_reason": true,
       "is_active": true
     }
   ]

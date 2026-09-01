@@ -9,9 +9,11 @@ use App\Models\Concerns\HasReference;
 use App\Models\Concerns\HasTimeline;
 use App\Models\Concerns\TracksBlame;
 use App\Models\Scopes\ScopedToOwner;
+use Carbon\CarbonImmutable;
 use Database\Factories\CharterProposalFactory;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -27,6 +29,20 @@ use OwenIt\Auditing\Contracts\Auditable;
  * the client actually saw and accepted is still on file afterwards.
  */
 #[ScopedBy([ScopedToOwner::class])]
+
+/**
+ * @property CarbonImmutable|null $valid_until
+ * @property CarbonImmutable|null $sent_at
+ * @property CarbonImmutable|null $responded_at
+ * @property string $status
+ * @property string $currency
+ * @property string|null $reference
+ * @property string|null $terms
+ * @property int $version
+ * @property numeric $total
+ * @property-read CharterEnquiry|null $enquiry
+ * @property-read Collection<int, ProposalItem> $items
+ */
 class CharterProposal extends Model implements Auditable
 {
     use AuditableTrait;
@@ -45,21 +61,18 @@ class CharterProposal extends Model implements Auditable
     protected $guarded = ['id'];
 
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'valid_until' => 'date',
-            'subtotal' => 'decimal:2',
-            'discount' => 'decimal:2',
-            'tax_amount' => 'decimal:2',
-            'total' => 'decimal:2',
-            'sent_at' => 'datetime',
-            'viewed_at' => 'datetime',
-            'responded_at' => 'datetime',
-        ];
-    }
+    protected $casts = [
+        'valid_until' => 'date',
+        'subtotal' => 'decimal:2',
+        'discount' => 'decimal:2',
+        'tax_amount' => 'decimal:2',
+        'total' => 'decimal:2',
+        'sent_at' => 'datetime',
+        'viewed_at' => 'datetime',
+        'responded_at' => 'datetime',
+    ];
 
     public function sequenceKey(): string
     {

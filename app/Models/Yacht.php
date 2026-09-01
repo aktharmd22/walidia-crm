@@ -177,19 +177,16 @@ class Yacht extends Model implements Auditable
     protected $guarded = ['id'];
 
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'is_charter_fleet' => 'boolean',
-            'is_for_sale' => 'boolean',
-            'is_managed' => 'boolean',
-            'loa_m' => 'decimal:2',
-            'beam_m' => 'decimal:2',
-            'draft_m' => 'decimal:2',
-        ];
-    }
+    protected $casts = [
+        'is_charter_fleet' => 'boolean',
+        'is_for_sale' => 'boolean',
+        'is_managed' => 'boolean',
+        'loa_m' => 'decimal:2',
+        'beam_m' => 'decimal:2',
+        'draft_m' => 'decimal:2',
+    ];
 
     public function sequenceKey(): string
     {

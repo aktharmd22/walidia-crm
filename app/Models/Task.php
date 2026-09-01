@@ -105,17 +105,14 @@ class Task extends Model implements Auditable
     protected $guarded = ['id'];
 
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'due_at' => 'datetime',
-            'completed_at' => 'datetime',
-            'escalate_at' => 'datetime',
-            'escalated_at' => 'datetime',
-        ];
-    }
+    protected $casts = [
+        'due_at' => 'datetime',
+        'completed_at' => 'datetime',
+        'escalate_at' => 'datetime',
+        'escalated_at' => 'datetime',
+    ];
 
     public function sequenceKey(): string
     {

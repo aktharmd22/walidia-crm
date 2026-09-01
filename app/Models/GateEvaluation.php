@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * Append-only record of every gate evaluation, pass or fail. This is
  * what makes "why was this charter allowed to sail" answerable.
+ *
+ * @property string $result
+ * @property list<array<string, mixed>>|null $failed_conditions
  */
 class GateEvaluation extends Model
 {
@@ -23,12 +26,13 @@ class GateEvaluation extends Model
     public $timestamps = false;
 
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return ['failed_conditions' => 'array', 'context' => 'array', 'evaluated_at' => 'datetime'];
-    }
+    protected $casts = [
+        'failed_conditions' => 'array',
+        'context' => 'array',
+        'evaluated_at' => 'datetime',
+    ];
 
     /** @return BelongsTo<GateRule, $this> */
     public function rule(): BelongsTo

@@ -48,10 +48,12 @@ class RecordAccessLog extends Model
         'action', 'ip_address', 'user_agent', 'occurred_at',
     ];
 
-    protected function casts(): array
-    {
-        return ['occurred_at' => 'datetime'];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'occurred_at' => 'datetime',
+    ];
 
     /** @return BelongsTo<User, $this> */
     public function user(): BelongsTo

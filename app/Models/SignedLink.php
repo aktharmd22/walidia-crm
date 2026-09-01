@@ -65,16 +65,13 @@ class SignedLink extends Model
     protected $guarded = ['id'];
 
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'expires_at' => 'datetime',
-            'last_used_at' => 'datetime',
-            'revoked_at' => 'datetime',
-        ];
-    }
+    protected $casts = [
+        'expires_at' => 'datetime',
+        'last_used_at' => 'datetime',
+        'revoked_at' => 'datetime',
+    ];
 
     /** @return MorphTo<Model, $this> */
     public function subject(): MorphTo

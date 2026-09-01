@@ -132,14 +132,14 @@ class Company extends Model implements Auditable
     /** @var list<string> */
     protected array $auditExclude = ['trn', 'trn_hash'];
 
-    protected function casts(): array
-    {
-        return [
-            'licence_expiry' => 'date',
-            'commission_rate_default' => 'decimal:2',
-            'trn' => 'encrypted',
-        ];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'licence_expiry' => 'date',
+        'commission_rate_default' => 'decimal:2',
+        'trn' => 'encrypted',
+    ];
 
     public function sequenceKey(): string
     {

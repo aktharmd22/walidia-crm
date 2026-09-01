@@ -20,10 +20,11 @@ use OwenIt\Auditing\Contracts\Auditable;
  */
 class Quotation extends Model implements Auditable
 {
-    /** @use HasFactory<QuotationFactory> */
     use AuditableTrait;
 
+    /** @use HasFactory<QuotationFactory> */
     use HasFactory;
+
     use HasReference;
     use SoftDeletes;
     use TracksBlame;
@@ -31,12 +32,16 @@ class Quotation extends Model implements Auditable
     protected $guarded = ['id'];
 
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return ['issued_on' => 'date', 'valid_until' => 'date', 'subtotal' => 'decimal:2', 'discount' => 'decimal:2', 'tax_amount' => 'decimal:2', 'total' => 'decimal:2'];
-    }
+    protected $casts = [
+        'issued_on' => 'date',
+        'valid_until' => 'date',
+        'subtotal' => 'decimal:2',
+        'discount' => 'decimal:2',
+        'tax_amount' => 'decimal:2',
+        'total' => 'decimal:2',
+    ];
 
     public function sequenceKey(): string
     {

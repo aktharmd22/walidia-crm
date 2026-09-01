@@ -57,10 +57,12 @@ class Team extends Model implements Auditable
 
     protected $fillable = ['name', 'business_line', 'lead_user_id', 'is_active'];
 
-    protected function casts(): array
-    {
-        return ['is_active' => 'boolean'];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
 
     /** @return BelongsTo<User, $this> */
     public function lead(): BelongsTo

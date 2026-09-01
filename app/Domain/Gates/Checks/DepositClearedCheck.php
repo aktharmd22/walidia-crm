@@ -69,6 +69,9 @@ class DepositClearedCheck implements GateCheck
         ] : null;
     }
 
+    /**
+     * @param  array<string, mixed>  $params
+     */
     private function depositItem(Booking $booking, array $params): ?PaymentScheduleItem
     {
         $label = (string) ($params['schedule_label'] ?? 'deposit');

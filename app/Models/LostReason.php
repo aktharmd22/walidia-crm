@@ -55,10 +55,12 @@ class LostReason extends Model implements Auditable
 
     protected $guarded = ['id'];
 
-    protected function casts(): array
-    {
-        return ['is_active' => 'boolean'];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
 
     /** @return BelongsTo<Pipeline, $this> */
     public function pipeline(): BelongsTo

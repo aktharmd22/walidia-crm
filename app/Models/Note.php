@@ -66,10 +66,13 @@ class Note extends Model implements Auditable
     /** @var list<string> */
     protected array $auditExclude = ['body'];
 
-    protected function casts(): array
-    {
-        return ['is_internal' => 'boolean', 'is_vip' => 'boolean'];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'is_internal' => 'boolean',
+        'is_vip' => 'boolean',
+    ];
 
     /** @return MorphTo<Model, $this> */
     public function subject(): MorphTo

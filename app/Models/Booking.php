@@ -31,6 +31,34 @@ use OwenIt\Auditing\Contracts\Auditable;
  * sets it.
  */
 #[ScopedBy([ScopedToOwner::class])]
+
+/**
+ * @property CarbonImmutable $starts_at
+ * @property CarbonImmutable $ends_at
+ * @property CarbonImmutable|null $contract_signed_at
+ * @property CarbonImmutable|null $operational_release_at
+ * @property CarbonImmutable|null $boarded_at
+ * @property CarbonImmutable|null $completed_at
+ * @property CarbonImmutable|null $cancelled_at
+ * @property string $status
+ * @property string $currency
+ * @property string|null $reference
+ * @property string|null $itinerary
+ * @property int $guests_adults
+ * @property int $guests_children
+ * @property int|null $client_id
+ * @property int|null $company_id
+ * @property int|null $deal_id
+ * @property int|null $assigned_user_id
+ * @property-read Client|null $client
+ * @property-read Yacht|null $yacht
+ * @property-read Marina|null $departureMarina
+ * @property-read CharterEnquiry|null $enquiry
+ * @property-read CharterProposal|null $proposal
+ * @property-read CostSheet|null $costSheet
+ * @property-read PaymentSchedule|null $paymentSchedule
+ * @property-read CancellationPolicy|null $cancellationPolicy
+ */
 class Booking extends Model implements Auditable
 {
     use AuditableTrait;
@@ -49,22 +77,19 @@ class Booking extends Model implements Auditable
     protected $guarded = ['id'];
 
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'starts_at' => 'datetime',
-            'ends_at' => 'datetime',
-            'contract_signed_at' => 'datetime',
-            'operational_release_at' => 'datetime',
-            'boarded_at' => 'datetime',
-            'completed_at' => 'datetime',
-            'cancelled_at' => 'datetime',
-            'cancellation_fee' => 'decimal:2',
-            'apa_amount' => 'decimal:2',
-        ];
-    }
+    protected $casts = [
+        'starts_at' => 'datetime',
+        'ends_at' => 'datetime',
+        'contract_signed_at' => 'datetime',
+        'operational_release_at' => 'datetime',
+        'boarded_at' => 'datetime',
+        'completed_at' => 'datetime',
+        'cancelled_at' => 'datetime',
+        'cancellation_fee' => 'decimal:2',
+        'apa_amount' => 'decimal:2',
+    ];
 
     public function sequenceKey(): string
     {

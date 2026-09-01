@@ -18,22 +18,23 @@ use OwenIt\Auditing\Contracts\Auditable;
  */
 class Receipt extends Model implements Auditable
 {
-    /** @use HasFactory<ReceiptFactory> */
     use AuditableTrait;
 
+    /** @use HasFactory<ReceiptFactory> */
     use HasFactory;
+
     use HasReference;
     use SoftDeletes;
 
     protected $guarded = ['id'];
 
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return ['issued_at' => 'datetime', 'amount' => 'decimal:2'];
-    }
+    protected $casts = [
+        'issued_at' => 'datetime',
+        'amount' => 'decimal:2',
+    ];
 
     public function sequenceKey(): string
     {

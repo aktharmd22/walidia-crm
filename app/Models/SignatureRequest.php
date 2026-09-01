@@ -82,17 +82,16 @@ class SignatureRequest extends Model implements Auditable
 
     protected $guarded = ['id'];
 
-    /** @return array<string, string> */
-    protected function casts(): array
-    {
-        return [
-            'audit_trail' => 'array',
-            'sent_at' => 'datetime',
-            'viewed_at' => 'datetime',
-            'signed_at' => 'datetime',
-            'declined_at' => 'datetime',
-        ];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'audit_trail' => 'array',
+        'sent_at' => 'datetime',
+        'viewed_at' => 'datetime',
+        'signed_at' => 'datetime',
+        'declined_at' => 'datetime',
+    ];
 
     /** @return BelongsTo<Document, $this> */
     public function document(): BelongsTo

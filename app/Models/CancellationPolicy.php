@@ -13,24 +13,27 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * Cancellation tiers as data: days before departure to fee percentage (Q10).
+ *
+ * @property list<array{days_before: int, fee_pct: float}>|null $rules
  */
 class CancellationPolicy extends Model implements Auditable
 {
-    /** @use HasFactory<CancellationPolicyFactory> */
     use AuditableTrait;
 
+    /** @use HasFactory<CancellationPolicyFactory> */
     use HasFactory;
+
     use SoftDeletes;
 
     protected $guarded = ['id'];
 
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return ['rules' => 'array', 'is_default' => 'boolean'];
-    }
+    protected $casts = [
+        'rules' => 'array',
+        'is_default' => 'boolean',
+    ];
 
     /**
      * The fee percentage that applies this many days before departure.

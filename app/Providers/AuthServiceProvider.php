@@ -29,6 +29,14 @@ class AuthServiceProvider extends ServiceProvider
         Models\Yacht::class => Policies\YachtPolicy::class,
         Models\Marina::class => Policies\MarinaPolicy::class,
         Models\Activity::class => Policies\ActivityPolicy::class,
+        Models\CharterEnquiry::class => Policies\CharterEnquiryPolicy::class,
+        Models\CharterProposal::class => Policies\CharterProposalPolicy::class,
+        Models\Booking::class => Policies\BookingPolicy::class,
+        Models\CostSheet::class => Policies\CostSheetPolicy::class,
+        Models\Invoice::class => Policies\InvoicePolicy::class,
+        Models\Payment::class => Policies\PaymentPolicy::class,
+        Models\GateRule::class => Policies\GateRulePolicy::class,
+        Models\GateOverride::class => Policies\GateOverridePolicy::class,
     ];
 
     public function boot(): void

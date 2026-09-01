@@ -51,11 +51,13 @@ class YachtSaleProfile extends Model implements Auditable
 
     protected $guarded = ['id'];
 
-    /** @return array<string, string> */
-    protected function casts(): array
-    {
-        return ['asking_price' => 'decimal:2', 'is_price_negotiable' => 'boolean'];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'asking_price' => 'decimal:2',
+        'is_price_negotiable' => 'boolean',
+    ];
 
     /** @return BelongsTo<Yacht, $this> */
     public function yacht(): BelongsTo

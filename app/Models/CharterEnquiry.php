@@ -9,6 +9,7 @@ use App\Models\Concerns\HasReference;
 use App\Models\Concerns\HasTimeline;
 use App\Models\Concerns\TracksBlame;
 use App\Models\Scopes\ScopedToOwner;
+use Carbon\CarbonImmutable;
 use Database\Factories\CharterEnquiryFactory;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Builder;
@@ -22,9 +23,33 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * What the client actually asked for: dates, guests, budget, marinas, extras.
+ *
  * Everything downstream — matching, proposals, the booking — reads this.
  */
 #[ScopedBy([ScopedToOwner::class])]
+
+/**
+ * @property CarbonImmutable|null $requested_date
+ * @property string|null $start_time
+ * @property string|null $reference
+ * @property string $status
+ * @property string $currency
+ * @property numeric|null $duration_hours
+ * @property numeric|null $budget_min
+ * @property numeric|null $budget_max
+ * @property int $guests_adults
+ * @property int $guests_children
+ * @property int|null $client_id
+ * @property int|null $company_id
+ * @property int|null $deal_id
+ * @property int|null $pickup_marina_id
+ * @property int|null $dropoff_marina_id
+ * @property int|null $yacht_preference_id
+ * @property int|null $assigned_user_id
+ * @property string|null $itinerary_notes
+ * @property-read Marina|null $pickupMarina
+ * @property-read Client|null $client
+ */
 class CharterEnquiry extends Model implements Auditable
 {
     use AuditableTrait;
@@ -43,19 +68,16 @@ class CharterEnquiry extends Model implements Auditable
     protected $guarded = ['id'];
 
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'requested_date' => 'date',
-            'alternative_dates' => 'array',
-            'requested_extras' => 'array',
-            'duration_hours' => 'decimal:2',
-            'budget_min' => 'decimal:2',
-            'budget_max' => 'decimal:2',
-        ];
-    }
+    protected $casts = [
+        'requested_date' => 'date',
+        'alternative_dates' => 'array',
+        'requested_extras' => 'array',
+        'duration_hours' => 'decimal:2',
+        'budget_min' => 'decimal:2',
+        'budget_max' => 'decimal:2',
+    ];
 
     public function sequenceKey(): string
     {

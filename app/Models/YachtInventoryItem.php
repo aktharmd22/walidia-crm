@@ -61,11 +61,12 @@ class YachtInventoryItem extends Model implements Auditable
 
     protected $guarded = ['id'];
 
-    /** @return array<string, string> */
-    protected function casts(): array
-    {
-        return ['last_checked_at' => 'date'];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'last_checked_at' => 'date',
+    ];
 
     /** @return BelongsTo<Yacht, $this> */
     public function yacht(): BelongsTo

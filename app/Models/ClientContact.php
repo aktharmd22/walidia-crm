@@ -73,10 +73,12 @@ class ClientContact extends Model implements Auditable
 
     protected $guarded = ['id'];
 
-    protected function casts(): array
-    {
-        return ['is_primary' => 'boolean'];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'is_primary' => 'boolean',
+    ];
 
     /** @return BelongsTo<Client, $this> */
     public function client(): BelongsTo

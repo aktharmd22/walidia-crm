@@ -53,6 +53,8 @@ class ReceiptsGeneratedCheck implements GateCheck
             return (int) $subject->getKey();
         }
 
-        return $subject->getAttribute('booking_id') === null ? null : (int) $subject->getAttribute('booking_id');
+        $bookingId = $subject->getAttribute('booking_id');
+
+        return $bookingId === null ? null : (int) $bookingId;
     }
 }

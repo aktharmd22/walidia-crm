@@ -79,16 +79,13 @@ class YachtAvailabilityBlock extends Model implements Auditable
     protected $guarded = ['id'];
 
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'starts_at' => 'datetime',
-            'ends_at' => 'datetime',
-            'expires_at' => 'datetime',
-        ];
-    }
+    protected $casts = [
+        'starts_at' => 'datetime',
+        'ends_at' => 'datetime',
+        'expires_at' => 'datetime',
+    ];
 
     /** @return BelongsTo<Yacht, $this> */
     public function yacht(): BelongsTo

@@ -27,16 +27,15 @@ class SecurityDeposit extends Model implements Auditable
 
     protected $guarded = ['id'];
 
-    /** @return array<string, string> */
-    protected function casts(): array
-    {
-        return [
-            'amount' => 'decimal:2',
-            'released_amount' => 'decimal:2',
-            'collected_at' => 'datetime',
-            'released_at' => 'datetime',
-        ];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'amount' => 'decimal:2',
+        'released_amount' => 'decimal:2',
+        'collected_at' => 'datetime',
+        'released_at' => 'datetime',
+    ];
 
     /** @return BelongsTo<Booking, $this> */
     public function booking(): BelongsTo

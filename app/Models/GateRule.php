@@ -21,6 +21,23 @@ use OwenIt\Auditing\Contracts\Auditable;
  * Editing a rule is audited and versioned, so "who loosened the boarding gate,
  * and when" is answerable — which is the whole reason the rules are data and
  * not conditionals.
+ *
+ * @property string $key
+ * @property string $subject_type
+ * @property string $trigger_type
+ * @property string|null $trigger_field
+ * @property string|null $trigger_to
+ * @property string|null $action_key
+ * @property string $severity
+ * @property string $name_en
+ * @property string $block_message_en
+ * @property string|null $resolution_label
+ * @property list<string>|null $trigger_from
+ * @property list<array{check: string, params?: array<string, mixed>, message_en?: string}> $conditions
+ * @property array{title?: string, role?: string, due_offset_hours?: int}|null $creates_task
+ * @property bool $is_overridable
+ * @property bool $is_active
+ * @property int $version
  */
 class GateRule extends Model implements Auditable
 {
@@ -34,18 +51,17 @@ class GateRule extends Model implements Auditable
 
     protected $guarded = ['id'];
 
-    /** @return array<string, string> */
-    protected function casts(): array
-    {
-        return [
-            'trigger_from' => 'array',
-            'conditions' => 'array',
-            'creates_task' => 'array',
-            'is_overridable' => 'boolean',
-            'requires_reason' => 'boolean',
-            'is_active' => 'boolean',
-        ];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'trigger_from' => 'array',
+        'conditions' => 'array',
+        'creates_task' => 'array',
+        'is_overridable' => 'boolean',
+        'requires_reason' => 'boolean',
+        'is_active' => 'boolean',
+    ];
 
     protected static function booted(): void
     {

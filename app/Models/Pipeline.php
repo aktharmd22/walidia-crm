@@ -49,10 +49,12 @@ class Pipeline extends Model implements Auditable
 
     protected $guarded = ['id'];
 
-    protected function casts(): array
-    {
-        return ['is_active' => 'boolean'];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
 
     /** @return HasMany<PipelineStage, $this> */
     public function stages(): HasMany

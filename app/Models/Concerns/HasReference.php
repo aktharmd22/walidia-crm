@@ -15,11 +15,21 @@ trait HasReference
     public static function bootHasReference(): void
     {
         static::creating(function ($model): void {
-            if (blank($model->reference)) {
+            if ($model->assignsReferenceOnCreate() && blank($model->reference)) {
                 $model->reference = app(SequenceService::class)->next($model->sequenceKey());
             }
         });
     }
 
     abstract public function sequenceKey(): string;
+
+    /**
+     * Most records take their reference the moment they exist. Documents whose
+     * number is a legal promise — a tax invoice — take theirs at the moment
+     * they are issued, so drafts never consume a number (D-013).
+     */
+    public function assignsReferenceOnCreate(): bool
+    {
+        return true;
+    }
 }

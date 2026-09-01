@@ -14,24 +14,32 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * A scored yacht suggestion. The reasons are stored so a broker can defend the shortlist to a client.
+ *
+ * @property int $score
+ * @property list<array{factor: string, detail: string, weight: int}>|null $reasons
+ * @property bool $is_shortlisted
+ * @property-read Yacht|null $yacht
  */
 class CharterMatch extends Model implements Auditable
 {
-    /** @use HasFactory<CharterMatchFactory> */
     use AuditableTrait;
 
+    /** @use HasFactory<CharterMatchFactory> */
     use HasFactory;
+
     use SoftDeletes;
 
     protected $guarded = ['id'];
 
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return ['reasons' => 'array', 'is_shortlisted' => 'boolean', 'is_sent' => 'boolean', 'sent_at' => 'datetime'];
-    }
+    protected $casts = [
+        'reasons' => 'array',
+        'is_shortlisted' => 'boolean',
+        'is_sent' => 'boolean',
+        'sent_at' => 'datetime',
+    ];
 
     /** @return BelongsTo<CharterEnquiry, $this> */
     public function enquiry(): BelongsTo

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Database\Factories\PaymentScheduleItemFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +16,12 @@ use OwenIt\Auditing\Contracts\Auditable;
 /**
  * One instalment: deposit, balance, APA. The deposit row is what the
  * Operational Release gate reads.
+ *
+ * @property CarbonImmutable|null $due_at
+ * @property string $label
+ * @property string $status
+ * @property numeric $amount
+ * @property-read PaymentSchedule|null $schedule
  */
 class PaymentScheduleItem extends Model implements Auditable
 {
@@ -25,17 +32,16 @@ class PaymentScheduleItem extends Model implements Auditable
 
     protected $guarded = ['id'];
 
-    /** @return array<string, string> */
-    protected function casts(): array
-    {
-        return [
-            'percentage' => 'decimal:2',
-            'amount' => 'decimal:2',
-            'due_at' => 'datetime',
-            'paid_at' => 'datetime',
-            'reminder_sent_at' => 'datetime',
-        ];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'percentage' => 'decimal:2',
+        'amount' => 'decimal:2',
+        'due_at' => 'datetime',
+        'paid_at' => 'datetime',
+        'reminder_sent_at' => 'datetime',
+    ];
 
     /** @return BelongsTo<PaymentSchedule, $this> */
     public function schedule(): BelongsTo

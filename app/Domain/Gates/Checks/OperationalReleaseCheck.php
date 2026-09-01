@@ -21,9 +21,9 @@ class OperationalReleaseCheck implements GateCheck
 
     public function passes(Model $subject, array $params): bool
     {
-        $booking = $subject instanceof Booking ? $subject : ($subject->booking ?? null);
+        $booking = $this->bookingFor($subject);
 
-        return $booking instanceof Booking && $booking->operational_release_at !== null;
+        return $booking !== null && $booking->operational_release_at !== null;
     }
 
     public function failureMessage(Model $subject, array $params): string
@@ -33,11 +33,22 @@ class OperationalReleaseCheck implements GateCheck
 
     public function resolution(Model $subject, array $params): ?array
     {
-        $booking = $subject instanceof Booking ? $subject : ($subject->booking ?? null);
+        $booking = $this->bookingFor($subject);
 
-        return $booking instanceof Booking ? [
+        return $booking !== null ? [
             'label' => 'Open booking',
             'url' => route('charter.bookings.show', $booking->getKey()),
         ] : null;
+    }
+
+    private function bookingFor(Model $subject): ?Booking
+    {
+        if ($subject instanceof Booking) {
+            return $subject;
+        }
+
+        $booking = $subject->getAttribute('booking');
+
+        return $booking instanceof Booking ? $booking : null;
     }
 }

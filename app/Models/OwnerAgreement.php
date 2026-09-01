@@ -93,18 +93,17 @@ class OwnerAgreement extends Model implements Auditable
 
     protected $guarded = ['id'];
 
-    /** @return array<string, string> */
-    protected function casts(): array
-    {
-        return [
-            'owner_share_pct' => 'decimal:2',
-            'company_share_pct' => 'decimal:2',
-            'starts_on' => 'date',
-            'ends_on' => 'date',
-            'auto_renew' => 'boolean',
-            'deductible_categories' => 'array',
-        ];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'owner_share_pct' => 'decimal:2',
+        'company_share_pct' => 'decimal:2',
+        'starts_on' => 'date',
+        'ends_on' => 'date',
+        'auto_renew' => 'boolean',
+        'deductible_categories' => 'array',
+    ];
 
     public function sequenceKey(): string
     {

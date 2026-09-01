@@ -94,16 +94,15 @@ class Marina extends Model implements Auditable
 
     protected $guarded = ['id'];
 
-    /** @return array<string, string> */
-    protected function casts(): array
-    {
-        return [
-            'requires_manifest' => 'boolean',
-            'is_active' => 'boolean',
-            'latitude' => 'decimal:7',
-            'longitude' => 'decimal:7',
-        ];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'requires_manifest' => 'boolean',
+        'is_active' => 'boolean',
+        'latitude' => 'decimal:7',
+        'longitude' => 'decimal:7',
+    ];
 
     /** @return HasMany<Berth, $this> */
     public function berths(): HasMany

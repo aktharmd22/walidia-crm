@@ -22,6 +22,15 @@ use OwenIt\Auditing\Contracts\Auditable;
  * Quote → invoice → actuals → P&L is a single artifact, exactly as the client
  * already works. Splitting it into three documents loses the variance analysis
  * that makes it worth keeping.
+ *
+ * @property string $status
+ * @property string $currency
+ * @property string|null $reference
+ * @property numeric $total_offer
+ * @property numeric $total_cost
+ * @property numeric $total_profit
+ * @property-read Booking|null $booking
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, CostSheetLine> $lines
  */
 class CostSheet extends Model implements Auditable
 {
@@ -68,19 +77,16 @@ class CostSheet extends Model implements Auditable
     ];
 
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'exchange_rate' => 'decimal:6',
-            'total_offer' => 'decimal:2',
-            'total_cost' => 'decimal:2',
-            'total_profit' => 'decimal:2',
-            'margin_pct' => 'decimal:2',
-            'closed_at' => 'datetime',
-        ];
-    }
+    protected $casts = [
+        'exchange_rate' => 'decimal:6',
+        'total_offer' => 'decimal:2',
+        'total_cost' => 'decimal:2',
+        'total_profit' => 'decimal:2',
+        'margin_pct' => 'decimal:2',
+        'closed_at' => 'datetime',
+    ];
 
     public function sequenceKey(): string
     {
@@ -129,6 +135,8 @@ class CostSheet extends Model implements Auditable
     /**
      * Which phase a given user may write. Sales prices the quote; Finance owns
      * what was invoiced and what actually happened.
+     *
+     * @return list<string>
      */
     public function writablePhasesFor(User $user): array
     {

@@ -46,8 +46,15 @@ class AcceptProposal
             ]);
         }
 
+        $proposal->forceFill(['status' => 'accepted', 'responded_at' => now()])->save();
+
+        // Locking the yacht is itself a guarded transition: it may only happen
+        // against an accepted proposal, which is what we have just recorded.
+        $overrideReason === null
+            ? $this->gates->assertAction($enquiry, 'charter.availability.lock', $user)
+            : $this->gates->override($enquiry, 'charter.availability.lock', $user, $overrideReason);
+
         return DB::transaction(function () use ($proposal, $enquiry, $yachtId, $user): Booking {
-            $proposal->forceFill(['status' => 'accepted', 'responded_at' => now()])->save();
 
             // Every other version is superseded — one accepted price, on file.
             $enquiry->proposals()

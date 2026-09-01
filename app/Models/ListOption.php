@@ -67,10 +67,14 @@ class ListOption extends Model implements Auditable
 
     protected $guarded = ['id'];
 
-    protected function casts(): array
-    {
-        return ['meta' => 'array', 'is_active' => 'boolean', 'is_system' => 'boolean'];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'meta' => 'array',
+        'is_active' => 'boolean',
+        'is_system' => 'boolean',
+    ];
 
     /**
      * @param  Builder<ListOption>  $query

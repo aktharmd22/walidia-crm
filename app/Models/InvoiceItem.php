@@ -16,20 +16,24 @@ use OwenIt\Auditing\Contracts\Auditable;
  */
 class InvoiceItem extends Model implements Auditable
 {
-    /** @use HasFactory<InvoiceItemFactory> */
     use AuditableTrait;
 
+    /** @use HasFactory<InvoiceItemFactory> */
     use HasFactory;
 
     protected $guarded = ['id'];
 
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return ['quantity' => 'decimal:2', 'unit_price' => 'decimal:2', 'discount' => 'decimal:2', 'tax_rate' => 'decimal:2', 'tax_amount' => 'decimal:2', 'line_total' => 'decimal:2'];
-    }
+    protected $casts = [
+        'quantity' => 'decimal:2',
+        'unit_price' => 'decimal:2',
+        'discount' => 'decimal:2',
+        'tax_rate' => 'decimal:2',
+        'tax_amount' => 'decimal:2',
+        'line_total' => 'decimal:2',
+    ];
 
     /** @return BelongsTo<Invoice, $this> */
     public function invoice(): BelongsTo

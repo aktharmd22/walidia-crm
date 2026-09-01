@@ -17,19 +17,22 @@ use OwenIt\Auditing\Contracts\Auditable;
  */
 class VatRate extends Model implements Auditable
 {
-    /** @use HasFactory<VatRateFactory> */
     use AuditableTrait;
 
+    /** @use HasFactory<VatRateFactory> */
     use HasFactory;
+
     use SoftDeletes;
 
     protected $guarded = ['id'];
 
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return ['rate_pct' => 'decimal:2', 'effective_from' => 'date', 'effective_to' => 'date', 'is_default' => 'boolean'];
-    }
+    protected $casts = [
+        'rate_pct' => 'decimal:2',
+        'effective_from' => 'date',
+        'effective_to' => 'date',
+        'is_default' => 'boolean',
+    ];
 }

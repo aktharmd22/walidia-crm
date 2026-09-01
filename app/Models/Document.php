@@ -117,18 +117,15 @@ class Document extends Model implements Auditable
     protected $guarded = ['id'];
 
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'issued_on' => 'date',
-            'expires_on' => 'date',
-            'signed_at' => 'datetime',
-            'is_sensitive' => 'boolean',
-            'requires_signature' => 'boolean',
-        ];
-    }
+    protected $casts = [
+        'issued_on' => 'date',
+        'expires_on' => 'date',
+        'signed_at' => 'datetime',
+        'is_sensitive' => 'boolean',
+        'requires_signature' => 'boolean',
+    ];
 
     public function sequenceKey(): string
     {

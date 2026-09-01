@@ -67,9 +67,11 @@ class DocumentTemplate extends Model implements Auditable
 
     protected $guarded = ['id'];
 
-    /** @return array<string, string> */
-    protected function casts(): array
-    {
-        return ['variables' => 'array', 'is_active' => 'boolean'];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'variables' => 'array',
+        'is_active' => 'boolean',
+    ];
 }

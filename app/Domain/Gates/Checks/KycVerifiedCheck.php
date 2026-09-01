@@ -64,6 +64,8 @@ class KycVerifiedCheck implements GateCheck
             return $subject;
         }
 
-        return method_exists($subject, 'client') ? $subject->client : null;
+        $client = method_exists($subject, 'client') ? $subject->getAttribute('client') : null;
+
+        return $client instanceof Client ? $client : null;
     }
 }

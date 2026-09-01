@@ -40,10 +40,13 @@ class Setting extends Model implements Auditable
 
     protected $guarded = ['id'];
 
-    protected function casts(): array
-    {
-        return ['value' => 'array', 'is_encrypted' => 'boolean'];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'value' => 'array',
+        'is_encrypted' => 'boolean',
+    ];
 
     public static function get(string $group, string $key, mixed $default = null): mixed
     {

@@ -15,18 +15,18 @@ use OwenIt\Auditing\Contracts\Auditable;
  */
 class ExchangeRate extends Model implements Auditable
 {
-    /** @use HasFactory<ExchangeRateFactory> */
     use AuditableTrait;
 
+    /** @use HasFactory<ExchangeRateFactory> */
     use HasFactory;
 
     protected $guarded = ['id'];
 
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return ['rate' => 'decimal:8', 'rate_date' => 'date'];
-    }
+    protected $casts = [
+        'rate' => 'decimal:8',
+        'rate_date' => 'date',
+    ];
 }

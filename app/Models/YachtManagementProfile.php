@@ -48,11 +48,12 @@ class YachtManagementProfile extends Model implements Auditable
 
     protected $guarded = ['id'];
 
-    /** @return array<string, string> */
-    protected function casts(): array
-    {
-        return ['budget_annual' => 'decimal:2'];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'budget_annual' => 'decimal:2',
+    ];
 
     /** @return BelongsTo<Yacht, $this> */
     public function yacht(): BelongsTo

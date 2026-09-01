@@ -17,21 +17,22 @@ use OwenIt\Auditing\Contracts\Auditable;
  */
 class GuestManifest extends Model implements Auditable
 {
-    /** @use HasFactory<GuestManifestFactory> */
     use AuditableTrait;
 
+    /** @use HasFactory<GuestManifestFactory> */
     use HasFactory;
+
     use SoftDeletes;
 
     protected $guarded = ['id'];
 
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return ['generated_at' => 'datetime', 'submitted_at' => 'datetime'];
-    }
+    protected $casts = [
+        'generated_at' => 'datetime',
+        'submitted_at' => 'datetime',
+    ];
 
     /** @return BelongsTo<Booking, $this> */
     public function booking(): BelongsTo

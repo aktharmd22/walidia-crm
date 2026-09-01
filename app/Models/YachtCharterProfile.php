@@ -65,21 +65,20 @@ class YachtCharterProfile extends Model implements Auditable
 
     protected $guarded = ['id'];
 
-    /** @return array<string, string> */
-    protected function casts(): array
-    {
-        return [
-            'hourly_rate' => 'decimal:2',
-            'half_day_rate' => 'decimal:2',
-            'full_day_rate' => 'decimal:2',
-            'overnight_rate' => 'decimal:2',
-            'weekly_rate' => 'decimal:2',
-            'peak_multiplier' => 'decimal:2',
-            'apa_percentage' => 'decimal:2',
-            'included_extras' => 'array',
-            'is_bookable' => 'boolean',
-        ];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'hourly_rate' => 'decimal:2',
+        'half_day_rate' => 'decimal:2',
+        'full_day_rate' => 'decimal:2',
+        'overnight_rate' => 'decimal:2',
+        'weekly_rate' => 'decimal:2',
+        'peak_multiplier' => 'decimal:2',
+        'apa_percentage' => 'decimal:2',
+        'included_extras' => 'array',
+        'is_bookable' => 'boolean',
+    ];
 
     /** @return BelongsTo<Yacht, $this> */
     public function yacht(): BelongsTo

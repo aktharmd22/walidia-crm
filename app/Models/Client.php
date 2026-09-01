@@ -195,29 +195,25 @@ class Client extends Model implements Auditable
     ];
 
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'client_type' => 'array',
-            'date_of_birth' => 'date',
-            'passport_expiry' => 'date',
-            'kyc_expires_on' => 'date',
-            'kyc_verified_at' => 'datetime',
-            'aml_screened_at' => 'datetime',
-            'marketing_consent_at' => 'datetime',
-            'approved_at' => 'datetime',
-
-            // Encrypted at rest (brief §4).
-            'passport_number' => 'encrypted',
-            'emirates_id' => 'encrypted',
-            'trn' => 'encrypted',
-            'dietary_preferences' => 'encrypted',
-            'allergies' => 'encrypted',
-            'notes_vip' => 'encrypted',
-        ];
-    }
+    protected $casts = [
+        'client_type' => 'array',
+        'date_of_birth' => 'date',
+        'passport_expiry' => 'date',
+        'kyc_expires_on' => 'date',
+        'kyc_verified_at' => 'datetime',
+        'aml_screened_at' => 'datetime',
+        'marketing_consent_at' => 'datetime',
+        'approved_at' => 'datetime',
+        // Encrypted at rest (brief §4).,
+        'passport_number' => 'encrypted',
+        'emirates_id' => 'encrypted',
+        'trn' => 'encrypted',
+        'dietary_preferences' => 'encrypted',
+        'allergies' => 'encrypted',
+        'notes_vip' => 'encrypted',
+    ];
 
     public function sequenceKey(): string
     {

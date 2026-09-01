@@ -71,10 +71,13 @@ class Activity extends Model
 
     protected $guarded = ['id'];
 
-    protected function casts(): array
-    {
-        return ['meta' => 'array', 'occurred_at' => 'datetime'];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'meta' => 'array',
+        'occurred_at' => 'datetime',
+    ];
 
     /** @return MorphTo<Model, $this> */
     public function subject(): MorphTo

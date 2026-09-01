@@ -133,17 +133,17 @@ class Lead extends Model implements Auditable
     /** The Unassigned pool is a shared queue, so unowned leads stay visible. */
     public bool $ownerScopeIncludesUnassigned = true;
 
-    protected function casts(): array
-    {
-        return [
-            'meta' => 'array',
-            'first_response_at' => 'datetime',
-            'sla_due_at' => 'datetime',
-            'next_follow_up_at' => 'datetime',
-            'duplicate_checked_at' => 'datetime',
-            'converted_at' => 'datetime',
-        ];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'meta' => 'array',
+        'first_response_at' => 'datetime',
+        'sla_due_at' => 'datetime',
+        'next_follow_up_at' => 'datetime',
+        'duplicate_checked_at' => 'datetime',
+        'converted_at' => 'datetime',
+    ];
 
     public function sequenceKey(): string
     {

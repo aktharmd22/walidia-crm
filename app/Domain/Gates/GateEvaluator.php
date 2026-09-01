@@ -43,7 +43,13 @@ class GateEvaluator
      */
     public function forTransition(Model $subject, string $field, string $to, ?User $user = null, array $context = []): GateResult
     {
-        return $this->evaluate($subject, 'transition', null, ['field' => $field, 'to' => $to], $user, $context);
+        return $this->evaluate($subject, 'transition', null, [
+            'field' => $field,
+            'to' => $to,
+            // Where it is moving from, so a rule can guard one edge rather
+            // than every route into a state.
+            'from' => (string) ($subject->getAttribute($field) ?? '*'),
+        ], $user, $context);
     }
 
     /**
@@ -109,7 +115,7 @@ class GateEvaluator
     }
 
     /**
-     * @param  array{field: string, to: string}|null  $transition
+     * @param  array{field: string, to: string, from: string}|null  $transition
      * @param  array<string, mixed>  $context
      */
     private function evaluate(
@@ -188,7 +194,10 @@ class GateEvaluator
             $failures[] = new GateFailure(
                 rule: $rule->key,
                 condition: $key,
-                message: (string) ($condition['message_en'] ?? $check->failureMessage($subject, $params)),
+                // The check speaks first: it can name the actual shortfall,
+                // where the rule's stored text can only describe the rule.
+                message: $check->failureMessage($subject, $params)
+                    ?: (string) ($condition['message_en'] ?? $rule->block_message_en),
                 severity: $rule->severity,
                 resolutionLabel: $resolution['label'] ?? $rule->resolution_label,
                 resolutionUrl: $resolution['url'] ?? null,
@@ -199,7 +208,7 @@ class GateEvaluator
     }
 
     /**
-     * @param  array{field: string, to: string}|null  $transition
+     * @param  array{field: string, to: string, from: string}|null  $transition
      * @return Collection<int, GateRule>
      */
     private function rulesFor(string $subjectType, string $triggerType, ?string $action, ?array $transition): Collection
@@ -229,9 +238,10 @@ class GateEvaluator
                 return false;
             }
 
+            /** @var list<string> $from */
             $from = $rule->trigger_from ?? ['*'];
 
-            return in_array('*', $from, true) || in_array($transition['from'] ?? '*', $from, true);
+            return in_array('*', $from, true) || in_array($transition['from'], $from, true);
         })->values();
     }
 

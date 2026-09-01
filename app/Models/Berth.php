@@ -57,11 +57,14 @@ class Berth extends Model implements Auditable
 
     protected $guarded = ['id'];
 
-    /** @return array<string, string> */
-    protected function casts(): array
-    {
-        return ['is_active' => 'boolean', 'max_loa_m' => 'decimal:2', 'monthly_fee' => 'decimal:2'];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'is_active' => 'boolean',
+        'max_loa_m' => 'decimal:2',
+        'monthly_fee' => 'decimal:2',
+    ];
 
     /** @return BelongsTo<Marina, $this> */
     public function marina(): BelongsTo

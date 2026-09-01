@@ -160,18 +160,15 @@ class User extends Authenticatable implements Auditable
     ];
 
     /**
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'is_active' => 'boolean',
-            'last_login_at' => 'datetime',
-            'two_factor_confirmed_at' => 'datetime',
-        ];
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'is_active' => 'boolean',
+        'last_login_at' => 'datetime',
+        'two_factor_confirmed_at' => 'datetime',
+    ];
 
     /* ── relations ──────────────────────────────────────────────────────── */
 

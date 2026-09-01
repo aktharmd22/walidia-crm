@@ -60,16 +60,15 @@ class YachtOwner extends Model implements Auditable
 
     protected $guarded = ['id'];
 
-    /** @return array<string, string> */
-    protected function casts(): array
-    {
-        return [
-            'ownership_percentage' => 'decimal:2',
-            'is_primary' => 'boolean',
-            'since' => 'date',
-            'until' => 'date',
-        ];
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'ownership_percentage' => 'decimal:2',
+        'is_primary' => 'boolean',
+        'since' => 'date',
+        'until' => 'date',
+    ];
 
     /** @return BelongsTo<Yacht, $this> */
     public function yacht(): BelongsTo
