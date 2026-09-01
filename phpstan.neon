@@ -12,3 +12,20 @@ parameters:
 
     excludePaths:
         - app/Actions/Fortify/*
+
+    ignoreErrors:
+        # The shared CRUD base dispatches on `class-string<TModel>`. PHPStan
+        # cannot see SoftDeletes or model scopes through a template parameter;
+        # the concrete controllers are checked normally.
+        -
+            path: app/Http/Controllers/ResourceController.php
+            identifier: staticMethod.notFound
+        -
+            path: app/Http/Controllers/ResourceController.php
+            identifier: method.notFound
+        -
+            identifier: missingType.generics
+            path: app/Http/Controllers/ResourceController.php
+        -
+            identifier: return.type
+            path: app/Http/Controllers/ResourceController.php

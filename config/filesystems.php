@@ -16,6 +16,12 @@ return [
     'default' => env('FILESYSTEM_DISK', 'local'),
 
     /*
+     * The disk every document is written to. Kept as its own key so switching
+     * to S3 in production is one environment variable, not a code change.
+     */
+    'private_disk' => env('PRIVATE_DISK', 'private'),
+
+    /*
     |--------------------------------------------------------------------------
     | Filesystem Disks
     |--------------------------------------------------------------------------
@@ -29,6 +35,18 @@ return [
     */
 
     'disks' => [
+
+        /*
+         * Client documents, contracts, manifests and identity scans. Private
+         * by construction: nothing here is web-addressable, and downloads are
+         * served through DocumentUrlService after a policy check (D-015).
+         */
+        'private' => [
+            'driver' => 'local',
+            'root' => storage_path('app/private'),
+            'serve' => false,
+            'throw' => false,
+        ],
 
         'local' => [
             'driver' => 'local',

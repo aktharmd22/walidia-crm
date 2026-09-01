@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Models\User;
+use App\Models;
+use App\Policies;
 use App\Support\Roles;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -19,7 +20,15 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     public array $policies = [
-        //
+        Models\Client::class => Policies\ClientPolicy::class,
+        Models\Company::class => Policies\CompanyPolicy::class,
+        Models\Lead::class => Policies\LeadPolicy::class,
+        Models\Deal::class => Policies\DealPolicy::class,
+        Models\Task::class => Policies\TaskPolicy::class,
+        Models\Document::class => Policies\DocumentPolicy::class,
+        Models\Yacht::class => Policies\YachtPolicy::class,
+        Models\Marina::class => Policies\MarinaPolicy::class,
+        Models\Activity::class => Policies\ActivityPolicy::class,
     ];
 
     public function boot(): void
@@ -36,7 +45,7 @@ class AuthServiceProvider extends ServiceProvider
          * It deliberately does NOT bypass gate rules: a hard gate still blocks
          * an Admin until they record an override with a reason (D-004).
          */
-        Gate::before(function (User $user, string $ability): ?bool {
+        Gate::before(function (Models\User $user, string $ability): ?bool {
             return $user->hasRole(Roles::ADMIN) ? true : null;
         });
     }
