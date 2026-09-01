@@ -37,6 +37,22 @@ class AuthServiceProvider extends ServiceProvider
         Models\Payment::class => Policies\PaymentPolicy::class,
         Models\GateRule::class => Policies\GateRulePolicy::class,
         Models\GateOverride::class => Policies\GateOverridePolicy::class,
+        Models\Crew::class => Policies\CrewPolicy::class,
+        Models\CrewAssignment::class => Policies\CrewAssignmentPolicy::class,
+        Models\CrewPayout::class => Policies\CrewPayoutPolicy::class,
+        Models\Vendor::class => Policies\VendorPolicy::class,
+        Models\PurchaseOrder::class => Policies\PurchaseOrderPolicy::class,
+        Models\Incident::class => Policies\IncidentPolicy::class,
+        Models\DamageReport::class => Policies\DamageReportPolicy::class,
+        Models\SecurityDeposit::class => Policies\SecurityDepositPolicy::class,
+        Models\Listing::class => Policies\ListingPolicy::class,
+        Models\BuyerRequirement::class => Policies\BuyerRequirementPolicy::class,
+        Models\Nda::class => Policies\NdaPolicy::class,
+        Models\Viewing::class => Policies\ViewingPolicy::class,
+        Models\Offer::class => Policies\OfferPolicy::class,
+        Models\Survey::class => Policies\SurveyPolicy::class,
+        Models\Transaction::class => Policies\TransactionPolicy::class,
+        Models\Handover::class => Policies\HandoverPolicy::class,
     ];
 
     public function boot(): void

@@ -72,6 +72,25 @@ class GateEvaluator
     }
 
     /**
+     * The throwing form of a transition check — the write path for a guarded
+     * status change, where proceeding past a block must be impossible.
+     *
+     * @param  array<string, mixed>  $context
+     *
+     * @throws GateBlockedException
+     */
+    public function assertTransition(Model $subject, string $field, string $to, ?User $user = null, array $context = []): GateResult
+    {
+        $result = $this->forTransition($subject, $field, $to, $user, $context);
+
+        if ($result->blocked()) {
+            throw new GateBlockedException($result);
+        }
+
+        return $result;
+    }
+
+    /**
      * Proceed past a hard gate, deliberately and on the record.
      *
      * The override is written before the transition runs, so a failure halfway
@@ -219,7 +238,7 @@ class GateEvaluator
             (int) config('walidia.gates.cache_seconds', 300),
             fn () => GateRule::query()
                 ->where('subject_type', $subjectType)
-                ->where('trigger_type', $triggerType)
+                ->whereIn('trigger_type', $triggerType === 'action' ? ['action', 'schedule'] : [$triggerType])
                 ->where('is_active', true)
                 ->orderBy('sort_order')
                 ->get(),

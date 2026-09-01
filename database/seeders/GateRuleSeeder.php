@@ -21,15 +21,8 @@ class GateRuleSeeder extends Seeder
 {
     /** Rules whose conditions depend on tables that arrive in later phases. */
     private const PENDING_PHASES = [
-        'charter.dispatch.resources',
-        'charter.deposit.release',
         'charter.dispatch.certificates',
-        'brokerage.viewing.schedule',
-        'brokerage.offer.submit',
-        'brokerage.ownership.transfer',
         'soft.weather.unchecked',
-        'soft.crew.documents.expiring',
-        'soft.listing.agreement.expiring',
         'soft.option_hold.expiring',
     ];
 

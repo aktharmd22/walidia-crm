@@ -164,6 +164,42 @@ class Booking extends Model implements Auditable
         return $this->hasMany(GuestManifest::class);
     }
 
+    /** @return HasMany<CharterDayLog, $this> */
+    public function dayLogs(): HasMany
+    {
+        return $this->hasMany(CharterDayLog::class)->orderByDesc('occurred_at');
+    }
+
+    /** @return HasMany<CharterExtra, $this> */
+    public function extras(): HasMany
+    {
+        return $this->hasMany(CharterExtra::class);
+    }
+
+    /** @return HasMany<CrewAssignment, $this> */
+    public function crewAssignments(): HasMany
+    {
+        return $this->hasMany(CrewAssignment::class);
+    }
+
+    /** @return HasMany<DamageReport, $this> */
+    public function damageReports(): HasMany
+    {
+        return $this->hasMany(DamageReport::class);
+    }
+
+    /** @return HasMany<Incident, $this> */
+    public function incidents(): HasMany
+    {
+        return $this->hasMany(Incident::class);
+    }
+
+    /** @return HasMany<OperationsChecklist, $this> */
+    public function checklists(): HasMany
+    {
+        return $this->hasMany(OperationsChecklist::class);
+    }
+
     /** @return HasOne<SecurityDeposit, $this> */
     public function securityDeposit(): HasOne
     {

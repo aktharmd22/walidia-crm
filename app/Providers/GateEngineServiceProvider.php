@@ -31,6 +31,15 @@ class GateEngineServiceProvider extends ServiceProvider implements DeferrablePro
         Checks\GuestsIdentityVerifiedCheck::class,
         Checks\SafetyBriefingLoggedCheck::class,
         Checks\ReceiptsGeneratedCheck::class,
+        Checks\CrewDocumentsValidCheck::class,
+        Checks\DamageInspectionClosedCheck::class,
+        Checks\PayoutsIssuedCheck::class,
+        Checks\NdaSignedCheck::class,
+        Checks\BuyerIdentityVerifiedCheck::class,
+        Checks\ProofOfFundsCheck::class,
+        Checks\TransactionFundsClearedCheck::class,
+        Checks\AmlClearedCheck::class,
+        Checks\ListingAgreementActiveCheck::class,
     ];
 
     public function register(): void

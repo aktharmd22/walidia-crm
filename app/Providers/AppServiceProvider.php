@@ -51,6 +51,22 @@ class AppServiceProvider extends ServiceProvider
             'quotation' => Models\Quotation::class,
             'security_deposit' => Models\SecurityDeposit::class,
             'gate_rule' => Models\GateRule::class,
+            'crew' => Models\Crew::class,
+            'crew_assignment' => Models\CrewAssignment::class,
+            'vendor' => Models\Vendor::class,
+            'purchase_order' => Models\PurchaseOrder::class,
+            'incident' => Models\Incident::class,
+            'damage_report' => Models\DamageReport::class,
+            'operations_checklist' => Models\OperationsChecklist::class,
+            'checklist_item' => Models\ChecklistItem::class,
+            'listing' => Models\Listing::class,
+            'buyer_requirement' => Models\BuyerRequirement::class,
+            'nda' => Models\Nda::class,
+            'viewing' => Models\Viewing::class,
+            'offer' => Models\Offer::class,
+            'survey' => Models\Survey::class,
+            'transaction' => Models\Transaction::class,
+            'handover' => Models\Handover::class,
         ]);
 
         /*

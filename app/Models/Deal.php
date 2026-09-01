@@ -136,6 +136,13 @@ class Deal extends Model implements Auditable
      * @var array<string, string>
      */
     protected $casts = [
+        'gross_value' => 'decimal:2',
+        'commission_amount' => 'decimal:2',
+        'co_broker_amount' => 'decimal:2',
+        'costs_amount' => 'decimal:2',
+        'net_amount' => 'decimal:2',
+        'payouts_issued' => 'boolean',
+        'receipts_generated' => 'boolean',
         'value' => 'decimal:2',
         'expected_close_date' => 'date',
         'stage_entered_at' => 'datetime',
@@ -241,5 +248,30 @@ class Deal extends Model implements Auditable
             $query->where('title', 'like', $like)
                 ->orWhere('reference', 'like', $like);
         });
+    }
+
+    /** @return BelongsTo<Transaction, $this> */
+    public function transaction(): BelongsTo
+    {
+        return $this->belongsTo(Transaction::class);
+    }
+
+    /** @return BelongsTo<Booking, $this> */
+    public function booking(): BelongsTo
+    {
+        return $this->belongsTo(Booking::class);
+    }
+
+    /**
+     * Commission less what is paid away and what it cost to earn. The deal is
+     * the one place the business asks "what did we actually make?", on any
+     * line — charter, brokerage or management.
+     */
+    public function recalculate(): void
+    {
+        $this->net_amount = round(
+            (float) $this->commission_amount - (float) $this->co_broker_amount - (float) $this->costs_amount,
+            2,
+        );
     }
 }
