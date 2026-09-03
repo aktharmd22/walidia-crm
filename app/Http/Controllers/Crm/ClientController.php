@@ -15,6 +15,7 @@ use App\Models\Company;
 use App\Models\LeadSource;
 use App\Models\User;
 use App\Services\DuplicateChecker;
+use App\Support\Paginate;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
@@ -178,7 +179,7 @@ class ClientController extends ResourceController
 
         return Inertia::render('Clients/Timeline', [
             'record' => ClientResource::make($client)->resolve(),
-            'activities' => $client->activities()->with('user:id,name')->paginate(50),
+            'activities' => Paginate::shape($client->activities()->with('user:id,name')->paginate(50)),
         ]);
     }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\ResourceController;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
 /**
@@ -64,10 +65,11 @@ function referencedPages(): array
         }
 
         foreach (['Index', 'Create', 'Show', 'Edit', 'Archive'] as $page) {
-            // Only assert the ones the controller actually exposes.
-            $method = strtolower($page);
-
-            if (! $reflection->hasMethod($method === 'index' ? 'index' : $method)) {
+            // Inheriting a method is not the same as exposing it: a read-only
+            // resource inherits create() from the spine but registers no route
+            // for it, so that page can never render and asserting it exists
+            // only teaches people to create dead files.
+            if (! routeExistsFor($reflection->getName(), strtolower($page))) {
                 continue;
             }
 
@@ -76,6 +78,28 @@ function referencedPages(): array
     }
 
     return $referenced;
+}
+
+/**
+ * Whether any registered route actually reaches this controller action.
+ */
+function routeExistsFor(string $controller, string $action): bool
+{
+    foreach (Route::getRoutes() as $route) {
+        $handler = $route->getAction('controller');
+
+        if (! is_string($handler) || ! str_contains($handler, '@')) {
+            continue;
+        }
+
+        [$class, $method] = explode('@', $handler, 2);
+
+        if ($class === $controller && $method === $action) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 it('has a React component for every page a controller can render', function (): void {

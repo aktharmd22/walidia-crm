@@ -34,8 +34,5 @@ parameters:
             path: app/Http/Controllers/ResourceController.php
             identifier: method.notFound
         -
-            identifier: missingType.generics
-            path: app/Http/Controllers/ResourceController.php
-        -
             identifier: return.type
             path: app/Http/Controllers/ResourceController.php

@@ -15,6 +15,7 @@ use App\Models\CrewAssignment;
 use App\Models\CrewDocument;
 use App\Models\CrewPayout;
 use App\Models\Marina;
+use App\Support\Paginate;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
@@ -113,7 +114,7 @@ class CrewController extends ResourceController
             ->paginate(50);
 
         return Inertia::render('Crew/Assignments', [
-            'rows' => $assignments->through(fn (CrewAssignment $assignment): array => [
+            'rows' => Paginate::shape($assignments->through(fn (CrewAssignment $assignment): array => [
                 'id' => $assignment->id,
                 'crew' => $assignment->crew?->full_name,
                 'role' => $assignment->role,
@@ -124,7 +125,7 @@ class CrewController extends ResourceController
                 // The screen asks the engine why dispatch is blocked, and
                 // shows the answer rather than a grey button.
                 'gate' => $gates->forAction($assignment, 'crew-assignments.dispatch', $request->user())->toArray(),
-            ]),
+            ])),
             'can' => ['dispatch' => $request->user()->can('crew-assignments.dispatch')],
         ]);
     }
@@ -187,7 +188,7 @@ class CrewController extends ResourceController
         $this->authorize('viewAny', CrewPayout::class);
 
         return Inertia::render('Crew/Payouts', [
-            'rows' => CrewPayout::query()
+            'rows' => Paginate::shape(CrewPayout::query()
                 ->with(['crew:id,full_name', 'booking:id,reference'])
                 ->latest()
                 ->paginate(50)
@@ -201,7 +202,7 @@ class CrewController extends ResourceController
                     'net' => $payout->net,
                     'currency' => $payout->currency,
                     'status' => $payout->status,
-                ]),
+                ])),
         ]);
     }
 

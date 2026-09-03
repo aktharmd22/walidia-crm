@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Support\Paginate;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -225,10 +225,13 @@ abstract class ResourceController extends Controller
     /* ── query building ─────────────────────────────────────────────────── */
 
     /**
+     * A page of records in the shape the front end is written against
+     * (App\Support\Paginate): data, links, and the counters under `meta`.
+     *
      * @param  callable(Builder<TModel>): Builder<TModel>|null  $modifier
-     * @return LengthAwarePaginator<TModel>
+     * @return array<string, mixed>
      */
-    protected function paginate(Request $request, ?callable $modifier = null): LengthAwarePaginator
+    protected function paginate(Request $request, ?callable $modifier = null): array
     {
         $query = $this->baseQuery($request)->with($this->indexWith);
 
@@ -242,7 +245,7 @@ abstract class ResourceController extends Controller
             min((int) $request->integer('per_page', $this->perPage), 100),
         )->withQueryString();
 
-        return $paginator->through(fn (Model $record) => $this->indexResource($record));
+        return Paginate::shape($paginator->through(fn (Model $record) => $this->indexResource($record)));
     }
 
     /**

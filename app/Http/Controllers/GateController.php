@@ -8,6 +8,7 @@ use App\Domain\Gates\GateCheckRegistry;
 use App\Domain\Gates\GateEvaluator;
 use App\Models\GateOverride;
 use App\Models\GateRule;
+use App\Support\Paginate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\JsonResponse;
@@ -57,7 +58,7 @@ class GateController extends Controller
         $this->authorize('viewAny', GateOverride::class);
 
         return Inertia::render('Compliance/Overrides', [
-            'rows' => GateOverride::query()
+            'rows' => Paginate::shape(GateOverride::query()
                 ->with(['rule:id,key,name_en,severity', 'user:id,name'])
                 ->latest('created_at')
                 ->paginate(50)
@@ -72,7 +73,7 @@ class GateController extends Controller
                     'failed_conditions' => $override->failed_conditions,
                     'ip_address' => $override->ip_address,
                     'created_at' => $override->created_at?->toIso8601String(),
-                ]),
+                ])),
         ]);
     }
 

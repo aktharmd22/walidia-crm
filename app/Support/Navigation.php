@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 final class Navigation
 {
     /**
-     * @return list<array{key: string, label: string, icon: string, href: string|null, children: list<array{key: string, label: string, href: string}>}>
+     * @return list<array{key: string, group: string, label: string, icon: string, href: string|null, children: list<array{key: string, label: string, href: string}>}>
      */
     public static function for(?User $user): array
     {
@@ -52,6 +52,7 @@ final class Navigation
 
             $sections[] = [
                 'key' => $section['key'],
+                'group' => $section['group'] ?? 'Overview',
                 'label' => $section['label'],
                 'icon' => $section['icon'],
                 'href' => $sectionVisible ? route($section['route']) : null,
@@ -88,7 +89,7 @@ final class Navigation
     {
         return [
             [
-                'key' => 'dashboard', 'label' => 'Dashboard', 'icon' => 'dashboard', 'route' => 'dashboard',
+                'key' => 'dashboard', 'group' => 'Overview', 'label' => 'Dashboard', 'icon' => 'dashboard', 'route' => 'dashboard',
                 'children' => [
                     ['key' => 'my-day', 'label' => 'My Day', 'route' => 'dashboard'],
                     ['key' => 'pipeline', 'label' => 'Pipeline', 'route' => 'dashboard.pipeline', 'permission' => 'deals.view'],
@@ -97,7 +98,7 @@ final class Navigation
                 ],
             ],
             [
-                'key' => 'leads', 'label' => 'Leads', 'icon' => 'leads', 'route' => 'leads.index', 'permission' => 'leads.view',
+                'key' => 'leads', 'group' => 'Revenue', 'label' => 'Leads', 'icon' => 'leads', 'route' => 'leads.index', 'permission' => 'leads.view',
                 'children' => [
                     ['key' => 'leads-inbox', 'label' => 'Inbox', 'route' => 'leads.inbox', 'permission' => 'leads.view'],
                     ['key' => 'leads-all', 'label' => 'All Leads', 'route' => 'leads.index', 'permission' => 'leads.view'],
@@ -107,7 +108,7 @@ final class Navigation
                 ],
             ],
             [
-                'key' => 'clients', 'label' => 'Clients', 'icon' => 'clients', 'route' => 'clients.index', 'permission' => 'clients.view',
+                'key' => 'clients', 'group' => 'Revenue', 'label' => 'Clients', 'icon' => 'clients', 'route' => 'clients.index', 'permission' => 'clients.view',
                 'children' => [
                     ['key' => 'clients-all', 'label' => 'All', 'route' => 'clients.index', 'permission' => 'clients.view'],
                     ['key' => 'clients-companies', 'label' => 'Companies', 'route' => 'companies.index', 'permission' => 'companies.view'],
@@ -120,7 +121,7 @@ final class Navigation
                 ],
             ],
             [
-                'key' => 'charter', 'label' => 'Charter', 'icon' => 'charter', 'route' => 'charter.enquiries.index', 'permission' => 'charter-enquiries.view',
+                'key' => 'charter', 'group' => 'Revenue', 'label' => 'Charter', 'icon' => 'charter', 'route' => 'charter.enquiries.index', 'permission' => 'charter-enquiries.view',
                 'children' => [
                     ['key' => 'charter-enquiries', 'label' => 'Enquiries', 'route' => 'charter.enquiries.index', 'permission' => 'charter-enquiries.view'],
                     ['key' => 'charter-proposals', 'label' => 'Proposals', 'route' => 'charter.proposals.index', 'permission' => 'charter-proposals.view'],
@@ -134,7 +135,7 @@ final class Navigation
                 ],
             ],
             [
-                'key' => 'brokerage', 'label' => 'Brokerage', 'icon' => 'brokerage', 'route' => 'brokerage.listings.index', 'permission' => 'listings.view',
+                'key' => 'brokerage', 'group' => 'Revenue', 'label' => 'Brokerage', 'icon' => 'brokerage', 'route' => 'brokerage.listings.index', 'permission' => 'listings.view',
                 'children' => [
                     ['key' => 'brokerage-buyers', 'label' => 'Buyer Requirements', 'route' => 'brokerage.buyer-requirements.index', 'permission' => 'buyer-requirements.view'],
                     ['key' => 'brokerage-listings', 'label' => 'Listings', 'route' => 'brokerage.listings.index', 'permission' => 'listings.view'],
@@ -147,7 +148,7 @@ final class Navigation
                 ],
             ],
             [
-                'key' => 'management', 'label' => 'Management', 'icon' => 'management', 'route' => 'management.agreements.index', 'permission' => 'management-agreements.view',
+                'key' => 'management', 'group' => 'Revenue', 'label' => 'Management', 'icon' => 'management', 'route' => 'management.agreements.index', 'permission' => 'management-agreements.view',
                 'children' => [
                     ['key' => 'management-agreements', 'label' => 'Agreements', 'route' => 'management.agreements.index', 'permission' => 'management-agreements.view'],
                     ['key' => 'management-maintenance', 'label' => 'Maintenance', 'route' => 'management.maintenance.index', 'permission' => 'maintenance.view'],
@@ -158,7 +159,7 @@ final class Navigation
                 ],
             ],
             [
-                'key' => 'fleet', 'label' => 'Fleet', 'icon' => 'fleet', 'route' => 'fleet.yachts.index', 'permission' => 'yachts.view',
+                'key' => 'fleet', 'group' => 'Operations', 'label' => 'Fleet', 'icon' => 'fleet', 'route' => 'fleet.yachts.index', 'permission' => 'yachts.view',
                 'children' => [
                     ['key' => 'fleet-yachts', 'label' => 'All Yachts', 'route' => 'fleet.yachts.index', 'permission' => 'yachts.view'],
                     ['key' => 'fleet-charter', 'label' => 'Charter Fleet', 'route' => 'fleet.charter-fleet', 'permission' => 'yachts.view'],
@@ -168,7 +169,7 @@ final class Navigation
                 ],
             ],
             [
-                'key' => 'crew', 'label' => 'Crew', 'icon' => 'crew', 'route' => 'crew.index', 'permission' => 'crew.view',
+                'key' => 'crew', 'group' => 'Operations', 'label' => 'Crew', 'icon' => 'crew', 'route' => 'crew.index', 'permission' => 'crew.view',
                 'children' => [
                     ['key' => 'crew-directory', 'label' => 'Directory', 'route' => 'crew.index', 'permission' => 'crew.view'],
                     ['key' => 'crew-assignments', 'label' => 'Assignments', 'route' => 'crew.assignments.index', 'permission' => 'crew-assignments.view'],
@@ -177,7 +178,7 @@ final class Navigation
                 ],
             ],
             [
-                'key' => 'vendors', 'label' => 'Vendors', 'icon' => 'vendors', 'route' => 'vendors.index', 'permission' => 'vendors.view',
+                'key' => 'vendors', 'group' => 'Operations', 'label' => 'Vendors', 'icon' => 'vendors', 'route' => 'vendors.index', 'permission' => 'vendors.view',
                 'children' => [
                     ['key' => 'vendors-directory', 'label' => 'Directory', 'route' => 'vendors.index', 'permission' => 'vendors.view'],
                     ['key' => 'vendors-categories', 'label' => 'Categories', 'route' => 'vendors.categories.index', 'permission' => 'vendor-categories.view'],
@@ -185,7 +186,7 @@ final class Navigation
                 ],
             ],
             [
-                'key' => 'finance', 'label' => 'Finance', 'icon' => 'finance', 'route' => 'finance.invoices.index', 'permission' => 'invoices.view',
+                'key' => 'finance', 'group' => 'Business', 'label' => 'Finance', 'icon' => 'finance', 'route' => 'finance.invoices.index', 'permission' => 'invoices.view',
                 'children' => [
                     ['key' => 'finance-quotations', 'label' => 'Quotations', 'route' => 'finance.quotations.index', 'permission' => 'quotations.view'],
                     ['key' => 'finance-invoices', 'label' => 'Invoices', 'route' => 'finance.invoices.index', 'permission' => 'invoices.view'],
@@ -200,7 +201,7 @@ final class Navigation
                 ],
             ],
             [
-                'key' => 'documents', 'label' => 'Documents', 'icon' => 'documents', 'route' => 'documents.index', 'permission' => 'documents.view',
+                'key' => 'documents', 'group' => 'Business', 'label' => 'Documents', 'icon' => 'documents', 'route' => 'documents.index', 'permission' => 'documents.view',
                 'children' => [
                     ['key' => 'documents-vault', 'label' => 'Vault', 'route' => 'documents.index', 'permission' => 'documents.view'],
                     ['key' => 'documents-templates', 'label' => 'Templates', 'route' => 'documents.templates.index', 'permission' => 'document-templates.view'],
@@ -209,7 +210,7 @@ final class Navigation
                 ],
             ],
             [
-                'key' => 'compliance', 'label' => 'Compliance', 'icon' => 'compliance', 'route' => 'compliance.kyc-queue', 'permission' => 'compliance.verify-kyc',
+                'key' => 'compliance', 'group' => 'Operations', 'label' => 'Compliance', 'icon' => 'compliance', 'route' => 'compliance.kyc-queue', 'permission' => 'compliance.verify-kyc',
                 'children' => [
                     ['key' => 'compliance-kyc', 'label' => 'KYC Queue', 'route' => 'compliance.kyc-queue', 'permission' => 'compliance.verify-kyc'],
                     ['key' => 'compliance-certificates', 'label' => 'Certificates', 'route' => 'compliance.certificates.index', 'permission' => 'certificates.view'],
@@ -218,14 +219,14 @@ final class Navigation
                 ],
             ],
             [
-                'key' => 'communications', 'label' => 'Communications', 'icon' => 'communications', 'route' => 'communications.index', 'permission' => 'communications.view',
+                'key' => 'communications', 'group' => 'Admin', 'label' => 'Communications', 'icon' => 'communications', 'route' => 'communications.index', 'permission' => 'communications.view',
                 'children' => [
                     ['key' => 'communications-log', 'label' => 'Log', 'route' => 'communications.index', 'permission' => 'communications.view'],
                     ['key' => 'communications-templates', 'label' => 'Templates', 'route' => 'communications.templates.index', 'permission' => 'message-templates.view'],
                 ],
             ],
             [
-                'key' => 'automation', 'label' => 'Automation', 'icon' => 'automation', 'route' => 'automation.gate-rules.index', 'permission' => 'automation.manage',
+                'key' => 'automation', 'group' => 'Admin', 'label' => 'Automation', 'icon' => 'automation', 'route' => 'automation.gate-rules.index', 'permission' => 'automation.manage',
                 'children' => [
                     ['key' => 'automation-workflows', 'label' => 'Workflows', 'route' => 'automation.workflows.index', 'permission' => 'workflows.view'],
                     ['key' => 'automation-gates', 'label' => 'Gate Rules', 'route' => 'automation.gate-rules.index', 'permission' => 'gate-rules.view'],
@@ -233,7 +234,7 @@ final class Navigation
                 ],
             ],
             [
-                'key' => 'tasks', 'label' => 'Tasks', 'icon' => 'tasks', 'route' => 'tasks.index', 'permission' => 'tasks.view',
+                'key' => 'tasks', 'group' => 'Overview', 'label' => 'Tasks', 'icon' => 'tasks', 'route' => 'tasks.index', 'permission' => 'tasks.view',
                 'children' => [
                     ['key' => 'tasks-mine', 'label' => 'My Tasks', 'route' => 'tasks.index', 'permission' => 'tasks.view'],
                     ['key' => 'tasks-team', 'label' => 'Team Tasks', 'route' => 'tasks.team', 'permission' => 'records.view-team'],
@@ -241,7 +242,7 @@ final class Navigation
                 ],
             ],
             [
-                'key' => 'reports', 'label' => 'Reports', 'icon' => 'reports', 'route' => 'reports.index',
+                'key' => 'reports', 'group' => 'Business', 'label' => 'Reports', 'icon' => 'reports', 'route' => 'reports.index',
                 'children' => [
                     ['key' => 'reports-sales', 'label' => 'Sales', 'route' => 'reports.sales', 'permission' => 'deals.view'],
                     ['key' => 'reports-utilisation', 'label' => 'Utilisation', 'route' => 'reports.utilisation', 'permission' => 'yachts.view'],
@@ -249,7 +250,7 @@ final class Navigation
                 ],
             ],
             [
-                'key' => 'settings', 'label' => 'Settings', 'icon' => 'settings', 'route' => 'settings.users.index', 'permission' => 'settings.manage',
+                'key' => 'settings', 'group' => 'Admin', 'label' => 'Settings', 'icon' => 'settings', 'route' => 'settings.users.index', 'permission' => 'settings.manage',
                 'children' => [
                     ['key' => 'settings-users', 'label' => 'Users', 'route' => 'settings.users.index', 'permission' => 'users.view'],
                     ['key' => 'settings-roles', 'label' => 'Roles', 'route' => 'settings.roles.index', 'permission' => 'roles.view'],

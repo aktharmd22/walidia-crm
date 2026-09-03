@@ -11,6 +11,7 @@ use App\Http\Controllers\ResourceController;
 use App\Http\Resources\CostSheetResource;
 use App\Models\Booking;
 use App\Models\CostSheet;
+use App\Support\Paginate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -187,7 +188,7 @@ class CostSheetController extends ResourceController
             ->paginate(25);
 
         return Inertia::render('Charter/ProfitAndLoss', [
-            'rows' => $sheets->through(fn (CostSheet $sheet): array => [
+            'rows' => Paginate::shape($sheets->through(fn (CostSheet $sheet): array => [
                 'id' => $sheet->id,
                 'reference' => $sheet->reference,
                 'booking' => $sheet->booking?->reference,
@@ -200,7 +201,7 @@ class CostSheetController extends ResourceController
                 'margin' => $sheet->margin_pct,
                 'currency' => $sheet->currency,
                 'url' => route('charter.cost-sheets.show', $sheet->id),
-            ]),
+            ])),
             'totals' => [
                 'offer' => (float) CostSheet::sum('total_offer'),
                 'cost' => (float) CostSheet::sum('total_cost'),

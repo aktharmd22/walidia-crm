@@ -29,6 +29,8 @@ export interface NavChild {
 
 export interface NavSection {
   key: string
+  /** The band it sits in — Overview, Revenue, Operations, Business, Admin. */
+  group: string
   label: string
   icon: string
   href: string | null
