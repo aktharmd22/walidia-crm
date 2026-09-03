@@ -307,7 +307,7 @@ class DashboardController extends Controller
         /** @var Collection<int, object{name: string|null, total: int}> $rows */
         $rows = Lead::query()
             ->selectRaw('lead_sources.name as name, count(*) as total')
-            ->leftJoin('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
+            ->leftJoin('lead_sources', 'leads.source_id', '=', 'lead_sources.id')
             ->where('leads.created_at', '>=', $monthStart->subMonths(2))
             ->groupBy('lead_sources.name')
             ->orderByDesc('total')
