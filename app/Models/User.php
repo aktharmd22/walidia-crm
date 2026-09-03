@@ -135,7 +135,7 @@ class User extends Authenticatable implements Auditable
     protected $attributes = [
         'locale' => 'en',
         'timezone' => 'Asia/Dubai',
-        'chrome' => 'light',
+        'chrome' => 'navy',
         'accent' => 'brass',
         'is_active' => true,
     ];

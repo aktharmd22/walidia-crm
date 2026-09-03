@@ -17,7 +17,7 @@ return new class extends Migration
 
             $table->string('locale', 5)->default('en')->after('job_title');
             $table->string('timezone', 64)->default('Asia/Dubai')->after('locale');
-            $table->string('chrome', 16)->default('light')->after('timezone');
+            $table->string('chrome', 16)->default('navy')->after('timezone');
             $table->string('accent', 16)->default('brass')->after('chrome');
 
             $table->boolean('is_active')->default(true)->after('accent');
