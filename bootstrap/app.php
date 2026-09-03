@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Middleware\EnsureTwoFactorIsConfirmed;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\PortalGuard;
 use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\SetLocaleAndTimezone;
 use Illuminate\Foundation\Application;
@@ -31,6 +32,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'two-factor' => EnsureTwoFactorIsConfirmed::class,
+            'portal' => PortalGuard::class,
             'role' => RoleMiddleware::class,
             'permission' => PermissionMiddleware::class,
         ]);

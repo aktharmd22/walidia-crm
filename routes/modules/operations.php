@@ -46,6 +46,7 @@ Route::middleware(['auth', 'two-factor'])->group(function (): void {
         Route::post('/{crew}/restore', 'restore')->withTrashed()->name('restore');
         Route::post('/assignments', 'storeAssignment')->name('assignments.store');
         Route::post('/assignments/{assignment}/dispatch', 'dispatch')->name('assignments.dispatch');
+        Route::post('/assignments/{assignment}/share', 'shareAssignment')->name('assignments.share');
         Route::post('/{crew}/documents', 'storeDocument')->name('documents.store');
     });
     Route::resource('crew', CrewController::class)->parameters(['crew' => 'crew']);

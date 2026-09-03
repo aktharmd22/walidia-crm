@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Operations;
 
 use App\Domain\Gates\GateEvaluator;
 use App\Domain\Operations\Actions\DispatchCrew;
+use App\Http\Controllers\Concerns\IssuesPortalLinks;
 use App\Http\Controllers\ResourceController;
 use App\Http\Resources\CrewResource;
 use App\Models\Booking;
@@ -32,6 +33,8 @@ use Inertia\Response;
  */
 class CrewController extends ResourceController
 {
+    use IssuesPortalLinks;
+
     protected string $model = Crew::class;
 
     protected string $name = 'crew';
@@ -252,5 +255,18 @@ class CrewController extends ResourceController
                 'is_expiring' => $document->isExpiring(30),
             ]),
         ];
+    }
+
+    /**
+     * The dispatch sheet a crew member opens on their phone at the marina:
+     * where to be, when, on which yacht. No guests, no client, no money.
+     */
+    public function shareAssignment(Request $request, CrewAssignment $assignment): RedirectResponse
+    {
+        $this->authorize('view', $assignment);
+
+        $assignment->booking?->logActivity('system', 'Dispatch sheet sent to crew');
+
+        return $this->issuePortalLink($assignment, 'crew.assignment', 'portal.assignment');
     }
 }

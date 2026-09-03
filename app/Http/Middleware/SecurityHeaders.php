@@ -20,7 +20,12 @@ class SecurityHeaders
 
         $response->headers->set('X-Frame-Options', 'DENY');
         $response->headers->set('X-Content-Type-Options', 'nosniff');
-        $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
+        // A route that has deliberately tightened this — the portals send
+        // `no-referrer` so a signed token cannot leak through a click — keeps
+        // its own value; this is the application-wide floor, not a ceiling.
+        if (! $response->headers->has('Referrer-Policy')) {
+            $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
+        }
         $response->headers->set('X-Permitted-Cross-Domain-Policies', 'none');
         $response->headers->set(
             'Permissions-Policy',

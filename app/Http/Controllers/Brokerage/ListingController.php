@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Brokerage;
 
 use App\Domain\Gates\GateEvaluator;
+use App\Http\Controllers\Concerns\IssuesPortalLinks;
 use App\Http\Controllers\ResourceController;
 use App\Http\Resources\ListingResource;
 use App\Models\Listing;
@@ -26,6 +27,8 @@ use Illuminate\Validation\Rule;
  */
 class ListingController extends ResourceController
 {
+    use IssuesPortalLinks;
+
     protected string $model = Listing::class;
 
     protected string $name = 'listings';
@@ -153,5 +156,18 @@ class ListingController extends ResourceController
             'notes' => ['nullable', 'string', 'max:2000'],
             'status' => ['required', Rule::in(['draft', 'active', 'under_offer', 'sold', 'withdrawn', 'expired'])],
         ]);
+    }
+
+    /**
+     * A partner broker's view of the listing — the presentation, never the
+     * reserve price and never the seller.
+     */
+    public function share(Request $request, Listing $listing): RedirectResponse
+    {
+        $this->authorize('view', $listing);
+
+        $listing->logActivity('system', 'Listing shared with a partner broker');
+
+        return $this->issuePortalLink($listing, 'partner.listing', 'portal.listing');
     }
 }

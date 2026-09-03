@@ -36,6 +36,7 @@ Route::middleware(['auth', 'two-factor'])->prefix('brokerage')->name('brokerage.
         Route::post('/{listing}/restore', 'restore')->withTrashed()->name('restore');
         Route::post('/{listing}/publish', 'publish')->name('publish');
         Route::post('/{listing}/withdraw', 'withdraw')->name('withdraw');
+        Route::post('/{listing}/share', 'share')->name('share');
     });
     Route::resource('listings', ListingController::class);
 

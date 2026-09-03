@@ -56,6 +56,7 @@ Route::middleware(['auth', 'two-factor'])->prefix('management')->name('managemen
         Route::post('/bulk', 'bulk')->name('bulk');
         Route::post('/{ownerStatement}/restore', 'restore')->withTrashed()->name('restore');
         Route::post('/{ownerStatement}/issue', 'issue')->name('issue');
+        Route::post('/{ownerStatement}/share', 'share')->name('share');
     });
     Route::resource('owner-statements', OwnerStatementController::class)
         ->parameters(['owner-statements' => 'ownerStatement']);

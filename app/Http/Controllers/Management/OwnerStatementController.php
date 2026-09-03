@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Management;
 
+use App\Http\Controllers\Concerns\IssuesPortalLinks;
 use App\Http\Controllers\ResourceController;
 use App\Http\Resources\OwnerStatementResource;
 use App\Models\ManagementAgreement;
@@ -24,6 +25,8 @@ use Illuminate\Validation\Rule;
  */
 class OwnerStatementController extends ResourceController
 {
+    use IssuesPortalLinks;
+
     protected string $model = OwnerStatement::class;
 
     protected string $name = 'owner-statements';
@@ -110,5 +113,18 @@ class OwnerStatementController extends ResourceController
             'notes' => ['nullable', 'string', 'max:2000'],
             'status' => ['required', Rule::in(['draft', 'issued', 'approved', 'paid'])],
         ]);
+    }
+
+    /**
+     * Hand the owner a link to their own statement. It grants no account, opens
+     * nothing else, and dies in seven days.
+     */
+    public function share(Request $request, OwnerStatement $ownerStatement): RedirectResponse
+    {
+        $this->authorize('view', $ownerStatement);
+
+        $ownerStatement->logActivity('system', 'Statement link sent to the owner');
+
+        return $this->issuePortalLink($ownerStatement, 'owner.statement', 'portal.statement');
     }
 }
