@@ -30,6 +30,7 @@ final class Permissions
         'crm' => [
             'leads', 'lead-sources', 'clients', 'client-contacts', 'companies',
             'deals', 'pipelines', 'tasks', 'notes', 'activities', 'tags', 'saved-views',
+            'client-journeys', 'loyalty-rewards',
         ],
 
         'fleet' => [
@@ -66,7 +67,7 @@ final class Permissions
         'documents' => ['documents', 'document-templates', 'signature-requests'],
 
         'engine' => [
-            'gate-rules', 'workflows', 'message-templates', 'reminder-rules',
+            'gate-rules', 'workflows', 'message-templates', 'reminder-rules', 'workflow-runs',
             'communications', 'notifications', 'portal-invitations',
         ],
     ];

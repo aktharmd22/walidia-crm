@@ -76,6 +76,13 @@ class AppServiceProvider extends ServiceProvider
             'payout' => Models\Payout::class,
             'maintenance_schedule' => Models\MaintenanceSchedule::class,
             'checklist_template' => Models\ChecklistTemplate::class,
+            'message_template' => Models\MessageTemplate::class,
+            'workflow_rule' => Models\WorkflowRule::class,
+            'workflow_run' => Models\WorkflowRun::class,
+            'communication' => Models\Communication::class,
+            'client_journey' => Models\ClientJourney::class,
+            'loyalty_reward' => Models\LoyaltyReward::class,
+            'payment_schedule_item' => Models\PaymentScheduleItem::class,
         ]);
 
         /*

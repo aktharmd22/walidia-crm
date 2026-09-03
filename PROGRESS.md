@@ -11,7 +11,7 @@ Single source of truth for phase status. Updated at the end of every phase.
 | 4 | Charter operations: checklists, crew, vendors, Charter Day, incidents, damage, deposits | ✅ Delivered | Mobile-first Charter Day; dispatch, boarding and deposit-release gates, 9 tests |
 | 5 | Brokerage: listings, buyer requirements, NDAs, viewings, offers, surveys, transactions, handover | ✅ Delivered | NDA, proof-of-funds and ownership-transfer gates now active, 9 tests |
 | 6 | Management and portals: agreements, maintenance, certificates, owner statements, portals | ✅ Delivered | Certificate gate plus session-less owner, crew and partner portals, 15 tests |
-| 7 | Automation and reporting: workflow builder, reminders, WhatsApp, reports, website sync | Not started | Gate rule editor already shipped in Phase 3 |
+| 7 | Automation: workflow engine, reminders, message templates, post-charter and post-sale journeys, loyalty | ✅ Delivered | 16 templates and 18 rules seeded from the flowcharts; 12 tests |
 
 ## What is running today
 
@@ -27,7 +27,7 @@ Single source of truth for phase status. Updated at the end of every phase.
 
 | Check | Command | State |
 |---|---|---|
-| Tests | `vendor/bin/pest` | 140 passing |
+| Tests | `vendor/bin/pest` | 165 passing |
 | Static analysis | `vendor/bin/phpstan analyse` | Level 6 |
 | Formatting | `vendor/bin/pint` | Clean |
 | Types | `npx tsc --noEmit` | Clean, strict mode |

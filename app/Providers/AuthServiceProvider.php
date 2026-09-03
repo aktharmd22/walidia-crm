@@ -61,6 +61,11 @@ class AuthServiceProvider extends ServiceProvider
         Models\Inspection::class => Policies\InspectionPolicy::class,
         Models\Payout::class => Policies\PayoutPolicy::class,
         Models\MaintenanceSchedule::class => Policies\MaintenanceSchedulePolicy::class,
+        Models\MessageTemplate::class => Policies\MessageTemplatePolicy::class,
+        Models\WorkflowRule::class => Policies\WorkflowRulePolicy::class,
+        Models\Communication::class => Policies\CommunicationPolicy::class,
+        Models\ClientJourney::class => Policies\ClientJourneyPolicy::class,
+        Models\LoyaltyReward::class => Policies\LoyaltyRewardPolicy::class,
     ];
 
     public function boot(): void

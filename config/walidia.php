@@ -95,6 +95,8 @@ return [
         'certificate' => ['prefix' => 'CT', 'period' => 'none', 'padding' => 4],
         'valuation' => ['prefix' => 'VL', 'period' => 'yearly', 'padding' => 4],
         'inspection' => ['prefix' => 'IS', 'period' => 'yearly', 'padding' => 4],
+        'communication' => ['prefix' => 'MSG', 'period' => 'yearly', 'padding' => 6],
+        'reward' => ['prefix' => 'RW', 'period' => 'yearly', 'padding' => 4],
         'maintenance' => ['prefix' => 'MT', 'period' => 'yearly', 'padding' => 4],
         'statement' => ['prefix' => 'OS', 'period' => 'yearly', 'padding' => 4],
         'buyer-req' => ['prefix' => 'BR', 'period' => 'yearly', 'padding' => 4],

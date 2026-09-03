@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Operations\Actions;
 
+use App\Domain\Automation\WorkflowEngine;
 use App\Domain\Charter\CostSheetCalculator;
 use App\Domain\Gates\GateEvaluator;
 use App\Domain\Gates\GateResult;
@@ -11,6 +12,7 @@ use App\Models\Booking;
 use App\Models\CharterDayLog;
 use App\Models\CharterExtra;
 use App\Models\ChecklistItem;
+use App\Models\ClientJourney;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -57,7 +59,31 @@ class RunCharterDay
 
         $booking->forceFill(['status' => 'completed', 'completed_at' => now()])->save();
 
+        // The whole post-charter sequence hangs off this moment: thank you,
+        // feedback, review, and the follow-ups that bring the client back.
+        app(WorkflowEngine::class)->fire('charter.completed', $booking);
+        $this->openJourney($booking);
+
         return $log;
+    }
+
+    /**
+     * Open the post-charter journey.
+     *
+     * One row per charter, holding what has been sent and what the client said
+     * back — because the part after the money is settled is where repeat
+     * business is won, and where most systems leave a spreadsheet.
+     */
+    private function openJourney(Booking $booking): void
+    {
+        if ($booking->client_id === null) {
+            return;
+        }
+
+        ClientJourney::firstOrCreate(
+            ['booking_id' => $booking->getKey(), 'type' => 'post_charter'],
+            ['client_id' => $booking->client_id, 'status' => 'open'],
+        );
     }
 
     /**

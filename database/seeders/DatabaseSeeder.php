@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             ChecklistTemplateSeeder::class,
             GateRuleSeeder::class,
             FinanceDefaultsSeeder::class,
+            AutomationSeeder::class,
         ]);
 
         // Never in production: demo accounts and sample records.

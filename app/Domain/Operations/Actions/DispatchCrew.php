@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Operations\Actions;
 
+use App\Domain\Automation\WorkflowEngine;
 use App\Domain\Gates\GateEvaluator;
 use App\Domain\Gates\GateResult;
 use App\Models\CrewAssignment;
@@ -39,6 +40,8 @@ class DispatchCrew
                 "Crew dispatched: {$assignment->crew?->full_name}",
                 $assignment->role,
             );
+
+            app(WorkflowEngine::class)->fire('crew.dispatched', $assignment);
         });
 
         return $result;

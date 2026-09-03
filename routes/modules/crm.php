@@ -3,9 +3,11 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Crm\ClientController;
+use App\Http\Controllers\Crm\ClientJourneyController;
 use App\Http\Controllers\Crm\CompanyController;
 use App\Http\Controllers\Crm\DealController;
 use App\Http\Controllers\Crm\LeadController;
+use App\Http\Controllers\Crm\LoyaltyRewardController;
 use App\Http\Controllers\Crm\TaskController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -96,4 +98,30 @@ Route::middleware(['auth', 'two-factor'])->group(function (): void {
 
     /* The pipeline board is also reachable from the dashboard nav. */
     Route::get('/dashboard/pipeline', [DealController::class, 'board'])->name('dashboard.pipeline');
+});
+
+Route::middleware(['auth', 'two-factor'])->prefix('crm')->name('crm.')->group(function (): void {
+
+    /* What happens after the money is settled ------------------------------ */
+    Route::controller(ClientJourneyController::class)->prefix('journeys')->name('journeys.')->group(function (): void {
+        Route::get('/archive', 'archive')->name('archive');
+        Route::get('/export', 'export')->name('export');
+        Route::post('/bulk', 'bulk')->name('bulk');
+        Route::post('/{clientJourney}/restore', 'restore')->withTrashed()->name('restore');
+        Route::post('/{clientJourney}/survey', 'recordSurvey')->name('survey');
+        Route::post('/{clientJourney}/complaint', 'raiseComplaint')->name('complaint');
+        Route::post('/{clientJourney}/complaint/resolve', 'resolveComplaint')->name('complaint.resolve');
+        Route::post('/{clientJourney}/upsell', 'recordUpsell')->name('upsell');
+    });
+    Route::resource('journeys', ClientJourneyController::class)->parameters(['journeys' => 'clientJourney']);
+
+    /* Why a client comes back ---------------------------------------------- */
+    Route::controller(LoyaltyRewardController::class)->prefix('rewards')->name('rewards.')->group(function (): void {
+        Route::get('/archive', 'archive')->name('archive');
+        Route::get('/export', 'export')->name('export');
+        Route::post('/bulk', 'bulk')->name('bulk');
+        Route::post('/{loyaltyReward}/restore', 'restore')->withTrashed()->name('restore');
+        Route::post('/{loyaltyReward}/redeem', 'redeem')->name('redeem');
+    });
+    Route::resource('rewards', LoyaltyRewardController::class)->parameters(['rewards' => 'loyaltyReward']);
 });

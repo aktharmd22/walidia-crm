@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Operations;
 
+use App\Domain\Automation\WorkflowEngine;
 use App\Domain\Gates\GateEvaluator;
 use App\Http\Controllers\Concerns\PicksOperationsContext;
 use App\Http\Controllers\ResourceController;
@@ -119,6 +120,8 @@ class SecurityDepositController extends ResourceController
             'Security deposit released',
             $data['deduction_reason'] ?? null,
         );
+
+        app(WorkflowEngine::class)->fire('deposit.released', $securityDeposit);
 
         return back()->with('success', 'Security deposit released.');
     }

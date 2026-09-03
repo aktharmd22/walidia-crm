@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Charter\Actions;
 
+use App\Domain\Automation\WorkflowEngine;
 use App\Domain\Gates\Exceptions\GateBlockedException;
 use App\Domain\Gates\GateEvaluator;
 use App\Domain\Gates\GateResult;
@@ -92,6 +93,9 @@ class ConfirmBooking
             // confirming a booking stamps the standing templates onto it, so
             // the planning steps exist from the moment the charter is real.
             $this->openChecklists($booking);
+
+            // Everything the client hears from here is a rule, not a habit.
+            app(WorkflowEngine::class)->fire('booking.confirmed', $booking);
         });
 
         return $result;
