@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { Link, router, usePage } from '@inertiajs/react'
-import { Bell, Languages, Menu, Moon, Search, Sun } from 'lucide-react'
+import { Bell, Menu, Moon, Search, Sun } from 'lucide-react'
 import { cn } from '@/lib/cn'
 import { Avatar } from '@/ui/Primitives'
 import type { SharedProps } from '@/types'
@@ -71,7 +71,7 @@ export function Topbar({
 }) {
   const { props } = usePage<SharedProps>()
   const user = props.auth.user
-  const { chrome, locale } = props
+  const { chrome } = props
 
   const firstName = user?.name?.split(' ')[0]
 
@@ -106,15 +106,6 @@ export function Topbar({
       <div className="flex shrink-0 items-center gap-2 lg:gap-3">
         <RoundButton label="Search" onClick={onOpenSearch} className="lg:hidden">
           <Search className="size-[19px]" aria-hidden />
-        </RoundButton>
-
-        {/* The reference's flag is a locale switch; this system is bilingual. */}
-        <RoundButton
-          label={locale === 'ar' ? 'Switch to English' : 'التبديل إلى العربية'}
-          onClick={() => router.post(`/me/locale/${locale === 'ar' ? 'en' : 'ar'}`)}
-          className="hidden sm:grid"
-        >
-          <Languages className="size-[19px]" aria-hidden />
         </RoundButton>
 
         <RoundButton

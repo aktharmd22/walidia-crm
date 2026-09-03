@@ -23,6 +23,14 @@ export interface TableColumnMeta {
   numeric?: boolean
   /** Shown in the stacked mobile card. Defaults to true for priority 1–2. */
   mobile?: boolean
+  /**
+   * A CSS width for the column. Truncation needs something to truncate
+   * against: without a width the browser gives every column an equal share,
+   * which clips a 40px action button and starves a 200px name.
+   */
+  width?: string
+  /** Let this column keep its natural width and never shrink. */
+  fit?: boolean
 }
 
 declare module '@tanstack/react-table' {
@@ -153,9 +161,11 @@ export function DataTable<T>({
                     <th
                       key={header.id}
                       scope="col"
+                      style={meta.width ? { width: meta.width } : undefined}
                       className={cn(
                         'px-4 py-3 text-micro uppercase tracking-[0.06em] text-ink-faint font-medium whitespace-nowrap border-b border-line bg-deck',
                         meta.align === 'end' ? 'text-end' : 'text-start',
+                        meta.fit && 'w-px',
                         priorityClass[meta.priority ?? 1],
                       )}
                     >
@@ -163,7 +173,7 @@ export function DataTable<T>({
                         <button
                           type="button"
                           onClick={() => toggleSort(header.column.id)}
-                          className="inline-flex items-center gap-2 hover:text-ink"
+                          className="inline-flex items-center gap-2 uppercase tracking-[0.06em] hover:text-ink"
                           aria-label={`Sort by ${header.column.id}`}
                         >
                           {flexRender(header.column.columnDef.header, header.getContext())}
@@ -230,7 +240,10 @@ export function DataTable<T>({
                         <td
                           key={cell.id}
                           className={cn(
-                            'h-row max-w-0 truncate whitespace-nowrap px-4 py-2 text-body text-ink-soft align-middle',
+                            'h-row whitespace-nowrap px-4 py-2 text-body text-ink-soft align-middle',
+                            // Only a column with a stated width can truncate;
+                            // the rest keep whatever they need.
+                            meta.width && 'max-w-0 truncate',
                             meta.align === 'end' ? 'text-end' : 'text-start',
                             meta.numeric && 'numeric text-ink',
                             priorityClass[meta.priority ?? 1],

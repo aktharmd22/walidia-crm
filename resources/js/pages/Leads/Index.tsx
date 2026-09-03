@@ -52,7 +52,7 @@ export default function LeadsIndex({
           subtitle={[row.original.reference, row.original.source].filter(Boolean).join(' · ')}
         />
       ),
-      meta: { priority: 1 },
+      meta: { priority: 1, width: '30%' },
     },
     {
       id: 'status',
@@ -71,7 +71,7 @@ export default function LeadsIndex({
       id: 'business_line',
       header: 'Line',
       cell: ({ row }) => <span className="capitalize">{row.original.business_line}</span>,
-      meta: { priority: 3 },
+      meta: { priority: 3, width: '12%' },
     },
     {
       id: 'assignee',
@@ -86,7 +86,7 @@ export default function LeadsIndex({
         ) : (
           <span className="text-ink-faint">Unassigned</span>
         ),
-      meta: { priority: 2 },
+      meta: { priority: 2, width: '18%' },
     },
     {
       id: 'sla_due_at',
@@ -103,7 +103,7 @@ export default function LeadsIndex({
           </span>
         </span>
       ),
-      meta: { priority: 2, align: 'end' },
+      meta: { priority: 2, align: 'end', fit: true },
     },
     {
       id: 'actions',
@@ -155,7 +155,7 @@ export default function LeadsIndex({
           />
         </span>
       ),
-      meta: { priority: 1, align: 'end' },
+      meta: { priority: 1, align: 'end', fit: true },
     },
   ]
 
