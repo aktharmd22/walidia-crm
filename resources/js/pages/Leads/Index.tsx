@@ -1,6 +1,7 @@
 import { router } from '@inertiajs/react'
 import type { ColumnDef } from '@tanstack/react-table'
-import { MessageSquare, MoreHorizontal } from 'lucide-react'
+import { MoreHorizontal } from 'lucide-react'
+import { WhatsAppIcon } from '@/ui/BrandIcons'
 import { ResourceIndex } from '@/components/crud/ResourceIndex'
 import { DropdownMenu } from '@/ui/Overlays'
 import { DateText, IdentityCell } from '@/ui/Primitives'
@@ -98,10 +99,11 @@ export default function LeadsIndex({
               target="_blank"
               rel="noreferrer"
               onClick={(event) => event.stopPropagation()}
-              className="rounded-pill p-2 text-ink-faint hover:bg-deck hover:text-ink"
-              aria-label="Message on WhatsApp"
+              className="rounded-pill p-2 text-whatsapp transition-colors duration-fast ease-std hover:bg-whatsapp-soft"
+              aria-label={`Message ${row.original.name} on WhatsApp`}
+              title="Message on WhatsApp"
             >
-              <MessageSquare className="size-4" aria-hidden />
+              <WhatsAppIcon className="size-[18px]" />
             </a>
           )}
           <DropdownMenu

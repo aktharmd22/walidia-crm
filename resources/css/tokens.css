@@ -89,6 +89,11 @@
   --shadow-modal: 0 16px 48px rgba(15, 27, 45, 0.18);
   --shadow-toast: 0 8px 24px rgba(15, 27, 45, 0.14);
 
+  /* WhatsApp's own green. A brand mark in the wrong colour is worse
+     than no brand mark: people stop trusting what the icon promises. */
+  --whatsapp: #1FA855;
+  --whatsapp-soft: #E7F7EE;
+
   --ease: cubic-bezier(0.2, 0, 0, 1);
   --dur-fast: 120ms;
   --dur-base: 180ms;

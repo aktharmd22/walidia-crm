@@ -26,6 +26,8 @@ export default {
       hull: 'var(--hull)',
       deck: 'var(--deck)',
       line: { DEFAULT: 'var(--line)', strong: 'var(--line-strong)' },
+      whatsapp: { DEFAULT: 'var(--whatsapp)', soft: 'var(--whatsapp-soft)' },
+
       accent: {
         DEFAULT: 'var(--accent)',
         hover: 'var(--accent-hover)',
