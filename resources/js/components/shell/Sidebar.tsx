@@ -115,7 +115,7 @@ function NavRow({
                 >
                   <span className="truncate">{child.label}</span>
                   {typeof child.badge === 'number' && child.badge > 0 && (
-                    <span className="numeric shrink-0 rounded-pill bg-accent-soft px-[6px] text-micro text-accent">
+                    <span className="numeric shrink-0 rounded-pill bg-accent-press px-[6px] text-micro text-white">
                       {child.badge}
                     </span>
                   )}

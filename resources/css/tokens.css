@@ -89,15 +89,25 @@
   --z-sticky: 10; --z-drawer: 40; --z-popover: 50; --z-modal: 60; --z-toast: 70;
 }
 
-/* Light chrome — matches the shared UI reference (D-009). */
+/*
+ * Light chrome (D-009).
+ *
+ * Three planes, deepest to lightest: sidebar, page, card. White-on-#F6F8FA was
+ * three per cent apart and the cards were white too, so the sidebar read as a
+ * full-height card rather than as navigation.
+ *
+ * The neutral is biased toward the brand navy rather than a flat grey — on a
+ * page this large the bias is what makes it look chosen instead of inherited,
+ * and it is what the brass accent sits against.
+ */
 [data-chrome='light'] {
-  --sidebar-bg: #FFFFFF;
+  --sidebar-bg: #E1E8F1;
   --sidebar-fg: #46566B;
-  --sidebar-fg-muted: #8A97A8;
+  --sidebar-fg-muted: #55657C;
   --sidebar-fg-active: #0F1B2D;
-  --sidebar-active-bg: var(--accent-soft);
-  --sidebar-hover-bg: #F6F8FA;
-  --sidebar-line: #E3E8EF;
+  --sidebar-active-bg: #FFFFFF;
+  --sidebar-hover-bg: #D5DEEA;
+  --sidebar-line: #CBD6E4;
 }
 
 /* Blue accent — pair with light chrome to reproduce the reference exactly. */
