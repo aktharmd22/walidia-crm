@@ -1,7 +1,7 @@
 import { Head, useForm } from '@inertiajs/react'
 import type { FormEvent } from 'react'
 import { Button } from '@/ui/Button'
-import { Input } from '@/ui/Field'
+import { Input, PasswordInput } from '@/ui/Field'
 
 export default function ResetPassword({ email, token }: { email: string; token: string }) {
   const { data, setData, post, processing, errors } = useForm({
@@ -36,9 +36,8 @@ export default function ResetPassword({ email, token }: { email: string; token: 
             error={errors.email}
             onChange={(event) => setData('email', event.target.value)}
           />
-          <Input
+          <PasswordInput
             label="New password"
-            type="password"
             autoComplete="new-password"
             required
             autoFocus
@@ -46,9 +45,8 @@ export default function ResetPassword({ email, token }: { email: string; token: 
             error={errors.password}
             onChange={(event) => setData('password', event.target.value)}
           />
-          <Input
+          <PasswordInput
             label="Confirm new password"
-            type="password"
             autoComplete="new-password"
             required
             value={data.password_confirmation}

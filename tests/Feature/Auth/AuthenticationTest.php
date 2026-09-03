@@ -55,13 +55,28 @@ it('rate limits sign-in after five attempts', function (): void {
     $this->assertGuest();
 });
 
-it('sends a user without confirmed two-factor to enrolment, not the dashboard', function (): void {
+it('sends a user without confirmed two-factor to enrolment, when it is required', function (): void {
+    // Enrolment is opt-in now (REQUIRE_TWO_FACTOR), but the machinery behind it
+    // stays wired and stays tested — turning it back on must still work.
+    config(['walidia.require_two_factor' => true]);
+
     $user = User::factory()->create();
     $user->assignRole(Roles::SALES);
 
     $this->actingAs($user)
         ->get('/')
         ->assertRedirect(route('two-factor.setup'));
+});
+
+it('lets a user straight in while two-factor is not required', function (): void {
+    config(['walidia.require_two_factor' => false]);
+
+    $user = User::factory()->create();
+    $user->assignRole(Roles::SALES);
+
+    $this->actingAs($user)
+        ->get('/')
+        ->assertOk();
 });
 
 it('lets a user with confirmed two-factor reach the dashboard', function (): void {
@@ -73,6 +88,8 @@ it('lets a user with confirmed two-factor reach the dashboard', function (): voi
 });
 
 it('keeps the enrolment screen reachable while two-factor is outstanding', function (): void {
+    config(['walidia.require_two_factor' => true]);
+
     $user = User::factory()->create();
     $user->assignRole(Roles::SALES);
 

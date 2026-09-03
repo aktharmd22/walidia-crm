@@ -21,7 +21,14 @@ return [
     'locales' => ['en', 'ar'],
 
     /* Security */
-    'require_two_factor' => (bool) env('REQUIRE_TWO_FACTOR', true),
+    /*
+     * Mandatory TOTP enrolment. Off by default at the owner's instruction;
+     * REQUIRE_TWO_FACTOR=true restores it, and everything behind it — the
+     * enrolment flow, the challenge, the `two-factor` middleware on every
+     * internal route — is still wired and tested, so turning it on is a one
+     * line change rather than a rebuild.
+     */
+    'require_two_factor' => (bool) env('REQUIRE_TWO_FACTOR', false),
     'password_min_length' => 12,
     'session_idle_minutes' => (int) env('SESSION_LIFETIME', 480),
     'signed_link_days' => 7,

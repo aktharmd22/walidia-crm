@@ -149,8 +149,7 @@ export default function Profile({ profile, security }: Props) {
             </CardHeader>
             <CardBody className="flex flex-col gap-3">
               <p className="text-body text-ink-soft">
-                Two-factor authentication is required on every Walidia account. Access to VIP records and guest
-                manifests is logged against your name.
+                Access to VIP records and guest manifests is logged against your name.
               </p>
               <dl className="flex flex-col gap-2 text-small">
                 <div className="flex justify-between gap-3">

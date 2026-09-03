@@ -1,4 +1,5 @@
-import { forwardRef, useId } from 'react'
+import { forwardRef, useId, useState } from 'react'
+import { Eye, EyeOff } from 'lucide-react'
 import type { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes, ReactNode } from 'react'
 import { cn } from '@/lib/cn'
 
@@ -202,3 +203,61 @@ export function Checkbox({
     </div>
   )
 }
+
+export interface PasswordInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
+  label?: string
+  error?: string
+  help?: string
+}
+
+/**
+ * A password field you can read back.
+ *
+ * People mistype long passphrases far more often than they are shoulder-surfed
+ * at their own desk, so the choice belongs to them: the field starts masked and
+ * the eye reveals it. The toggle is a real button — reachable by keyboard,
+ * announced by a screen reader, and never a tab stop that swallows the submit.
+ */
+export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(function PasswordInput(
+  { label, error, help, className, required, id, ...props },
+  ref,
+) {
+  const generated = useId()
+  const inputId = id ?? generated
+  const [revealed, setRevealed] = useState(false)
+
+  const field = (
+    <div className="relative">
+      <input
+        ref={ref}
+        id={inputId}
+        type={revealed ? 'text' : 'password'}
+        required={required}
+        aria-invalid={error ? true : undefined}
+        className={cn(control, 'h-field pe-11', className)}
+        {...props}
+      />
+      <button
+        type="button"
+        onClick={() => setRevealed((shown) => !shown)}
+        // The label says what pressing it does, not what state it is in.
+        aria-label={revealed ? 'Hide password' : 'Show password'}
+        aria-pressed={revealed}
+        className={cn(
+          'absolute inset-y-0 end-0 flex w-11 items-center justify-center rounded-e-card',
+          'text-ink-faint transition-colors duration-fast ease-std hover:text-ink',
+        )}
+      >
+        {revealed ? <EyeOff className="size-4" aria-hidden /> : <Eye className="size-4" aria-hidden />}
+      </button>
+    </div>
+  )
+
+  if (!label && !error && !help) return field
+
+  return (
+    <Field label={label} error={error} help={help} required={required} htmlFor={inputId}>
+      {field}
+    </Field>
+  )
+})

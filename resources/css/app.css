@@ -27,10 +27,20 @@
     font-weight: 500;
   }
 
+  /*
+   * The ring follows whatever radius the element already has — forcing one
+   * here drew a 4px-cornered outline around a 6px-cornered input, which is the
+   * kind of half-millimetre wrongness you feel before you can name it.
+   */
   :where(a, button, input, select, textarea, [tabindex]):focus-visible {
     outline: 2px solid var(--accent-ring);
     outline-offset: 2px;
-    border-radius: var(--radius-pill);
+  }
+
+  /* A focused control also darkens its own border, so the field reads as live
+     rather than merely haloed. */
+  :where(input, select, textarea):focus-visible {
+    border-color: var(--accent);
   }
 
   ::placeholder {

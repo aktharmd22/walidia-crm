@@ -1,7 +1,7 @@
 import { Head, useForm } from '@inertiajs/react'
 import type { FormEvent } from 'react'
 import { Button } from '@/ui/Button'
-import { Input } from '@/ui/Field'
+import { PasswordInput } from '@/ui/Field'
 
 export default function ConfirmPassword() {
   const { data, setData, post, processing, errors } = useForm({ password: '' })
@@ -22,9 +22,8 @@ export default function ConfirmPassword() {
         </p>
 
         <form onSubmit={submit} className="mt-6 flex flex-col gap-3">
-          <Input
+          <PasswordInput
             label="Password"
-            type="password"
             autoComplete="current-password"
             required
             autoFocus

@@ -3,7 +3,7 @@ import type { FormEvent } from 'react'
 import { ShieldCheck } from 'lucide-react'
 import { PageHeader } from '@/components/shell/Page'
 import { Button } from '@/ui/Button'
-import { Input } from '@/ui/Field'
+import { PasswordInput } from '@/ui/Field'
 import { Card, CardBody, CardHeader, CardTitle } from '@/ui/Primitives'
 import { StatusPill } from '@/ui/StatusPill'
 
@@ -35,18 +35,16 @@ export default function Security({ two_factor_confirmed }: { two_factor_confirme
           </CardHeader>
           <CardBody>
             <form onSubmit={submit} className="flex flex-col gap-3">
-              <Input
+              <PasswordInput
                 label="Current password"
-                type="password"
                 autoComplete="current-password"
                 required
                 value={data.current_password}
                 error={errors.current_password}
                 onChange={(event) => setData('current_password', event.target.value)}
               />
-              <Input
+              <PasswordInput
                 label="New password"
-                type="password"
                 autoComplete="new-password"
                 required
                 value={data.password}
@@ -54,9 +52,8 @@ export default function Security({ two_factor_confirmed }: { two_factor_confirme
                 help="At least 12 characters, mixed case and a number. Breached passwords are refused."
                 onChange={(event) => setData('password', event.target.value)}
               />
-              <Input
+              <PasswordInput
                 label="Confirm new password"
-                type="password"
                 autoComplete="new-password"
                 required
                 value={data.password_confirmation}
@@ -74,14 +71,14 @@ export default function Security({ two_factor_confirmed }: { two_factor_confirme
         <Card>
           <CardHeader>
             <CardTitle>Two-factor authentication</CardTitle>
-            <StatusPill tone={two_factor_confirmed ? 'success' : 'danger'}>
+            <StatusPill tone={two_factor_confirmed ? 'success' : 'neutral'}>
               {two_factor_confirmed ? 'Active' : 'Not set up'}
             </StatusPill>
           </CardHeader>
           <CardBody className="flex flex-col gap-3">
             <p className="text-body text-ink-soft">
-              Required on every account, with no exception. If you lose your device, use a recovery code; if you have
-              run out, an Admin can reset your enrolment.
+              Recommended, not compulsory. If you lose your device, use a recovery code; if you have run out, an
+              Admin can reset your enrolment.
             </p>
             <div>
               <Button
