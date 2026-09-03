@@ -54,7 +54,7 @@ class HandleInertiaRequests extends Middleware
             ],
 
             'chrome' => [
-                'theme' => $user instanceof User ? $user->chrome : 'navy',
+                'theme' => $user instanceof User ? $user->chrome : 'light',
                 'accent' => $user instanceof User ? $user->accent : 'brass',
             ],
 
