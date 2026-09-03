@@ -64,7 +64,7 @@ function NavRow({
     return (
       <Link href={section.href ?? '#'} className={row} title={collapsed ? section.label : undefined} onClick={onNavigate}>
         {rail}
-        <Icon className={cn('size-[18px] shrink-0', active && 'text-accent')} aria-hidden />
+        <Icon className={cn('size-[18px] shrink-0', active && 'text-accent-ink')} aria-hidden />
         {!collapsed && <span className="truncate">{section.label}</span>}
       </Link>
     )
@@ -80,7 +80,7 @@ function NavRow({
         title={collapsed ? section.label : undefined}
       >
         {rail}
-        <Icon className={cn('size-[18px] shrink-0', active && 'text-accent')} aria-hidden />
+        <Icon className={cn('size-[18px] shrink-0', active && 'text-accent-ink')} aria-hidden />
         {!collapsed && (
           <>
             <span className="flex-1 truncate text-start">{section.label}</span>

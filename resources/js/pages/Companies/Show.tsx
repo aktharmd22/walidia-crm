@@ -66,7 +66,7 @@ export default function CompanyShow({
         {
           label: 'Website',
           value: record.website ? (
-            <a href={record.website} target="_blank" rel="noreferrer" className="text-accent hover:underline">
+            <a href={record.website} target="_blank" rel="noreferrer" className="text-accent-ink hover:underline">
               Open
             </a>
           ) : (
@@ -122,7 +122,7 @@ export default function CompanyShow({
       <Card>
         <CardHeader>
           <CardTitle>Clients</CardTitle>
-          <Link href={`/clients?company_id=${record.id}`} className="text-small text-accent hover:underline">
+          <Link href={`/clients?company_id=${record.id}`} className="text-small text-accent-ink hover:underline">
             All clients
           </Link>
         </CardHeader>

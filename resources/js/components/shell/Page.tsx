@@ -73,7 +73,7 @@ export function Toolbar({
           <Button variant="secondary" icon={<Filter className="size-4" />} onClick={onFilter}>
             Filter
             {filterCount > 0 && (
-              <span className="numeric ms-1 rounded-pill bg-accent-soft px-2 text-micro text-accent">
+              <span className="numeric ms-1 rounded-pill bg-accent-soft px-2 text-micro text-accent-ink">
                 {filterCount}
               </span>
             )}

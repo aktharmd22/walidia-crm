@@ -60,13 +60,13 @@ export default function Alerts({
               <li key={blocker.id} className="flex flex-wrap items-start gap-3 px-5 py-4">
                 <StatusPill tone="danger">Blocked</StatusPill>
                 <span className="min-w-0 flex-1">
-                  <Link href={blocker.href} className="block text-h3 text-ink hover:text-accent">
+                  <Link href={blocker.href} className="block text-h3 text-ink hover:text-accent-ink">
                     {blocker.subject}
                   </Link>
                   <span className="block text-small text-ink-soft">{blocker.message}</span>
                 </span>
                 {blocker.resolution && (
-                  <Link href={blocker.resolution.href} className="text-small text-accent hover:underline">
+                  <Link href={blocker.resolution.href} className="text-small text-accent-ink hover:underline">
                     {blocker.resolution.label}
                   </Link>
                 )}
@@ -93,7 +93,7 @@ export default function Alerts({
               <li key={blocker.id} className="flex flex-wrap items-start gap-3 px-5 py-4">
                 <StatusPill tone="warning">Warning</StatusPill>
                 <span className="min-w-0 flex-1">
-                  <Link href={blocker.href} className="block text-h3 text-ink hover:text-accent">
+                  <Link href={blocker.href} className="block text-h3 text-ink hover:text-accent-ink">
                     {blocker.subject}
                   </Link>
                   <span className="block text-small text-ink-soft">{blocker.message}</span>
@@ -119,7 +119,7 @@ export default function Alerts({
             {expiring.map((item) => (
               <li key={item.id} className="flex items-center gap-3 px-5 py-3">
                 <StatusPill tone="warning">{item.kind}</StatusPill>
-                <Link href={item.href} className="min-w-0 flex-1 truncate text-h3 text-ink hover:text-accent">
+                <Link href={item.href} className="min-w-0 flex-1 truncate text-h3 text-ink hover:text-accent-ink">
                   {item.subject}
                 </Link>
                 <DateText value={item.expires_on} className="text-small text-ink-soft" />

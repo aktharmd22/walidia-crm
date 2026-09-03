@@ -35,7 +35,7 @@ export default function DealShow({
         {
           label: 'Client',
           value: record.client ? (
-            <Link href={`/clients/${record.client.id}`} className="text-accent hover:underline">
+            <Link href={`/clients/${record.client.id}`} className="text-accent-ink hover:underline">
               {record.client.name}
             </Link>
           ) : (

@@ -97,7 +97,7 @@ export default function Login({ status, canResetPassword }: { status?: string; c
               {canResetPassword && (
                 <a
                   href="/forgot-password"
-                  className="shrink-0 text-small text-accent hover:underline"
+                  className="shrink-0 text-small text-accent-ink hover:underline"
                 >
                   Forgot password?
                 </a>

@@ -135,7 +135,7 @@ export function DataTable<T>({
                     <input
                       type="checkbox"
                       aria-label="Select all rows"
-                      className="form-checkbox size-4 rounded-[3px] border-line text-accent focus:ring-0"
+                      className="form-checkbox size-4 rounded-[3px] border-line text-accent-ink focus:ring-0"
                       checked={table.getIsAllRowsSelected()}
                       ref={(el) => {
                         if (el) el.indeterminate = table.getIsSomeRowsSelected()
@@ -217,7 +217,7 @@ export function DataTable<T>({
                         <input
                           type="checkbox"
                           aria-label="Select row"
-                          className="form-checkbox size-4 rounded-[3px] border-line text-accent focus:ring-0"
+                          className="form-checkbox size-4 rounded-[3px] border-line text-accent-ink focus:ring-0"
                           checked={row.getIsSelected()}
                           onChange={row.getToggleSelectedHandler()}
                           onClick={(event) => event.stopPropagation()}

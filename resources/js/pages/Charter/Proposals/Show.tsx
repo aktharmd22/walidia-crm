@@ -89,7 +89,7 @@ export default function ProposalShow({
           {
             label: 'Enquiry',
             value: record.enquiry ? (
-              <Link href={record.enquiry.url} className="text-accent hover:underline">
+              <Link href={record.enquiry.url} className="text-accent-ink hover:underline">
                 {record.enquiry.reference}
               </Link>
             ) : (

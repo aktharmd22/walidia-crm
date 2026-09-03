@@ -79,7 +79,7 @@ export default function EnquiryShow({
         <Card>
           <CardHeader>
             <CardTitle>Proposals</CardTitle>
-            <Link href={`/charter/proposals/create?enquiry=${record.id}`} className="text-small text-accent hover:underline">
+            <Link href={`/charter/proposals/create?enquiry=${record.id}`} className="text-small text-accent-ink hover:underline">
               New
             </Link>
           </CardHeader>

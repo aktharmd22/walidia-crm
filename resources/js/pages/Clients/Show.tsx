@@ -93,7 +93,7 @@ export default function ClientShow({
             <Card>
               <CardHeader>
                 <CardTitle>Open tasks</CardTitle>
-                <Link href="/tasks" className="text-small text-accent hover:underline">
+                <Link href="/tasks" className="text-small text-accent-ink hover:underline">
                   All
                 </Link>
               </CardHeader>
@@ -116,7 +116,7 @@ export default function ClientShow({
             <Card>
               <CardHeader>
                 <CardTitle>Documents</CardTitle>
-                <Link href={`/documents?subject_type=client&subject_id=${record.id}`} className="text-small text-accent hover:underline">
+                <Link href={`/documents?subject_type=client&subject_id=${record.id}`} className="text-small text-accent-ink hover:underline">
                   All
                 </Link>
               </CardHeader>

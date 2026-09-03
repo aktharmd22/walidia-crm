@@ -156,7 +156,7 @@ export function GatePanel({ gate }: { gate: GateResult }) {
             <span className={cn('mt-1 size-[6px] shrink-0 rounded-full', blocked ? 'bg-danger' : 'bg-warning')} aria-hidden />
             <span className="min-w-0 flex-1 text-body text-ink">{failure.message}</span>
             {failure.resolution && (
-              <Link href={failure.resolution.href} className="text-small text-accent hover:underline">
+              <Link href={failure.resolution.href} className="text-small text-accent-ink hover:underline">
                 {failure.resolution.label}
               </Link>
             )}

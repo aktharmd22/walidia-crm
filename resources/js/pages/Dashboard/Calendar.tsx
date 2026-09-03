@@ -95,7 +95,7 @@ export default function Calendar({ events = [], month }: { events?: CalendarEven
                 <span
                   className={cn(
                     'numeric text-small',
-                    isSameDay(day, new Date()) ? 'font-medium text-accent' : 'text-ink-faint',
+                    isSameDay(day, new Date()) ? 'font-medium text-accent-ink' : 'text-ink-faint',
                   )}
                 >
                   {format(day, 'd')}

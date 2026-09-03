@@ -67,7 +67,7 @@ export default function TwoFactorChallenge() {
           <button
             type="button"
             onClick={() => setUseRecovery((value) => !value)}
-            className="mt-4 text-small text-accent hover:underline"
+            className="mt-4 text-small text-accent-ink hover:underline"
           >
             {useRecovery ? 'Use an authentication code instead' : 'Use a recovery code instead'}
           </button>

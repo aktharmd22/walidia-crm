@@ -49,7 +49,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
             </Button>
           </form>
 
-          <a href="/login" className="mt-4 inline-block text-small text-accent hover:underline">
+          <a href="/login" className="mt-4 inline-block text-small text-accent-ink hover:underline">
             Back to sign in
           </a>
         </div>

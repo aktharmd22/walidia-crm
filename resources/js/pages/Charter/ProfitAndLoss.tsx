@@ -83,7 +83,7 @@ export default function ProfitAndLoss({
                 {rows.data.map((row) => (
                   <tr key={row.id} className="border-b border-line last:border-0 hover:bg-deck">
                     <td className="px-4 py-3">
-                      <Link href={row.url} className="text-h3 text-ink hover:text-accent">
+                      <Link href={row.url} className="text-h3 text-ink hover:text-accent-ink">
                         {row.yacht ?? row.reference}
                       </Link>
                       <span className="block text-small text-ink-faint">

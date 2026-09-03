@@ -92,7 +92,7 @@ export default function CostSheetShow({
         description={
           record.booking ? (
             <>
-              Charter <Link href={record.booking.url} className="text-accent hover:underline">{record.booking.reference}</Link>
+              Charter <Link href={record.booking.url} className="text-accent-ink hover:underline">{record.booking.reference}</Link>
             </>
           ) as unknown as string : undefined
         }

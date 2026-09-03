@@ -26,7 +26,7 @@ export function PortalShell({
 
       <header className="border-b border-line bg-hull">
         <div className="mx-auto flex max-w-3xl flex-col gap-1 px-5 py-6">
-          <span className="text-micro uppercase tracking-wide text-accent">Walidia Yachts</span>
+          <span className="text-micro uppercase tracking-wide text-accent-ink">Walidia Yachts</span>
           {eyebrow && <span className="text-small text-ink-faint">{eyebrow}</span>}
           <h1 className="text-h1 text-ink">{title}</h1>
         </div>

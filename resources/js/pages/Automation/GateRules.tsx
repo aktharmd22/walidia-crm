@@ -90,7 +90,7 @@ export default function GateRules({ rules = [], checks = [] }: { rules?: Rule[];
                   <span className="rounded-pill bg-deck px-2 py-px text-micro">{rule.subject_type}</span>
                   <span className="numeric">{rule.trigger}</span>
                   {rule.conditions.map((condition) => (
-                    <span key={condition.check} className="numeric rounded-pill bg-accent-soft px-2 py-px text-micro text-accent">
+                    <span key={condition.check} className="numeric rounded-pill bg-accent-soft px-2 py-px text-micro text-accent-ink">
                       {condition.check}
                     </span>
                   ))}

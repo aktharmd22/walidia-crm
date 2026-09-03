@@ -82,7 +82,7 @@ export default function SecurityDepositShow({
             <ul className="divide-y divide-line">
               {openDamage.map((damage) => (
                 <li key={damage.id} className="flex flex-wrap items-center gap-3 px-5 py-3">
-                  <Link href={`/charter/damage-reports/${damage.id}`} className="min-w-0 flex-1 text-h3 text-ink hover:text-accent">
+                  <Link href={`/charter/damage-reports/${damage.id}`} className="min-w-0 flex-1 text-h3 text-ink hover:text-accent-ink">
                     {damage.reference ?? 'Damage report'}
                     <span className="block text-small text-ink-faint">{damage.description}</span>
                   </Link>

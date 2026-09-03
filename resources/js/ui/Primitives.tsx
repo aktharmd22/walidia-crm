@@ -101,7 +101,7 @@ export function Avatar({
     <span
       aria-hidden
       className={cn(
-        'inline-grid place-items-center rounded-full shrink-0 bg-accent-soft text-accent font-medium',
+        'inline-grid place-items-center rounded-full shrink-0 bg-accent-soft text-accent-ink font-medium',
         dimensions,
         className,
       )}
@@ -133,7 +133,7 @@ export function IdentityCell({
     <span className="flex items-center gap-3 min-w-0">
       <Avatar name={name} src={src} />
       {href ? (
-        <a href={href} className="min-w-0 hover:text-accent">
+        <a href={href} className="min-w-0 hover:text-accent-ink">
           {label}
         </a>
       ) : (

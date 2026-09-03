@@ -20,11 +20,11 @@
 
   --ink: #0F1B2D;
   --ink-soft: #46566B;
-  --ink-faint: #8A97A8;
+  --ink-faint: #697687;
   --hull: #FFFFFF;
-  --deck: #F6F8FA;
-  --line: #E3E8EF;
-  --line-strong: #CBD4E1;
+  --deck: #F8F6F3;
+  --line: #E7E2DA;
+  --line-strong: #CFC7BA;
 
   --brass: #B8894A;
   --brass-hover: #A2783F;
@@ -37,6 +37,9 @@
   --accent-press: var(--brass-press);
   --accent-soft: var(--brass-soft);
   --accent-ring: var(--brass-ring);
+  /* Brass is legible as a fill or a rule, not as small text: it is
+     3.13:1 on white. Links and labels take the darker step. */
+  --accent-ink: var(--brass-press);
   --accent-on: #FFFFFF;
 
   --status-green: #1B7F4B;   --status-green-bg: #E8F2ED;
@@ -101,18 +104,19 @@
  * and it is what the brass accent sits against.
  */
 [data-chrome='light'] {
-  --sidebar-bg: #E1E8F1;
-  --sidebar-fg: #46566B;
-  --sidebar-fg-muted: #55657C;
+  --sidebar-bg: #E8E2D7;
+  --sidebar-fg: #4A4239;
+  --sidebar-fg-muted: #615647;
   --sidebar-fg-active: #0F1B2D;
   --sidebar-active-bg: #FFFFFF;
-  --sidebar-hover-bg: #D5DEEA;
-  --sidebar-line: #CBD6E4;
+  --sidebar-hover-bg: #DED7C9;
+  --sidebar-line: #D6CEC0;
 }
 
 /* Blue accent — pair with light chrome to reproduce the reference exactly. */
 [data-accent='blue'] {
   --accent: #2563A8;
+  --accent-ink: #1A4677;
   --accent-hover: #1F548F;
   --accent-press: #1A4677;
   --accent-soft: #E9EFF6;

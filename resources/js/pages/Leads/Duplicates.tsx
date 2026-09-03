@@ -39,7 +39,7 @@ export default function LeadDuplicates({ pairs = [] }: { pairs?: Pair[] }) {
             {pairs.map((pair) => (
               <li key={pair.lead.id} className="flex flex-wrap items-center gap-4 px-5 py-4">
                 <div className="min-w-0 flex-1">
-                  <Link href={pair.lead.url} className="text-h3 text-ink hover:text-accent">
+                  <Link href={pair.lead.url} className="text-h3 text-ink hover:text-accent-ink">
                     {pair.lead.name}
                   </Link>
                   <p className="text-small text-ink-faint">
@@ -52,7 +52,7 @@ export default function LeadDuplicates({ pairs = [] }: { pairs?: Pair[] }) {
                 </StatusPill>
 
                 <div className="min-w-0 flex-1">
-                  <Link href={pair.match.url} className="text-h3 text-ink hover:text-accent">
+                  <Link href={pair.match.url} className="text-h3 text-ink hover:text-accent-ink">
                     {pair.match.name}
                   </Link>
                   <p className="text-small text-ink-faint">{pair.match.reference}</p>

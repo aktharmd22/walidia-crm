@@ -191,7 +191,7 @@ export function Checkbox({
       <input
         type="checkbox"
         id={inputId}
-        className="form-checkbox mt-px size-4 rounded-[3px] border-line text-accent focus:ring-0"
+        className="form-checkbox mt-px size-4 rounded-[3px] border-line text-accent-ink focus:ring-0"
         {...props}
       />
       <span className="min-w-0">

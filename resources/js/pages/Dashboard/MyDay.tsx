@@ -86,7 +86,7 @@ function PeriodSelect({ months }: { months: number }) {
           }
           className={cn(
             'rounded-pill px-[10px] py-1 text-small transition-colors duration-fast ease-std',
-            months === option ? 'bg-accent-soft font-medium text-accent' : 'text-ink-faint hover:text-ink',
+            months === option ? 'bg-accent-soft font-medium text-accent-ink' : 'text-ink-faint hover:text-ink',
           )}
         >
           {option}m
@@ -97,7 +97,7 @@ function PeriodSelect({ months }: { months: number }) {
 }
 
 const TONE_BG: Record<Metric['tone'], string> = {
-  accent: 'bg-accent-soft text-accent',
+  accent: 'bg-accent-soft text-accent-ink',
   info: 'bg-info-bg text-info',
   success: 'bg-success-bg text-success',
   warning: 'bg-warning-bg text-warning',
@@ -268,7 +268,7 @@ export default function MyDay({
                   </span>
                 ))}
                 {team.more > 0 && (
-                  <span className="-ms-2 grid size-[28px] place-items-center rounded-full bg-accent-soft text-micro text-accent ring-2 ring-hull">
+                  <span className="-ms-2 grid size-[28px] place-items-center rounded-full bg-accent-soft text-micro text-accent-ink ring-2 ring-hull">
                     +{team.more}
                   </span>
                 )}
@@ -308,7 +308,7 @@ export default function MyDay({
         <Card>
           <CardHeader>
             <CardTitle>The week ahead</CardTitle>
-            <Link href="/charter/bookings" className="flex items-center gap-1 text-small text-accent hover:underline">
+            <Link href="/charter/bookings" className="flex items-center gap-1 text-small text-accent-ink hover:underline">
               All charters <ChevronRight className="size-[14px]" aria-hidden />
             </Link>
           </CardHeader>
@@ -344,7 +344,7 @@ export default function MyDay({
                             <span className="size-[36px] shrink-0 rounded-card bg-deck" aria-hidden />
                           )}
                           <span className="min-w-0">
-                            <Link href={charter.url} className="block truncate text-h3 text-ink hover:text-accent">
+                            <Link href={charter.url} className="block truncate text-h3 text-ink hover:text-accent-ink">
                               {charter.yacht ?? 'Yacht'}
                             </Link>
                             <span className="block text-micro text-ink-faint">{charter.reference}</span>
@@ -412,7 +412,7 @@ export default function MyDay({
         <Card>
           <CardHeader>
             <CardTitle>Blocked</CardTitle>
-            <Link href="/dashboard/alerts" className="flex items-center gap-1 text-small text-accent hover:underline">
+            <Link href="/dashboard/alerts" className="flex items-center gap-1 text-small text-accent-ink hover:underline">
               All alerts <ChevronRight className="size-[14px]" aria-hidden />
             </Link>
           </CardHeader>
@@ -427,7 +427,7 @@ export default function MyDay({
             <ul className="divide-y divide-line">
               {blockers.map((blocker) => (
                 <li key={blocker.id} className="px-5 py-3">
-                  <Link href={blocker.url} className="block text-h3 text-ink hover:text-accent">
+                  <Link href={blocker.url} className="block text-h3 text-ink hover:text-accent-ink">
                     {blocker.title}
                   </Link>
                   <span className="block text-micro text-ink-faint">
@@ -450,7 +450,7 @@ export default function MyDay({
         <Card>
           <CardHeader>
             <CardTitle>Your tasks</CardTitle>
-            <Link href="/tasks" className="flex items-center gap-1 text-small text-accent hover:underline">
+            <Link href="/tasks" className="flex items-center gap-1 text-small text-accent-ink hover:underline">
               All tasks <ChevronRight className="size-[14px]" aria-hidden />
             </Link>
           </CardHeader>
@@ -461,7 +461,7 @@ export default function MyDay({
             <ul className="divide-y divide-line">
               {tasks.map((task) => (
                 <li key={task.id} className="flex items-center justify-between gap-3 px-5 py-3">
-                  <Link href={task.url} className="min-w-0 flex-1 truncate text-body text-ink hover:text-accent">
+                  <Link href={task.url} className="min-w-0 flex-1 truncate text-body text-ink hover:text-accent-ink">
                     {task.title}
                   </Link>
                   {task.due_at ? (
@@ -481,7 +481,7 @@ export default function MyDay({
         <Card>
           <CardHeader>
             <CardTitle>Expiring soon</CardTitle>
-            <Link href="/management/certificates/expiry" className="flex items-center gap-1 text-small text-accent hover:underline">
+            <Link href="/management/certificates/expiry" className="flex items-center gap-1 text-small text-accent-ink hover:underline">
               Compliance <ChevronRight className="size-[14px]" aria-hidden />
             </Link>
           </CardHeader>
@@ -494,7 +494,7 @@ export default function MyDay({
                 <li key={`${item.kind}-${item.title}-${item.expires_on}`} className="flex items-center gap-3 px-5 py-3">
                   <span className="min-w-0 flex-1">
                     {item.url ? (
-                      <Link href={item.url} className="block truncate text-body text-ink hover:text-accent">
+                      <Link href={item.url} className="block truncate text-body text-ink hover:text-accent-ink">
                         {item.title}
                       </Link>
                     ) : (

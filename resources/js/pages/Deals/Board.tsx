@@ -141,7 +141,7 @@ export default function DealBoard({
                     <div className="flex items-start gap-2">
                       <GripVertical className="mt-px size-4 shrink-0 cursor-grab text-ink-faint opacity-0 group-hover:opacity-100" aria-hidden />
                       <div className="min-w-0 flex-1">
-                        <Link href={card.url} className="block truncate text-h3 text-ink hover:text-accent">
+                        <Link href={card.url} className="block truncate text-h3 text-ink hover:text-accent-ink">
                           {card.title}
                         </Link>
                         {card.client && <p className="truncate text-small text-ink-faint">{card.client.name}</p>}

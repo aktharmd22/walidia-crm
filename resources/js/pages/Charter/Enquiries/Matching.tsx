@@ -79,7 +79,7 @@ export default function Matching({ record, matches = [] }: { record: EnquiryRow;
               <CardBody className="flex flex-col gap-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <Link href={match.yacht.url} className="text-h2 text-ink hover:text-accent">
+                    <Link href={match.yacht.url} className="text-h2 text-ink hover:text-accent-ink">
                       {match.yacht.name}
                     </Link>
                     <p className="text-small text-ink-faint">

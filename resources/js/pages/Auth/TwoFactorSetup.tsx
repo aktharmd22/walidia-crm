@@ -69,7 +69,7 @@ export default function TwoFactorSetup({ enabled, confirmed }: Props) {
         />
 
         <div className="rounded-card border border-line bg-hull p-6">
-          <span className="grid size-10 place-items-center rounded-card bg-accent-soft text-accent">
+          <span className="grid size-10 place-items-center rounded-card bg-accent-soft text-accent-ink">
             <ShieldCheck className="size-5" aria-hidden />
           </span>
 

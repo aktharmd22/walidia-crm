@@ -32,7 +32,7 @@ export default function VendorCategories({ categories = [] }: { categories?: Cat
               <li key={category.id} className="flex flex-wrap items-center gap-3 px-5 py-3">
                 <Link
                   href={`/vendors?vendor_category_id=${category.id}`}
-                  className="min-w-0 flex-1 text-h3 text-ink hover:text-accent"
+                  className="min-w-0 flex-1 text-h3 text-ink hover:text-accent-ink"
                 >
                   {category.name}
                 </Link>
