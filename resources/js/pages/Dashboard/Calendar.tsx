@@ -11,6 +11,7 @@ import {
   startOfWeek,
 } from 'date-fns'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { DashboardShell } from '@/components/shell/DashboardShell'
 import { PageHeader } from '@/components/shell/Page'
 import { Button } from '@/ui/Button'
 import { Card } from '@/ui/Primitives'
@@ -53,7 +54,7 @@ export default function Calendar({ events = [], month }: { events?: CalendarEven
   }
 
   return (
-    <>
+    <DashboardShell title="Calendar">
       <Head title="Calendar" />
 
       <PageHeader
@@ -119,6 +120,6 @@ export default function Calendar({ events = [], month }: { events?: CalendarEven
           })}
         </div>
       </Card>
-    </>
+    </DashboardShell>
   )
 }

@@ -1,5 +1,6 @@
 import { Head, Link } from '@inertiajs/react'
 import { AlertTriangle, CalendarClock, ShieldAlert } from 'lucide-react'
+import { DashboardShell } from '@/components/shell/DashboardShell'
 import { PageHeader } from '@/components/shell/Page'
 import { Card, CardHeader, CardTitle, DateText, EmptyState } from '@/ui/Primitives'
 import { StatusPill } from '@/ui/StatusPill'
@@ -35,7 +36,7 @@ export default function Alerts({
   expiring?: Expiring[]
 }) {
   return (
-    <>
+    <DashboardShell title="Alerts & Blockers">
       <Head title="Alerts & Blockers" />
 
       <PageHeader
@@ -128,6 +129,6 @@ export default function Alerts({
           </ul>
         )}
       </Card>
-    </>
+    </DashboardShell>
   )
 }

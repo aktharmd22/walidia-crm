@@ -4,6 +4,7 @@ import {
   AreaChart,
   Bar,
   BarChart,
+  CartesianGrid,
   Cell,
   Line,
   LineChart,
@@ -161,6 +162,10 @@ export function TrendChart({
     <div style={{ height }} className="w-full">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: -18 }}>
+          {/* Horizontal only, dashed, and quiet — a grid should let the eye
+              carry a value across without competing with the series. */}
+          <CartesianGrid vertical={false} stroke={palette.line} strokeDasharray="4 4" />
+
           <defs>
             {series.map((item) => (
               <linearGradient key={item.key} id={`fill-${item.key}`} x1="0" y1="0" x2="0" y2="1">

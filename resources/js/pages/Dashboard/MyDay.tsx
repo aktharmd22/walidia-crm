@@ -1,10 +1,10 @@
 import { Head, Link, router } from '@inertiajs/react'
-import { ArrowDownRight, ArrowUpRight, CalendarDays, ChevronRight, Eye, ShieldAlert } from 'lucide-react'
+import { ChevronRight, Eye, ShieldAlert } from 'lucide-react'
 import { navIcon } from '@/lib/icons'
+import { DashboardShell, PeriodMenu } from '@/components/shell/DashboardShell'
 import { ChartLegend, DonutChart, ShareBar, Sparkline, TrendChart, type SeriesPoint } from '@/ui/Charts'
 import { Avatar, Card, CardBody, CardHeader, CardTitle, DateText, EmptyState, Money, Num } from '@/ui/Primitives'
 import { StatusPill } from '@/ui/StatusPill'
-import { cn } from '@/lib/cn'
 import type { StatusTone } from '@/types'
 
 interface Metric {
@@ -66,36 +66,6 @@ interface Expiry {
   url: string | null
 }
 
-/**
- * The window a card is showing.
- *
- * It reloads from the server rather than slicing an array the client already
- * holds, so the chart can never disagree with the figures above it about which
- * months are on screen.
- */
-function PeriodSelect({ months }: { months: number }) {
-  return (
-    <span className="flex items-center gap-1 rounded-pill border border-line p-[2px]">
-      {[3, 6, 12].map((option) => (
-        <button
-          key={option}
-          type="button"
-          aria-pressed={months === option}
-          onClick={() =>
-            router.get('/', { months: option }, { preserveScroll: true, preserveState: true, only: ['revenue', 'months'] })
-          }
-          className={cn(
-            'rounded-pill px-[10px] py-1 text-small transition-colors duration-fast ease-std',
-            months === option ? 'bg-accent-soft font-medium text-accent-ink' : 'text-ink-faint hover:text-ink',
-          )}
-        >
-          {option}m
-        </button>
-      ))}
-    </span>
-  )
-}
-
 const TONE_BG: Record<Metric['tone'], string> = {
   accent: 'bg-accent-soft text-accent-ink',
   info: 'bg-info-bg text-info',
@@ -104,28 +74,40 @@ const TONE_BG: Record<Metric['tone'], string> = {
 }
 
 /**
- * One figure.
+ * One figure, laid out as the reference does it: a tinted disc, the label, the
+ * change on a single line beneath it, then the value and its chart on the
+ * bottom row.
  *
- * Composed so it survives an empty database, which is what a new deployment
- * shows first. The delta sits with the number it describes rather than under
- * the label; a flat sparkline is drawn as nothing at all, because a straight
- * line across a card reads as a rendering fault rather than as "no movement
- * yet"; and the period is stated once above the row instead of four times.
+ * It still has to survive an empty database, which the reference never shows —
+ * so a series with no spread draws nothing rather than a flat rule, and a card
+ * with no prior month says so instead of restating the period.
  */
 function MetricCard({ metric }: { metric: Metric }) {
   const Icon = navIcon(metric.icon)
-
-  // No spread means no trend. Six identical points is not a chart.
   const hasSignal = metric.spark.length > 1 && new Set(metric.spark).size > 1
 
   return (
     <Card>
-      <CardBody className="flex flex-col gap-3">
-        <div className="flex items-center gap-[10px]">
-          <span className={`grid size-[34px] shrink-0 place-items-center rounded-card ${TONE_BG[metric.tone]}`}>
-            <Icon className="size-[17px]" aria-hidden />
+      <CardBody className="flex flex-col gap-5">
+        <div className="flex items-start gap-3">
+          {/* A disc, not a square — the reference's shape. */}
+          <span className={`grid size-[42px] shrink-0 place-items-center rounded-full ${TONE_BG[metric.tone]}`}>
+            <Icon className="size-[19px]" aria-hidden />
           </span>
-          <span className="min-w-0 truncate text-h3 text-ink">{metric.label}</span>
+
+          <span className="min-w-0 flex-1">
+            <span className="block truncate text-h3 text-ink">{metric.label}</span>
+            {metric.change ? (
+              <span className="block truncate text-small">
+                <span className={metric.change.direction === 'up' ? 'text-success' : 'text-danger'}>
+                  {metric.change.value}% {metric.change.direction === 'up' ? 'increase' : 'decrease'}
+                </span>
+                <span className="text-ink-faint"> from last month</span>
+              </span>
+            ) : (
+              <span className="block truncate text-small text-ink-faint">No prior month to compare</span>
+            )}
+          </span>
         </div>
 
         <div className="flex items-end justify-between gap-3">
@@ -135,24 +117,6 @@ function MetricCard({ metric }: { metric: Metric }) {
           </span>
           {hasSignal && <Sparkline data={metric.spark} tone={metric.tone} variant={metric.sparkVariant} />}
         </div>
-
-        {metric.change ? (
-          <span
-            className={`flex items-center gap-1 text-small ${
-              metric.change.direction === 'up' ? 'text-success' : 'text-danger'
-            }`}
-          >
-            {metric.change.direction === 'up' ? (
-              <ArrowUpRight className="size-[14px]" aria-hidden />
-            ) : (
-              <ArrowDownRight className="size-[14px]" aria-hidden />
-            )}
-            <span className="numeric">{metric.change.value}%</span>
-            <span className="text-ink-faint">on last month</span>
-          </span>
-        ) : (
-          <span className="text-small text-ink-faint">No prior month to compare</span>
-        )}
       </CardBody>
     </Card>
   )
@@ -200,20 +164,8 @@ export default function MyDay({
     value >= 1_000_000 ? `${(value / 1_000_000).toFixed(1)}m` : value >= 1000 ? `${Math.round(value / 1000)}k` : String(value)
 
   return (
-    <>
+    <DashboardShell title={greeting}>
       <Head title="My Day" />
-
-      {/* Greeting */}
-      <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-h1 text-ink">{greeting}</h1>
-          <p className="mt-[2px] text-body text-ink-soft">Here is where the business stands this morning.</p>
-        </div>
-        <p className="flex items-center gap-2 text-small text-ink-faint">
-          <CalendarDays className="size-4" aria-hidden />
-          <DateText value={new Date().toISOString()} />
-        </p>
-      </div>
 
       {/* What we earned */}
       <p className="mb-2 text-micro uppercase tracking-[0.08em] text-ink-faint">This month</p>
@@ -228,21 +180,27 @@ export default function MyDay({
         <Card>
           <CardHeader>
             <CardTitle>Revenue by month</CardTitle>
-            <span className="flex flex-wrap items-center gap-4">
-              <ChartLegend
-                series={[
-                  { name: 'Charter', tone: 'accent' },
-                  { name: 'Brokerage', tone: 'info' },
-                  { name: 'Management', tone: 'success' },
-                ]}
-              />
-              <PeriodSelect months={months} />
-            </span>
+            <PeriodMenu
+              months={months}
+              onSelect={(next) =>
+                router.get('/', { months: next }, { preserveScroll: true, preserveState: true, only: ['revenue', 'months'] })
+              }
+            />
           </CardHeader>
           <CardBody>
             {!hasRevenue ? (
               <EmptyState title="No revenue yet" description="Cleared payments and completed sales appear here." />
             ) : (
+              <>
+                <div className="mb-2 flex justify-center">
+                  <ChartLegend
+                    series={[
+                      { name: 'Charter', tone: 'accent' },
+                      { name: 'Brokerage', tone: 'info' },
+                      { name: 'Management', tone: 'success' },
+                    ]}
+                  />
+                </div>
               <TrendChart
                 data={revenue}
                 series={[
@@ -252,6 +210,7 @@ export default function MyDay({
                 ]}
                 format={compact}
               />
+              </>
             )}
           </CardBody>
         </Card>
@@ -389,9 +348,12 @@ export default function MyDay({
           {sources.length === 0 ? (
             <EmptyState title="No leads yet" description="Lead sources appear here as enquiries arrive." />
           ) : (
-            <ul className="flex flex-col gap-4 p-5">
+            <ul className="flex flex-col p-5">
               {sources.map((source) => (
-                <li key={source.name} className="flex flex-col gap-[6px]">
+                <li
+                  key={source.name}
+                  className="flex flex-col gap-[6px] border-b border-dashed border-line py-3 first:pt-0 last:border-0 last:pb-0"
+                >
                   <span className="flex items-center justify-between gap-3">
                     <span className="truncate text-body text-ink">{source.name}</span>
                     <Num value={source.total} className="shrink-0 text-small text-ink-soft" />
@@ -517,6 +479,6 @@ export default function MyDay({
           )}
         </Card>
       </div>
-    </>
+    </DashboardShell>
   )
 }

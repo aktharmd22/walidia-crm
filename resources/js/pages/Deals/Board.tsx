@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Head, Link, router } from '@inertiajs/react'
 import { GripVertical, Plus } from 'lucide-react'
+import { DashboardShell } from '@/components/shell/DashboardShell'
 import { PageHeader } from '@/components/shell/Page'
 import { Button } from '@/ui/Button'
 import { Modal, Tabs } from '@/ui/Overlays'
@@ -71,7 +72,7 @@ export default function DealBoard({
   }
 
   return (
-    <>
+    <DashboardShell title="Pipeline">
       <Head title={`${pipeline.name} pipeline`} />
 
       <PageHeader
@@ -216,6 +217,6 @@ export default function DealBoard({
           <Textarea label="Notes" value={lostNotes} onChange={(event) => setLostNotes(event.target.value)} />
         </div>
       </Modal>
-    </>
+    </DashboardShell>
   )
 }

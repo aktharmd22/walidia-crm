@@ -90,12 +90,7 @@ final class Navigation
         return [
             [
                 'key' => 'dashboard', 'group' => 'Overview', 'label' => 'Dashboard', 'icon' => 'dashboard', 'route' => 'dashboard',
-                'children' => [
-                    ['key' => 'my-day', 'label' => 'My Day', 'route' => 'dashboard'],
-                    ['key' => 'pipeline', 'label' => 'Pipeline', 'route' => 'dashboard.pipeline', 'permission' => 'deals.view'],
-                    ['key' => 'alerts', 'label' => 'Alerts & Blockers', 'route' => 'dashboard.alerts'],
-                    ['key' => 'calendar', 'label' => 'Calendar', 'route' => 'dashboard.calendar'],
-                ],
+                'children' => [],
             ],
             [
                 'key' => 'leads', 'group' => 'Revenue', 'label' => 'Leads', 'icon' => 'leads', 'route' => 'leads.index', 'permission' => 'leads.view',
