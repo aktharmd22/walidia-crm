@@ -4,7 +4,7 @@ import { MoreHorizontal } from 'lucide-react'
 import { WhatsAppIcon } from '@/ui/BrandIcons'
 import { ResourceIndex } from '@/components/crud/ResourceIndex'
 import { DropdownMenu } from '@/ui/Overlays'
-import { DateText, IdentityCell } from '@/ui/Primitives'
+import { Avatar, DateText, IdentityCell } from '@/ui/Primitives'
 import { StatusPill } from '@/ui/StatusPill'
 import type { Paginated, StatusTone } from '@/types'
 
@@ -37,10 +37,21 @@ export default function LeadsIndex({
   heading?: string
 }) {
   const columns: ColumnDef<LeadRow, unknown>[] = [
+    /*
+     * Five columns, not eight. Source and line are context about a lead, not
+     * things anyone sorts a queue by, so they sit under the name where they
+     * cost no width — which is what stopped "Boat show" and "03 Sep 2026"
+     * wrapping onto second lines and dragging every row to twice its height.
+     */
     {
       id: 'name',
       header: 'Lead',
-      cell: ({ row }) => <IdentityCell name={row.original.name} subtitle={row.original.reference} />,
+      cell: ({ row }) => (
+        <IdentityCell
+          name={row.original.name}
+          subtitle={[row.original.reference, row.original.source].filter(Boolean).join(' · ')}
+        />
+      ),
       meta: { priority: 1 },
     },
     {
@@ -49,6 +60,8 @@ export default function LeadsIndex({
       cell: ({ row }) => (
         <span className="flex items-center gap-2">
           <StatusPill tone={row.original.status_tone}>{row.original.status}</StatusPill>
+          {/* A missed response is the one thing on this screen that costs
+              money, so it stays a pill rather than becoming a subtitle. */}
           {row.original.is_overdue && <StatusPill tone="danger">SLA missed</StatusPill>}
         </span>
       ),
@@ -58,13 +71,6 @@ export default function LeadsIndex({
       id: 'business_line',
       header: 'Line',
       cell: ({ row }) => <span className="capitalize">{row.original.business_line}</span>,
-      meta: { priority: 2 },
-    },
-    {
-      id: 'source',
-      header: 'Source',
-      enableSorting: false,
-      cell: ({ row }) => row.original.source ?? '—',
       meta: { priority: 3 },
     },
     {
@@ -72,19 +78,31 @@ export default function LeadsIndex({
       header: 'Owner',
       enableSorting: false,
       cell: ({ row }) =>
-        row.original.assignee?.name ?? <span className="text-ink-faint">Unassigned</span>,
+        row.original.assignee ? (
+          <span className="flex items-center gap-2">
+            <Avatar name={row.original.assignee.name} size="sm" />
+            <span className="truncate">{row.original.assignee.name}</span>
+          </span>
+        ) : (
+          <span className="text-ink-faint">Unassigned</span>
+        ),
       meta: { priority: 2 },
     },
     {
       id: 'sla_due_at',
       header: 'Respond by',
-      cell: ({ row }) => <DateText value={row.original.sla_due_at} withTime />,
-      meta: { priority: 3, align: 'end' },
-    },
-    {
-      id: 'created_at',
-      header: 'Received',
-      cell: ({ row }) => <DateText value={row.original.created_at} />,
+      cell: ({ row }) => (
+        <span className="flex flex-col items-end leading-tight">
+          <DateText
+            value={row.original.sla_due_at}
+            withTime
+            className={row.original.is_overdue ? 'text-danger' : undefined}
+          />
+          <span className="text-micro text-ink-faint">
+            received <DateText value={row.original.created_at} />
+          </span>
+        </span>
+      ),
       meta: { priority: 2, align: 'end' },
     },
     {

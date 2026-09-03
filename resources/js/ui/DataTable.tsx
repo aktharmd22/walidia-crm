@@ -154,7 +154,7 @@ export function DataTable<T>({
                       key={header.id}
                       scope="col"
                       className={cn(
-                        'px-4 py-3 text-micro text-ink-faint font-medium whitespace-nowrap border-b border-line',
+                        'px-4 py-3 text-micro uppercase tracking-[0.06em] text-ink-faint font-medium whitespace-nowrap border-b border-line bg-deck',
                         meta.align === 'end' ? 'text-end' : 'text-start',
                         priorityClass[meta.priority ?? 1],
                       )}
@@ -230,7 +230,7 @@ export function DataTable<T>({
                         <td
                           key={cell.id}
                           className={cn(
-                            'h-row px-4 py-2 text-body text-ink-soft align-middle',
+                            'h-row max-w-0 truncate whitespace-nowrap px-4 py-2 text-body text-ink-soft align-middle',
                             meta.align === 'end' ? 'text-end' : 'text-start',
                             meta.numeric && 'numeric text-ink',
                             priorityClass[meta.priority ?? 1],
