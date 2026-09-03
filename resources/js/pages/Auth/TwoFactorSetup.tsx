@@ -61,83 +61,91 @@ export default function TwoFactorSetup({ enabled, confirmed }: Props) {
     <div className="flex min-h-screen items-center justify-center bg-deck px-4 py-12">
       <Head title="Set up two-factor authentication" />
 
-      <div className="w-full max-w-[520px] rounded-card border border-line bg-hull p-6">
-        <span className="grid size-10 place-items-center rounded-card bg-accent-soft text-accent">
-          <ShieldCheck className="size-5" aria-hidden />
-        </span>
+      <div className="w-full max-w-[400px]">
+        <img
+          src="/images/walidia-logo.png"
+          alt="Walidia Yachts"
+          className="mx-auto mb-8 h-[44px] w-auto object-contain"
+        />
 
-        <h1 className="mt-4 text-h1 text-ink">Set up two-factor authentication</h1>
-        <p className="mt-2 text-body text-ink-soft">
-          Every Walidia account requires it. Client records here include passport data, guest manifests and financial
-          detail, so a password alone is not enough.
-        </p>
+        <div className="rounded-card border border-line bg-hull p-6">
+          <span className="grid size-10 place-items-center rounded-card bg-accent-soft text-accent">
+            <ShieldCheck className="size-5" aria-hidden />
+          </span>
 
-        {!enabled && (
-          <Button variant="primary" size="lg" className="mt-6" loading={loading} onClick={enable}>
-            Begin setup
-          </Button>
-        )}
+          <h1 className="mt-4 text-h1 text-ink">Set up two-factor authentication</h1>
+          <p className="mt-2 text-body text-ink-soft">
+            Every Walidia account requires it. Client records here include passport data, guest manifests and financial
+            detail, so a password alone is not enough.
+          </p>
 
-        {enabled && (
-          <>
-            <ol className="mt-6 flex flex-col gap-5">
-              <li>
-                <p className="text-h3 text-ink">1 · Scan this code</p>
-                <p className="mt-1 text-small text-ink-soft">
-                  Use Google Authenticator, Microsoft Authenticator, 1Password or any TOTP app.
-                </p>
-                {qr && (
-                  <div
-                    className="mt-3 inline-block rounded-card border border-line bg-white p-3 [&_svg]:size-40"
-                    dangerouslySetInnerHTML={{ __html: qr }}
-                  />
-                )}
-                {secret && (
-                  <p className="mt-2 text-small text-ink-faint">
-                    Or enter this key manually: <span className="numeric text-ink-soft">{secret}</span>
-                  </p>
-                )}
-              </li>
+          {!enabled && (
+            <Button variant="primary" size="lg" className="mt-6" loading={loading} onClick={enable}>
+              Begin setup
+            </Button>
+          )}
 
-              {recoveryCodes.length > 0 && (
+          {enabled && (
+            <>
+              <ol className="mt-6 flex flex-col gap-5">
                 <li>
-                  <p className="text-h3 text-ink">2 · Save your recovery codes</p>
+                  <p className="text-h3 text-ink">1 · Scan this code</p>
                   <p className="mt-1 text-small text-ink-soft">
-                    Each code works once, and this is the only time they are shown. Store them somewhere you can reach
-                    without this device.
+                    Use Google Authenticator, Microsoft Authenticator, 1Password or any TOTP app.
                   </p>
-                  <ul className="mt-3 grid grid-cols-2 gap-2 rounded-card border border-line bg-deck p-3">
-                    {recoveryCodes.map((code) => (
-                      <li key={code} className="numeric text-small text-ink">
-                        {code}
-                      </li>
-                    ))}
-                  </ul>
+                  {qr && (
+                    <div
+                      className="mt-3 inline-block rounded-card border border-line bg-white p-3 [&_svg]:size-40"
+                      dangerouslySetInnerHTML={{ __html: qr }}
+                    />
+                  )}
+                  {secret && (
+                    <p className="mt-2 text-small text-ink-faint">
+                      Or enter this key manually: <span className="numeric text-ink-soft">{secret}</span>
+                    </p>
+                  )}
                 </li>
-              )}
 
-              <li>
-                <p className="text-h3 text-ink">3 · Confirm a code</p>
-                <form onSubmit={confirm} className="mt-3 flex items-end gap-3">
-                  <Input
-                    label="Authentication code"
-                    inputMode="numeric"
-                    maxLength={6}
-                    required
-                    numeric
-                    className="max-w-[160px]"
-                    value={data.code}
-                    error={errors.code}
-                    onChange={(event) => setData('code', event.target.value.replace(/\D/g, ''))}
-                  />
-                  <Button type="submit" variant="primary" loading={processing}>
-                    Confirm
-                  </Button>
-                </form>
-              </li>
-            </ol>
-          </>
-        )}
+                {recoveryCodes.length > 0 && (
+                  <li>
+                    <p className="text-h3 text-ink">2 · Save your recovery codes</p>
+                    <p className="mt-1 text-small text-ink-soft">
+                      Each code works once, and this is the only time they are shown. Store them somewhere you can reach
+                      without this device.
+                    </p>
+                    <ul className="mt-3 grid grid-cols-2 gap-2 rounded-card border border-line bg-deck p-3">
+                      {recoveryCodes.map((code) => (
+                        <li key={code} className="numeric text-small text-ink">
+                          {code}
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                )}
+
+                <li>
+                  <p className="text-h3 text-ink">3 · Confirm a code</p>
+                  <form onSubmit={confirm} className="mt-3 flex items-end gap-3">
+                    <Input
+                      label="Authentication code"
+                      inputMode="numeric"
+                      maxLength={6}
+                      required
+                      numeric
+                      className="max-w-[160px]"
+                      value={data.code}
+                      error={errors.code}
+                      onChange={(event) => setData('code', event.target.value.replace(/\D/g, ''))}
+                    />
+                    <Button type="submit" variant="primary" loading={processing}>
+                      Confirm
+                    </Button>
+                  </form>
+                </li>
+              </ol>
+            </>
+          )}
+        </div>
       </div>
     </div>
   )
