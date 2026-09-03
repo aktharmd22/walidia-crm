@@ -71,6 +71,11 @@ class AppServiceProvider extends ServiceProvider
             'certificate' => Models\Certificate::class,
             'maintenance_job' => Models\MaintenanceJob::class,
             'owner_statement' => Models\OwnerStatement::class,
+            'valuation' => Models\Valuation::class,
+            'inspection' => Models\Inspection::class,
+            'payout' => Models\Payout::class,
+            'maintenance_schedule' => Models\MaintenanceSchedule::class,
+            'checklist_template' => Models\ChecklistTemplate::class,
         ]);
 
         /*

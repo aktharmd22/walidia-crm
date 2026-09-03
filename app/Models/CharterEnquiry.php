@@ -134,11 +134,11 @@ class CharterEnquiry extends Model implements Auditable
     public function statusTone(): string
     {
         return match ($this->status) {
-            'won' => 'success',
-            'proposed' => 'attention',
-            'matching' => 'warning',
+            'won', 'qualified' => 'success',
+            'proposed', 'matching' => 'info',
+            'contacted', 'waiting_client', 'follow_up' => 'warning',
             'lost', 'cancelled' => 'danger',
-            default => 'info',
+            default => 'neutral',
         };
     }
 

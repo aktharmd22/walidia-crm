@@ -11,6 +11,7 @@ use App\Http\Controllers\ResourceController;
 use App\Http\Resources\ActivityResource;
 use App\Http\Resources\BookingResource;
 use App\Models\Booking;
+use App\Support\Statuses;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
@@ -154,7 +155,7 @@ class BookingController extends ResourceController
             'special_requests' => ['nullable', 'string', 'max:5000'],
             'cancellation_policy_id' => ['nullable', 'integer', 'exists:cancellation_policies,id'],
             'apa_amount' => ['nullable', 'numeric', 'min:0'],
-            'status' => ['nullable', Rule::in(['draft', 'pending_contract', 'contract_signed', 'deposit_pending', 'confirmed', 'in_progress', 'completed', 'cancelled', 'no_show'])],
+            'status' => ['nullable', Rule::in(Statuses::keys(Statuses::BOOKING))],
         ]));
 
         return back()->with('success', 'Booking updated.');

@@ -247,11 +247,13 @@ class Booking extends Model implements Auditable
 
     public function statusTone(): string
     {
+        // The colour key from the flowchart: green done, blue in progress,
+        // yellow waiting on someone, orange committed-not-paid, red dead.
         return match ($this->status) {
             'completed' => 'success',
-            'confirmed', 'in_progress' => 'info',
-            'deposit_pending', 'pending_contract' => 'warning',
-            'contract_signed' => 'attention',
+            'confirmed', 'upcoming', 'in_progress' => 'info',
+            'pending_contract', 'deposit_pending' => 'warning',
+            'tentative', 'option_held', 'contract_signed', 'deposit_paid' => 'attention',
             'cancelled', 'no_show' => 'danger',
             default => 'neutral',
         };

@@ -8,6 +8,7 @@ use App\Models\LeadSource;
 use App\Models\ListOption;
 use App\Models\Marina;
 use App\Models\Setting;
+use App\Support\Statuses;
 use Illuminate\Database\Seeder;
 
 /**
@@ -63,16 +64,7 @@ class ReferenceDataSeeder extends Seeder
         }
 
         $lists = [
-            'experience_type' => [
-                'day_charter' => 'Day charter',
-                'sunset_cruise' => 'Sunset cruise',
-                'overnight' => 'Overnight',
-                'multi_day' => 'Multi-day',
-                'corporate' => 'Corporate event',
-                'wedding' => 'Wedding or celebration',
-                'photoshoot' => 'Photoshoot or filming',
-                'fishing' => 'Fishing trip',
-            ],
+            'experience_type' => Statuses::EXPERIENCE,
             'occasion' => [
                 'birthday' => 'Birthday',
                 'anniversary' => 'Anniversary',
@@ -91,6 +83,40 @@ class ReferenceDataSeeder extends Seeder
                 'security' => 'Security',
                 'other' => 'Other',
             ],
+            /*
+             * The Cost and Offer Table from the charter flowchart §7. The cost
+             * sheet takes any category, but these are the ones the business
+             * actually keeps — so they are seeded rather than typed fresh on
+             * every charter, and a quoted-to-actual variance compares like
+             * with like.
+             */
+            'cost_category_revenue' => [
+                'hourly_rate' => 'Hourly rate',
+                'yacht_fee' => 'Yacht fees',
+                'visitor_fee' => 'Visitor fees',
+                'berth_fee' => 'Berth fees',
+                'security_deposit' => 'Security deposit',
+                'food' => 'Food',
+                'beverages' => 'Beverages',
+                'entertainment' => 'Entertainment',
+                'watersports' => 'Watersports',
+                'guest_transfer' => 'Guest transfer',
+                'additional' => 'Additional',
+                'other_revenue' => 'Other',
+            ],
+            'cost_category_cost' => [
+                'standard_inclusions' => 'Standard inclusions',
+                'operations_staff' => 'Operations staff',
+                'buggy_driver_tips' => 'Buggy driver tips',
+                'catering_tips' => 'Catering tips',
+                'crew_tips' => 'Crew tips',
+                'team_commission' => 'Team commission',
+                'agent_commission' => 'Agent commission',
+                'bank_charges' => 'Bank charges',
+                'refund_apa' => 'Refund APA',
+                'other_cost' => 'Other',
+            ],
+            'client_type' => Statuses::CLIENT_TYPE,
             'vendor_category' => [
                 'catering' => 'Catering',
                 'watersports' => 'Watersports',

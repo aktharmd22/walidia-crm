@@ -46,7 +46,7 @@ final class Permissions
 
         'brokerage' => [
             'listing-agreements', 'listings', 'valuations', 'buyer-requirements', 'ndas',
-            'viewings', 'offers', 'surveys', 'sea-trials', 'transactions', 'handovers',
+            'viewings', 'offers', 'surveys', 'sea-trials', 'transactions', 'handovers', 'inspections',
             'aml-screenings',
         ],
 
@@ -54,7 +54,7 @@ final class Permissions
             'crew', 'crew-documents', 'crew-assignments', 'crew-payouts',
             'vendors', 'vendor-categories', 'purchase-orders',
             'management-agreements', 'maintenance', 'maintenance-schedules', 'maintenance-logs',
-            'certificates', 'owner-statements',
+            'certificates', 'owner-statements', 'maintenance-schedules',
         ],
 
         'finance' => [
@@ -109,6 +109,9 @@ final class Permissions
         'offers.reject',
         'transactions.transfer-ownership',
         'transactions.clear-aml',
+        'handovers.complete',
+        'maintenance-schedules.raise-job',
+        'valuations.decide',
         'listings.publish',
         'viewings.schedule',
         'ndas.mark-signed',

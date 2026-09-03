@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Management\CertificateController;
 use App\Http\Controllers\Management\MaintenanceJobController;
+use App\Http\Controllers\Management\MaintenanceScheduleController;
 use App\Http\Controllers\Management\ManagementAgreementController;
 use App\Http\Controllers\Management\OwnerStatementController;
 use Illuminate\Support\Facades\Route;
@@ -60,4 +61,15 @@ Route::middleware(['auth', 'two-factor'])->prefix('management')->name('managemen
     });
     Route::resource('owner-statements', OwnerStatementController::class)
         ->parameters(['owner-statements' => 'ownerStatement']);
+
+    /* Preventive maintenance that recurs ---------------------------------- */
+    Route::controller(MaintenanceScheduleController::class)->prefix('maintenance-schedules')->name('maintenance-schedules.')->group(function (): void {
+        Route::get('/archive', 'archive')->name('archive');
+        Route::get('/export', 'export')->name('export');
+        Route::post('/bulk', 'bulk')->name('bulk');
+        Route::post('/{maintenanceSchedule}/restore', 'restore')->withTrashed()->name('restore');
+        Route::post('/{maintenanceSchedule}/raise-job', 'raiseJob')->name('raise-job');
+    });
+    Route::resource('maintenance-schedules', MaintenanceScheduleController::class)
+        ->parameters(['maintenance-schedules' => 'maintenanceSchedule']);
 });

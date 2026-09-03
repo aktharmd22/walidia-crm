@@ -8,6 +8,7 @@ use App\Domain\Gates\Exceptions\GateBlockedException;
 use App\Domain\Gates\GateEvaluator;
 use App\Domain\Gates\GateResult;
 use App\Models\Booking;
+use App\Models\ChecklistTemplate;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -53,6 +54,28 @@ class ConfirmBooking
      * Confirming is where the soft gates speak up: the charter proceeds, and
      * the warnings become tasks for whoever has to close them.
      */
+    /**
+     * Instantiate every active charter template against a booking, unless it
+     * already carries one — confirming twice must not double the crew's work.
+     */
+    private function openChecklists(Booking $booking): void
+    {
+        ChecklistTemplate::query()
+            ->where('business_line', 'charter')
+            ->where('is_active', true)
+            ->with('items')
+            ->get()
+            ->each(function (ChecklistTemplate $template) use ($booking): void {
+                $exists = $booking->checklists()
+                    ->where('checklist_template_id', $template->getKey())
+                    ->exists();
+
+                if (! $exists) {
+                    $template->applyTo($booking);
+                }
+            });
+    }
+
     public function confirm(Booking $booking, User $user): GateResult
     {
         $result = $this->gates->forTransition($booking, 'status', 'confirmed', $user);
@@ -64,6 +87,11 @@ class ConfirmBooking
         DB::transaction(function () use ($booking): void {
             $booking->forceFill(['status' => 'confirmed'])->save();
             $booking->logActivity('status_change', 'Booking confirmed');
+
+            // Operations is notified by the work appearing, not by an email:
+            // confirming a booking stamps the standing templates onto it, so
+            // the planning steps exist from the moment the charter is real.
+            $this->openChecklists($booking);
         });
 
         return $result;

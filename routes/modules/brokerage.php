@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Brokerage\BuyerRequirementController;
 use App\Http\Controllers\Brokerage\HandoverController;
+use App\Http\Controllers\Brokerage\InspectionController;
 use App\Http\Controllers\Brokerage\ListingController;
 use App\Http\Controllers\Brokerage\NdaController;
 use App\Http\Controllers\Brokerage\OfferController;
 use App\Http\Controllers\Brokerage\SurveyController;
 use App\Http\Controllers\Brokerage\TransactionController;
+use App\Http\Controllers\Brokerage\ValuationController;
 use App\Http\Controllers\Brokerage\ViewingController;
 use Illuminate\Support\Facades\Route;
 
@@ -113,4 +115,23 @@ Route::middleware(['auth', 'two-factor'])->prefix('brokerage')->name('brokerage.
         Route::post('/{handover}/complete', 'complete')->name('complete');
     });
     Route::resource('handovers', HandoverController::class);
+
+    /* Valuation — the working behind an asking price ---------------------- */
+    Route::controller(ValuationController::class)->prefix('valuations')->name('valuations.')->group(function (): void {
+        Route::get('/archive', 'archive')->name('archive');
+        Route::get('/export', 'export')->name('export');
+        Route::post('/bulk', 'bulk')->name('bulk');
+        Route::post('/{valuation}/restore', 'restore')->withTrashed()->name('restore');
+        Route::post('/{valuation}/decide', 'decide')->name('decide');
+    });
+    Route::resource('valuations', ValuationController::class);
+
+    /* Inspections — before listing, and before delivery -------------------- */
+    Route::controller(InspectionController::class)->prefix('inspections')->name('inspections.')->group(function (): void {
+        Route::get('/archive', 'archive')->name('archive');
+        Route::get('/export', 'export')->name('export');
+        Route::post('/bulk', 'bulk')->name('bulk');
+        Route::post('/{inspection}/restore', 'restore')->withTrashed()->name('restore');
+    });
+    Route::resource('inspections', InspectionController::class);
 });

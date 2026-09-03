@@ -13,6 +13,7 @@ use App\Models\Client;
 use App\Models\ListOption;
 use App\Models\Marina;
 use App\Models\User;
+use App\Support\Statuses;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -183,7 +184,7 @@ class CharterEnquiryController extends ResourceController
             'requested_extras' => ['nullable', 'array'],
             'notes' => ['nullable', 'string', 'max:5000'],
             'assigned_user_id' => ['nullable', 'integer', 'exists:users,id'],
-            'status' => ['nullable', Rule::in(['new', 'matching', 'proposed', 'won', 'lost', 'cancelled'])],
+            'status' => ['nullable', Rule::in(Statuses::keys(Statuses::ENQUIRY))],
         ]);
     }
 }

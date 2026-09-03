@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             RolesAndPermissionsSeeder::class,
             PipelineSeeder::class,
             ReferenceDataSeeder::class,
+            ChecklistTemplateSeeder::class,
             GateRuleSeeder::class,
             FinanceDefaultsSeeder::class,
         ]);

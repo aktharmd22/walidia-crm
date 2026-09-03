@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Brokerage;
 
+use App\Domain\Brokerage\ListingMatcher;
 use App\Http\Controllers\ResourceController;
 use App\Http\Resources\BuyerRequirementResource;
 use App\Models\BuyerRequirement;
 use App\Models\Client;
-use App\Models\Listing;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -68,22 +68,24 @@ class BuyerRequirementController extends ResourceController
     protected function showProps(Request $request, Model $record): array
     {
         /** @var BuyerRequirement $record */
-        $matches = Listing::query()
-            ->with('yacht:id,name,length_overall')
-            ->where('status', 'active')
-            ->when($record->budget_max !== null, fn ($query) => $query->where('asking_price', '<=', $record->budget_max))
-            ->when($record->budget_min !== null, fn ($query) => $query->where('asking_price', '>=', $record->budget_min))
-            ->limit(20)
-            ->get();
+        $matches = app(ListingMatcher::class)->match($record);
 
         return [
-            'matches' => $matches->map(fn (Listing $listing): array => [
-                'id' => $listing->id,
-                'reference' => $listing->reference,
-                'yacht' => $listing->yacht?->name,
-                'asking_price' => $listing->asking_price,
-                'currency' => $listing->currency,
-                'url' => route('brokerage.listings.show', $listing->id),
+            'matches' => $matches->map(fn (array $row): array => [
+                'id' => $row['listing']->id,
+                'reference' => $row['listing']->reference,
+                'yacht' => $row['listing']->yacht?->name,
+                'builder' => $row['listing']->yacht?->builder,
+                'year_built' => $row['listing']->yacht?->year_built,
+                'loa_m' => $row['listing']->yacht?->loa_m,
+                'asking_price' => $row['listing']->asking_price,
+                'currency' => $row['listing']->currency,
+                'status' => $row['listing']->status,
+                'score' => $row['score'],
+                // The reasons travel with the score, so a broker can defend
+                // the shortlist rather than recite a number.
+                'reasons' => $row['reasons'],
+                'url' => route('brokerage.listings.show', $row['listing']->id),
             ])->all(),
         ];
     }

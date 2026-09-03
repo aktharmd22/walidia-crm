@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Finance\InvoiceController;
 use App\Http\Controllers\Finance\PaymentController;
+use App\Http\Controllers\Finance\PayoutController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -41,4 +42,15 @@ Route::middleware(['auth', 'two-factor'])->prefix('finance')->name('finance.')->
         Route::post('/{payment}/allocate', 'allocateTo')->name('allocate');
     });
     Route::resource('payments', PaymentController::class);
+
+    /* Payouts — money leaving the company --------------------------------- */
+    Route::controller(PayoutController::class)->prefix('payouts')->name('payouts.')->group(function (): void {
+        Route::get('/archive', 'archive')->name('archive');
+        Route::get('/export', 'export')->name('export');
+        Route::post('/bulk', 'bulk')->name('bulk');
+        Route::post('/{payout}/restore', 'restore')->withTrashed()->name('restore');
+        Route::post('/{payout}/approve', 'approve')->name('approve');
+        Route::post('/{payout}/pay', 'pay')->name('pay');
+    });
+    Route::resource('payouts', PayoutController::class);
 });
