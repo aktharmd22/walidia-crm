@@ -86,7 +86,7 @@ function NavRow({
             <span className="flex-1 truncate text-start">{section.label}</span>
             <ChevronDown
               className={cn(
-                'size-3.5 shrink-0 text-[color:var(--sidebar-fg-muted)] transition-transform duration-fast motion-reduce:transition-none',
+                'size-[14px] shrink-0 text-[color:var(--sidebar-fg-muted)] transition-transform duration-fast motion-reduce:transition-none',
                 open && 'rotate-180',
               )}
               aria-hidden
@@ -115,7 +115,7 @@ function NavRow({
                 >
                   <span className="truncate">{child.label}</span>
                   {typeof child.badge === 'number' && child.badge > 0 && (
-                    <span className="numeric shrink-0 rounded-pill bg-accent-soft px-1.5 text-micro text-accent">
+                    <span className="numeric shrink-0 rounded-pill bg-accent-soft px-[6px] text-micro text-accent">
                       {child.badge}
                     </span>
                   )}
@@ -195,7 +195,7 @@ export function Sidebar({
           <button
             type="button"
             onClick={onClose}
-            className="ms-auto rounded-pill p-1.5 text-[color:var(--sidebar-fg-muted)] hover:bg-[color:var(--sidebar-hover-bg)] hover:text-[color:var(--sidebar-fg-active)]"
+            className="ms-auto rounded-pill p-[6px] text-[color:var(--sidebar-fg-muted)] hover:bg-[color:var(--sidebar-hover-bg)] hover:text-[color:var(--sidebar-fg-active)]"
             aria-label="Close navigation"
           >
             <X className="size-4" aria-hidden />
@@ -210,12 +210,12 @@ export function Sidebar({
             {collapsed ? (
               index > 0 && <hr className="mx-auto mb-2 w-6 border-[color:var(--sidebar-line)]" />
             ) : (
-              <p className="px-3 pb-1.5 text-micro uppercase tracking-[0.08em] text-[color:var(--sidebar-fg-muted)]">
+              <p className="px-3 pb-[6px] text-micro uppercase tracking-[0.08em] text-[color:var(--sidebar-fg-muted)]">
                 {group.name}
               </p>
             )}
 
-            <div className="flex flex-col gap-0.5">
+            <div className="flex flex-col gap-[2px]">
               {group.sections.map((section) => (
                 <NavRow
                   key={section.key}

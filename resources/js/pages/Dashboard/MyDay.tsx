@@ -75,7 +75,7 @@ interface Expiry {
  */
 function PeriodSelect({ months }: { months: number }) {
   return (
-    <span className="flex items-center gap-1 rounded-pill border border-line p-0.5">
+    <span className="flex items-center gap-1 rounded-pill border border-line p-[2px]">
       {[3, 6, 12].map((option) => (
         <button
           key={option}
@@ -85,7 +85,7 @@ function PeriodSelect({ months }: { months: number }) {
             router.get('/', { months: option }, { preserveScroll: true, preserveState: true, only: ['revenue', 'months'] })
           }
           className={cn(
-            'rounded-pill px-2.5 py-1 text-small transition-colors duration-fast ease-std',
+            'rounded-pill px-[10px] py-1 text-small transition-colors duration-fast ease-std',
             months === option ? 'bg-accent-soft font-medium text-accent' : 'text-ink-faint hover:text-ink',
           )}
         >
@@ -111,7 +111,7 @@ function MetricCard({ metric }: { metric: Metric }) {
     <Card>
       <CardBody className="flex flex-col gap-4">
         <div className="flex items-start gap-3">
-          <span className={`grid size-9 shrink-0 place-items-center rounded-card ${TONE_BG[metric.tone]}`}>
+          <span className={`grid size-[36px] shrink-0 place-items-center rounded-card ${TONE_BG[metric.tone]}`}>
             <Icon className="size-[18px]" aria-hidden />
           </span>
 
@@ -124,9 +124,9 @@ function MetricCard({ metric }: { metric: Metric }) {
                 }`}
               >
                 {metric.change.direction === 'up' ? (
-                  <ArrowUpRight className="size-3.5" aria-hidden />
+                  <ArrowUpRight className="size-[14px]" aria-hidden />
                 ) : (
-                  <ArrowDownRight className="size-3.5" aria-hidden />
+                  <ArrowDownRight className="size-[14px]" aria-hidden />
                 )}
                 <span className="numeric">{metric.change.value}%</span>
                 <span className="text-ink-faint">on last month</span>
@@ -195,7 +195,7 @@ export default function MyDay({
       <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-h1 text-ink">{greeting}</h1>
-          <p className="mt-0.5 text-body text-ink-soft">Here is where the business stands this morning.</p>
+          <p className="mt-[2px] text-body text-ink-soft">Here is where the business stands this morning.</p>
         </div>
         <p className="flex items-center gap-2 text-small text-ink-faint">
           <CalendarDays className="size-4" aria-hidden />
@@ -255,7 +255,7 @@ export default function MyDay({
                   </span>
                 ))}
                 {team.more > 0 && (
-                  <span className="-ms-2 grid size-7 place-items-center rounded-full bg-accent-soft text-micro text-accent ring-2 ring-hull">
+                  <span className="-ms-2 grid size-[28px] place-items-center rounded-full bg-accent-soft text-micro text-accent ring-2 ring-hull">
                     +{team.more}
                   </span>
                 )}
@@ -296,7 +296,7 @@ export default function MyDay({
           <CardHeader>
             <CardTitle>The week ahead</CardTitle>
             <Link href="/charter/bookings" className="flex items-center gap-1 text-small text-accent hover:underline">
-              All charters <ChevronRight className="size-3.5" aria-hidden />
+              All charters <ChevronRight className="size-[14px]" aria-hidden />
             </Link>
           </CardHeader>
 
@@ -307,12 +307,12 @@ export default function MyDay({
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="bg-deck">
-                    <th className="px-4 py-2.5 text-start text-micro uppercase tracking-wide text-ink-faint">Yacht</th>
-                    <th className="px-4 py-2.5 text-start text-micro uppercase tracking-wide text-ink-faint">Client</th>
-                    <th className="px-4 py-2.5 text-start text-micro uppercase tracking-wide text-ink-faint">Departs</th>
-                    <th className="px-4 py-2.5 text-end text-micro uppercase tracking-wide text-ink-faint">Guests</th>
-                    <th className="px-4 py-2.5 text-start text-micro uppercase tracking-wide text-ink-faint">Status</th>
-                    <th className="w-[52px] px-4 py-2.5" aria-label="Actions" />
+                    <th className="px-4 py-[10px] text-start text-micro uppercase tracking-wide text-ink-faint">Yacht</th>
+                    <th className="px-4 py-[10px] text-start text-micro uppercase tracking-wide text-ink-faint">Client</th>
+                    <th className="px-4 py-[10px] text-start text-micro uppercase tracking-wide text-ink-faint">Departs</th>
+                    <th className="px-4 py-[10px] text-end text-micro uppercase tracking-wide text-ink-faint">Guests</th>
+                    <th className="px-4 py-[10px] text-start text-micro uppercase tracking-wide text-ink-faint">Status</th>
+                    <th className="w-[52px] px-4 py-[10px]" aria-label="Actions" />
                   </tr>
                 </thead>
                 <tbody>
@@ -325,10 +325,10 @@ export default function MyDay({
                               src={charter.thumbnail}
                               alt=""
                               aria-hidden
-                              className="size-9 shrink-0 rounded-card object-cover"
+                              className="size-[36px] shrink-0 rounded-card object-cover"
                             />
                           ) : (
-                            <span className="size-9 shrink-0 rounded-card bg-deck" aria-hidden />
+                            <span className="size-[36px] shrink-0 rounded-card bg-deck" aria-hidden />
                           )}
                           <span className="min-w-0">
                             <Link href={charter.url} className="block truncate text-h3 text-ink hover:text-accent">
@@ -378,7 +378,7 @@ export default function MyDay({
           ) : (
             <ul className="flex flex-col gap-4 p-5">
               {sources.map((source) => (
-                <li key={source.name} className="flex flex-col gap-1.5">
+                <li key={source.name} className="flex flex-col gap-[6px]">
                   <span className="flex items-center justify-between gap-3">
                     <span className="truncate text-body text-ink">{source.name}</span>
                     <Num value={source.total} className="shrink-0 text-small text-ink-soft" />
@@ -400,7 +400,7 @@ export default function MyDay({
           <CardHeader>
             <CardTitle>Blocked</CardTitle>
             <Link href="/dashboard/alerts" className="flex items-center gap-1 text-small text-accent hover:underline">
-              All alerts <ChevronRight className="size-3.5" aria-hidden />
+              All alerts <ChevronRight className="size-[14px]" aria-hidden />
             </Link>
           </CardHeader>
 
@@ -421,7 +421,7 @@ export default function MyDay({
                     {blocker.subtitle} · <DateText value={blocker.starts_at} />
                   </span>
                   {/* The gate's own words, so this list and the button agree. */}
-                  <ul className="mt-1.5 flex flex-col gap-1">
+                  <ul className="mt-[6px] flex flex-col gap-1">
                     {blocker.reasons.map((reason) => (
                       <li key={reason} className="text-small text-danger">
                         {reason}
@@ -438,7 +438,7 @@ export default function MyDay({
           <CardHeader>
             <CardTitle>Your tasks</CardTitle>
             <Link href="/tasks" className="flex items-center gap-1 text-small text-accent hover:underline">
-              All tasks <ChevronRight className="size-3.5" aria-hidden />
+              All tasks <ChevronRight className="size-[14px]" aria-hidden />
             </Link>
           </CardHeader>
 
@@ -469,7 +469,7 @@ export default function MyDay({
           <CardHeader>
             <CardTitle>Expiring soon</CardTitle>
             <Link href="/management/certificates/expiry" className="flex items-center gap-1 text-small text-accent hover:underline">
-              Compliance <ChevronRight className="size-3.5" aria-hidden />
+              Compliance <ChevronRight className="size-[14px]" aria-hidden />
             </Link>
           </CardHeader>
 

@@ -330,7 +330,7 @@ export function ShareBar({ value, tone = 'accent', className }: { value: number;
   const palette = usePalette()
 
   return (
-    <span className={cn('block h-1.5 w-full overflow-hidden rounded-full bg-deck', className)}>
+    <span className={cn('block h-[6px] w-full overflow-hidden rounded-full bg-deck', className)}>
       <span
         className="block h-full rounded-full transition-[width] duration-slow ease-std motion-reduce:transition-none"
         style={{ width: `${Math.min(Math.max(value, 0), 100)}%`, background: palette[tone] }}

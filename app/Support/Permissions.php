@@ -67,7 +67,7 @@ final class Permissions
         'documents' => ['documents', 'document-templates', 'signature-requests'],
 
         'engine' => [
-            'gate-rules', 'workflows', 'message-templates', 'reminder-rules', 'workflow-runs',
+            'gate-rules', 'workflows', 'message-templates', 'reminder-rules',
             'communications', 'notifications', 'portal-invitations',
         ],
     ];
