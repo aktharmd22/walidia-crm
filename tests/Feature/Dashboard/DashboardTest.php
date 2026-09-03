@@ -93,6 +93,23 @@ it('loads with real records behind every panel', function (): void {
             ->has('tasks.0.title'));
 });
 
+it('narrows the revenue chart to the window asked for', function (): void {
+    $admin = userWithRole(Roles::ADMIN);
+
+    foreach ([3, 6, 12] as $months) {
+        $this->actingAs($admin)
+            ->get("/?months={$months}")
+            ->assertOk()
+            ->assertInertia(fn ($page) => $page->where('months', $months)->has('revenue', $months));
+    }
+
+    // Anything else falls back to a year rather than reaching the query.
+    $this->actingAs($admin)
+        ->get('/?months=9999')
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page->where('months', 12)->has('revenue', 12));
+});
+
 it('serves the alerts and calendar screens', function (): void {
     $admin = userWithRole(Roles::ADMIN);
 

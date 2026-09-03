@@ -14,6 +14,7 @@ use App\Models\Listing;
 use App\Models\Payment;
 use App\Models\Task;
 use App\Models\Transaction;
+use App\Models\User;
 use App\Models\Yacht;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
@@ -41,12 +42,18 @@ class DashboardController extends Controller
         $today = CarbonImmutable::now(config('walidia.display_timezone'));
         $monthStart = $today->startOfMonth();
 
+        // 3, 6 or 12 months — clamped, because it reaches a query.
+        $months = (int) $request->integer('months', 12);
+        $months = in_array($months, [3, 6, 12], true) ? $months : 12;
+
         return Inertia::render('Dashboard/MyDay', [
             'greeting' => $this->greeting($today),
             'today' => $today->toIso8601String(),
+            'months' => $months,
             'metrics' => $this->metrics($monthStart, $today),
-            'revenue' => $this->revenueByMonth($today),
+            'revenue' => $this->revenueByMonth($today, $months),
             'mix' => $this->revenueMix($monthStart),
+            'team' => $this->teamOnTheWater($today),
             'sources' => $this->leadSources($monthStart),
             'charters' => $this->chartersThisWeek($today),
             'blockers' => $this->blockers($request),
@@ -251,11 +258,11 @@ class DashboardController extends Controller
      *
      * @return list<array<string, mixed>>
      */
-    private function revenueByMonth(CarbonImmutable $today): array
+    private function revenueByMonth(CarbonImmutable $today, int $months = 12): array
     {
         $rows = [];
 
-        for ($offset = 11; $offset >= 0; $offset--) {
+        for ($offset = $months - 1; $offset >= 0; $offset--) {
             $from = $today->startOfMonth()->subMonths($offset);
             $to = $from->endOfMonth();
 
@@ -298,6 +305,35 @@ class DashboardController extends Controller
     }
 
     /**
+     * The people behind this month's charters.
+     *
+     * A dashboard that only shows money forgets that someone is delivering it;
+     * the stack is a quiet reminder of who is carrying the month.
+     *
+     * @return array{avatars: list<array{name: string, avatar: string|null}>, more: int}
+     */
+    private function teamOnTheWater(CarbonImmutable $today): array
+    {
+        $users = User::query()
+            ->whereIn('id', Booking::query()
+                ->whereBetween('starts_at', [$today->startOfMonth(), $today->endOfMonth()])
+                ->whereNotIn('status', ['cancelled', 'no_show'])
+                ->whereNotNull('assigned_user_id')
+                ->distinct()
+                ->pluck('assigned_user_id'))
+            ->limit(9)
+            ->get();
+
+        return [
+            'avatars' => $users->take(4)->map(fn (User $user): array => [
+                'name' => $user->name,
+                'avatar' => $user->avatarUrl(),
+            ])->all(),
+            'more' => max($users->count() - 4, 0),
+        ];
+    }
+
+    /**
      * Where the work is coming from. The bar does the comparing.
      *
      * @return list<array<string, mixed>>
@@ -332,7 +368,7 @@ class DashboardController extends Controller
     private function chartersThisWeek(CarbonImmutable $today): array
     {
         return Booking::query()
-            ->with(['yacht:id,name', 'client:id,full_name'])
+            ->with(['yacht.media', 'client:id,full_name'])
             ->whereBetween('starts_at', [$today->startOfDay(), $today->addDays(7)->endOfDay()])
             ->whereNotIn('status', ['cancelled'])
             ->orderBy('starts_at')
@@ -342,6 +378,7 @@ class DashboardController extends Controller
                 'id' => $booking->id,
                 'reference' => $booking->reference,
                 'yacht' => $booking->yacht?->name,
+                'thumbnail' => $booking->yacht?->heroImageUrl(),
                 'client' => $booking->client?->full_name,
                 'starts_at' => $booking->starts_at->toIso8601String(),
                 'guests' => $booking->guestCount(),

@@ -1,9 +1,10 @@
-import { Head, Link } from '@inertiajs/react'
-import { ArrowDownRight, ArrowUpRight, CalendarDays, ChevronRight, ShieldAlert } from 'lucide-react'
+import { Head, Link, router } from '@inertiajs/react'
+import { ArrowDownRight, ArrowUpRight, CalendarDays, ChevronRight, Eye, ShieldAlert } from 'lucide-react'
 import { navIcon } from '@/lib/icons'
 import { ChartLegend, DonutChart, ShareBar, Sparkline, TrendChart, type SeriesPoint } from '@/ui/Charts'
-import { Card, CardBody, CardHeader, CardTitle, DateText, EmptyState, Money, Num } from '@/ui/Primitives'
+import { Avatar, Card, CardBody, CardHeader, CardTitle, DateText, EmptyState, Money, Num } from '@/ui/Primitives'
 import { StatusPill } from '@/ui/StatusPill'
+import { cn } from '@/lib/cn'
 import type { StatusTone } from '@/types'
 
 interface Metric {
@@ -18,10 +19,16 @@ interface Metric {
   sparkVariant: 'line' | 'bar'
 }
 
+interface TeamMember {
+  name: string
+  avatar: string | null
+}
+
 interface Charter {
   id: number
   reference: string | null
   yacht: string | null
+  thumbnail: string | null
   client: string | null
   starts_at: string
   guests: number | null
@@ -57,6 +64,36 @@ interface Expiry {
   expired: boolean
   blocking: boolean
   url: string | null
+}
+
+/**
+ * The window a card is showing.
+ *
+ * It reloads from the server rather than slicing an array the client already
+ * holds, so the chart can never disagree with the figures above it about which
+ * months are on screen.
+ */
+function PeriodSelect({ months }: { months: number }) {
+  return (
+    <span className="flex items-center gap-1 rounded-pill border border-line p-0.5">
+      {[3, 6, 12].map((option) => (
+        <button
+          key={option}
+          type="button"
+          aria-pressed={months === option}
+          onClick={() =>
+            router.get('/', { months: option }, { preserveScroll: true, preserveState: true, only: ['revenue', 'months'] })
+          }
+          className={cn(
+            'rounded-pill px-2.5 py-1 text-small transition-colors duration-fast ease-std',
+            months === option ? 'bg-accent-soft font-medium text-accent' : 'text-ink-faint hover:text-ink',
+          )}
+        >
+          {option}m
+        </button>
+      ))}
+    </span>
+  )
 }
 
 const TONE_BG: Record<Metric['tone'], string> = {
@@ -123,9 +160,11 @@ function MetricCard({ metric }: { metric: Metric }) {
  */
 export default function MyDay({
   greeting,
+  months = 12,
   metrics = [],
   revenue = [],
   mix = [],
+  team,
   sources = [],
   charters = [],
   blockers = [],
@@ -133,9 +172,11 @@ export default function MyDay({
   expiring = [],
 }: {
   greeting: string
+  months?: number
   metrics?: Metric[]
   revenue?: SeriesPoint[]
   mix?: { name: string; value: number; tone?: 'accent' | 'info' | 'success' }[]
+  team?: { avatars: TeamMember[]; more: number }
   sources?: { name: string; total: number; share: number }[]
   charters?: Charter[]
   blockers?: Blocker[]
@@ -174,13 +215,16 @@ export default function MyDay({
         <Card>
           <CardHeader>
             <CardTitle>Revenue by month</CardTitle>
-            <ChartLegend
-              series={[
-                { name: 'Charter', tone: 'accent' },
-                { name: 'Brokerage', tone: 'info' },
-                { name: 'Management', tone: 'success' },
-              ]}
-            />
+            <span className="flex flex-wrap items-center gap-4">
+              <ChartLegend
+                series={[
+                  { name: 'Charter', tone: 'accent' },
+                  { name: 'Brokerage', tone: 'info' },
+                  { name: 'Management', tone: 'success' },
+                ]}
+              />
+              <PeriodSelect months={months} />
+            </span>
           </CardHeader>
           <CardBody>
             {revenue.length === 0 ? (
@@ -202,6 +246,21 @@ export default function MyDay({
         <Card>
           <CardHeader>
             <CardTitle>This month's mix</CardTitle>
+            {team && team.avatars.length > 0 && (
+              <span className="flex items-center">
+                {/* Who is carrying the month, not just what it earned. */}
+                {team.avatars.map((member) => (
+                  <span key={member.name} className="-ms-2 first:ms-0 rounded-full ring-2 ring-hull" title={member.name}>
+                    <Avatar name={member.name} src={member.avatar} size="sm" />
+                  </span>
+                ))}
+                {team.more > 0 && (
+                  <span className="-ms-2 grid size-7 place-items-center rounded-full bg-accent-soft text-micro text-accent ring-2 ring-hull">
+                    +{team.more}
+                  </span>
+                )}
+              </span>
+            )}
           </CardHeader>
           <CardBody className="flex flex-col gap-4">
             {mixTotal === 0 ? (
@@ -253,16 +312,31 @@ export default function MyDay({
                     <th className="px-4 py-2.5 text-start text-micro uppercase tracking-wide text-ink-faint">Departs</th>
                     <th className="px-4 py-2.5 text-end text-micro uppercase tracking-wide text-ink-faint">Guests</th>
                     <th className="px-4 py-2.5 text-start text-micro uppercase tracking-wide text-ink-faint">Status</th>
+                    <th className="w-[52px] px-4 py-2.5" aria-label="Actions" />
                   </tr>
                 </thead>
                 <tbody>
                   {charters.map((charter) => (
                     <tr key={charter.id} className="border-b border-line last:border-0 hover:bg-deck">
                       <td className="h-row px-4">
-                        <Link href={charter.url} className="text-h3 text-ink hover:text-accent">
-                          {charter.yacht ?? 'Yacht'}
-                        </Link>
-                        <span className="block text-micro text-ink-faint">{charter.reference}</span>
+                        <span className="flex items-center gap-3">
+                          {charter.thumbnail ? (
+                            <img
+                              src={charter.thumbnail}
+                              alt=""
+                              aria-hidden
+                              className="size-9 shrink-0 rounded-card object-cover"
+                            />
+                          ) : (
+                            <span className="size-9 shrink-0 rounded-card bg-deck" aria-hidden />
+                          )}
+                          <span className="min-w-0">
+                            <Link href={charter.url} className="block truncate text-h3 text-ink hover:text-accent">
+                              {charter.yacht ?? 'Yacht'}
+                            </Link>
+                            <span className="block text-micro text-ink-faint">{charter.reference}</span>
+                          </span>
+                        </span>
                       </td>
                       <td className="h-row px-4 text-body text-ink-soft">{charter.client ?? '—'}</td>
                       <td className="h-row px-4">
@@ -276,6 +350,15 @@ export default function MyDay({
                           <StatusPill tone={charter.tone}>{charter.status.replace(/_/g, ' ')}</StatusPill>
                           {!charter.released && <StatusPill tone="warning">Not released</StatusPill>}
                         </span>
+                      </td>
+                      <td className="h-row px-4">
+                        <Link
+                          href={charter.url}
+                          aria-label={`Open ${charter.yacht ?? 'charter'}`}
+                          className="grid size-8 place-items-center rounded-card text-ink-faint transition-colors duration-fast hover:bg-deck hover:text-ink"
+                        >
+                          <Eye className="size-4" aria-hidden />
+                        </Link>
                       </td>
                     </tr>
                   ))}
@@ -300,7 +383,10 @@ export default function MyDay({
                     <span className="truncate text-body text-ink">{source.name}</span>
                     <Num value={source.total} className="shrink-0 text-small text-ink-soft" />
                   </span>
-                  <ShareBar value={source.share} />
+                  <span className="flex items-center gap-2">
+                    <ShareBar value={source.share} className="flex-1" />
+                    <span className="numeric shrink-0 text-micro text-ink-faint">{source.share}%</span>
+                  </span>
                 </li>
               ))}
             </ul>
