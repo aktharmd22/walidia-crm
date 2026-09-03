@@ -63,7 +63,7 @@ export function Toolbar({
             onChange={(event) => onSearchChange(event.target.value)}
             placeholder={searchPlaceholder}
             aria-label={searchPlaceholder}
-            className="h-field w-full rounded-card border border-line bg-hull ps-9 pe-3 text-body text-ink placeholder:text-ink-faint hover:border-line-strong"
+            className="h-field w-full rounded-card border border-line bg-hull ps-[34px] pe-3 text-body text-ink placeholder:text-ink-faint hover:border-line-strong"
           />
         </div>
       )}

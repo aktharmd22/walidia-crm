@@ -196,7 +196,7 @@ export function DataTable<T>({
                       const meta = (column.columnDef.meta ?? {}) as TableColumnMeta
                       return (
                         <td key={column.id} className={cn('h-row px-4', priorityClass[meta.priority ?? 1])}>
-                          <Skeleton className="h-3 w-24" />
+                          <Skeleton className="h-3 w-[96px]" />
                         </td>
                       )
                     })}

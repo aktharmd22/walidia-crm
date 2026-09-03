@@ -234,7 +234,7 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(fu
         type={revealed ? 'text' : 'password'}
         required={required}
         aria-invalid={error ? true : undefined}
-        className={cn(control, 'h-field pe-11', className)}
+        className={cn(control, 'h-field pe-[36px]', className)}
         {...props}
       />
       <button
@@ -244,7 +244,7 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(fu
         aria-label={revealed ? 'Hide password' : 'Show password'}
         aria-pressed={revealed}
         className={cn(
-          'absolute inset-y-0 end-0 flex w-11 items-center justify-center rounded-e-card',
+          'absolute inset-y-0 end-0 flex w-[36px] items-center justify-center rounded-e-card',
           'text-ink-faint transition-colors duration-fast ease-std hover:text-ink',
         )}
       >

@@ -259,9 +259,9 @@ export default function Ui() {
       <Section title="Loading and empty states">
         <div className="grid w-full gap-4 md:grid-cols-2">
           <div className="flex flex-col gap-2">
-            <Skeleton className="h-3 w-40" />
-            <Skeleton className="h-3 w-64" />
-            <Skeleton className="h-3 w-24" />
+            <Skeleton className="h-3 w-[160px]" />
+            <Skeleton className="h-3 w-[256px]" />
+            <Skeleton className="h-3 w-[96px]" />
           </div>
           <EmptyState
             icon={<Ship className="size-5" aria-hidden />}

@@ -38,15 +38,15 @@ export default function Login({ status, canResetPassword }: { status?: string; c
         {/* A whisper of ink at the seam, so the photograph meets the white
             column as an edge rather than a collision. */}
         <div
-          className="absolute inset-y-0 end-0 w-32 bg-gradient-to-l from-black/25 to-transparent"
+          className="absolute inset-y-0 end-0 w-[128px] bg-gradient-to-l from-black/25 to-transparent"
           aria-hidden
         />
       </div>
 
       <div className="flex min-h-screen items-center justify-center bg-hull px-6 py-10 sm:px-10 lg:min-h-0 lg:px-12">
         <div className="w-full max-w-[340px]">
-          {/* Sized in absolutes: the spacing scale here is a fixed set of
-              tokens, so h-14 and friends silently do nothing. */}
+          {/* Sized in absolutes: this project replaces the spacing scale with
+              its own tokens, so off-scale steps compile to nothing. */}
           <img
             src="/images/walidia-logo.png"
             alt="Walidia Yachts"

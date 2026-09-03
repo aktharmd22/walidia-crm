@@ -95,7 +95,7 @@ export default function TwoFactorSetup({ enabled, confirmed }: Props) {
                   </p>
                   {qr && (
                     <div
-                      className="mt-3 inline-block rounded-card border border-line bg-white p-3 [&_svg]:size-40"
+                      className="mt-3 inline-block rounded-card border border-line bg-white p-3 [&_svg]:size-[160px]"
                       dangerouslySetInnerHTML={{ __html: qr }}
                     />
                   )}

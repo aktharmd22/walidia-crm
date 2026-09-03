@@ -101,7 +101,7 @@ export default function FleetAvailability({
             <div className="min-w-[900px]">
               {yachts.map((yacht) => (
                 <div key={yacht.id} className="flex items-center gap-4 border-b border-line px-5 py-3 last:border-0">
-                  <div className="w-48 shrink-0">
+                  <div className="w-[192px] shrink-0">
                     <p className="truncate text-h3 text-ink">{yacht.name}</p>
                     <p className="numeric text-small text-ink-faint">{yacht.reference}</p>
                   </div>
