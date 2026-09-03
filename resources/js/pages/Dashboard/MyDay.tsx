@@ -74,13 +74,9 @@ const TONE_BG: Record<Metric['tone'], string> = {
 }
 
 /**
- * One figure, laid out as the reference does it: a tinted disc, the label, the
- * change on a single line beneath it, then the value and its chart on the
- * bottom row.
- *
- * It still has to survive an empty database, which the reference never shows —
- * so a series with no spread draws nothing rather than a flat rule, and a card
- * with no prior month says so instead of restating the period.
+ * One figure, to the reference's proportions: a 44px tinted disc, the label
+ * and its change stacked beside it, then the value and its chart on the
+ * bottom row with real air between the two.
  */
 function MetricCard({ metric }: { metric: Metric }) {
   const Icon = navIcon(metric.icon)
@@ -88,11 +84,10 @@ function MetricCard({ metric }: { metric: Metric }) {
 
   return (
     <Card>
-      <CardBody className="flex flex-col gap-5">
+      <CardBody className="flex flex-col gap-6 p-6">
         <div className="flex items-start gap-3">
-          {/* A disc, not a square — the reference's shape. */}
-          <span className={`grid size-[42px] shrink-0 place-items-center rounded-full ${TONE_BG[metric.tone]}`}>
-            <Icon className="size-[19px]" aria-hidden />
+          <span className={`grid size-[44px] shrink-0 place-items-center rounded-full ${TONE_BG[metric.tone]}`}>
+            <Icon className="size-5" aria-hidden />
           </span>
 
           <span className="min-w-0 flex-1">
@@ -110,12 +105,14 @@ function MetricCard({ metric }: { metric: Metric }) {
           </span>
         </div>
 
-        <div className="flex items-end justify-between gap-3">
-          <span className="numeric text-display leading-none text-ink">
-            {metric.prefix && <span className="me-[6px] align-baseline text-h3 text-ink-faint">{metric.prefix}</span>}
+        <div className="flex items-center justify-between gap-3">
+          <span className="numeric text-display font-semibold leading-none text-ink">
+            {metric.prefix && <span className="me-[6px] align-baseline text-h3 font-normal text-ink-faint">{metric.prefix}</span>}
             {metric.value}
           </span>
-          {hasSignal && <Sparkline data={metric.spark} tone={metric.tone} variant={metric.sparkVariant} />}
+          {/* A series with no spread would draw a flat rule, which reads as a
+              rendering fault rather than as "no movement yet". */}
+          {hasSignal && <Sparkline data={metric.spark} tone={metric.tone} variant={metric.sparkVariant} height={48} />}
         </div>
       </CardBody>
     </Card>

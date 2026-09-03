@@ -265,11 +265,13 @@ export function Sparkline({
   data,
   tone = 'accent',
   height = 40,
+  width = 120,
   variant = 'line',
 }: {
   data: number[]
   tone?: Series['tone']
   height?: number
+  width?: number
   variant?: 'line' | 'bar'
 }) {
   const palette = usePalette()
@@ -279,7 +281,7 @@ export function Sparkline({
 
   if (variant === 'bar') {
     return (
-      <div style={{ height, width: 88 }} aria-hidden>
+      <div style={{ height, width }} aria-hidden>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={points} margin={{ top: 2, right: 0, bottom: 0, left: 0 }}>
             <Bar dataKey="value" fill={stroke} radius={[2, 2, 0, 0]} isAnimationActive={!reduced} />
@@ -290,7 +292,7 @@ export function Sparkline({
   }
 
   return (
-    <div style={{ height, width: 88 }} aria-hidden>
+    <div style={{ height, width }} aria-hidden>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={points} margin={{ top: 4, right: 2, bottom: 4, left: 2 }}>
           <Line

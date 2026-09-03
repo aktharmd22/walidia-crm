@@ -1,5 +1,6 @@
-import { Link, usePage } from '@inertiajs/react'
-import { Bell, Menu, Search, Zap } from 'lucide-react'
+import type { ReactNode } from 'react'
+import { Link, router, usePage } from '@inertiajs/react'
+import { Bell, Languages, Menu, Moon, Search, Sun } from 'lucide-react'
 import { cn } from '@/lib/cn'
 import { Avatar } from '@/ui/Primitives'
 import type { SharedProps } from '@/types'
@@ -9,8 +10,58 @@ export interface Crumb {
   href?: string
 }
 
+/** The circular outlined control the reference uses along the top bar. */
+function RoundButton({
+  label,
+  onClick,
+  href,
+  children,
+  className,
+}: {
+  label: string
+  onClick?: () => void
+  href?: string
+  children: ReactNode
+  className?: string
+}) {
+  const classes = cn(
+    'relative grid size-[42px] shrink-0 place-items-center rounded-full border border-line bg-hull',
+    'text-ink-soft transition-colors duration-fast ease-std hover:border-line-strong hover:text-ink',
+    className,
+  )
+
+  if (href) {
+    return (
+      <Link href={href} className={classes} aria-label={label}>
+        {children}
+      </Link>
+    )
+  }
+
+  return (
+    <button type="button" onClick={onClick} className={classes} aria-label={label}>
+      {children}
+    </button>
+  )
+}
+
+function greetingFor(date: Date): string {
+  const hour = date.getHours()
+
+  if (hour < 12) return 'Good morning'
+  if (hour < 17) return 'Good afternoon'
+
+  return 'Good evening'
+}
+
+/**
+ * The top bar.
+ *
+ * Greeting on the left, search in the middle, round controls on the right —
+ * the shape of the reference. The breadcrumb lives with the page heading
+ * rather than up here, which is also where the reference keeps it.
+ */
 export function Topbar({
-  crumbs = [],
   onOpenNav,
   onOpenSearch,
 }: {
@@ -20,71 +71,66 @@ export function Topbar({
 }) {
   const { props } = usePage<SharedProps>()
   const user = props.auth.user
+  const { chrome, locale } = props
+
+  const firstName = user?.name?.split(' ')[0]
 
   return (
-    <header className="sticky top-0 z-sticky flex h-topbar items-center gap-3 border-b border-line bg-hull px-4 lg:px-6">
-      <button
-        type="button"
-        onClick={onOpenNav}
-        className="rounded-card p-2 text-ink-soft hover:bg-deck md:hidden"
-        aria-label="Open navigation"
-      >
-        <Menu className="size-5" aria-hidden />
-      </button>
+    <header className="sticky top-0 z-sticky flex h-topbar items-center gap-4 border-b border-line bg-hull px-4 lg:px-6">
+      <RoundButton label="Toggle navigation" onClick={onOpenNav}>
+        <Menu className="size-[19px]" aria-hidden />
+      </RoundButton>
 
-      <nav aria-label="Breadcrumb" className="min-w-0 flex-1">
-        <ol className="flex items-center gap-2 text-small text-ink-faint">
-          {crumbs.map((crumb, index) => (
-            <li key={`${crumb.label}-${index}`} className="flex items-center gap-2 min-w-0">
-              {index > 0 && <span aria-hidden>/</span>}
-              {crumb.href ? (
-                <Link href={crumb.href} className="truncate hover:text-ink">
-                  {crumb.label}
-                </Link>
-              ) : (
-                <span className={cn('truncate', index === crumbs.length - 1 && 'text-ink-soft')}>{crumb.label}</span>
-              )}
-            </li>
-          ))}
-        </ol>
-      </nav>
+      <p className="hidden min-w-0 truncate text-h2 text-ink sm:block">
+        {greetingFor(new Date())}
+        {firstName ? `, ${firstName}!` : '!'}
+      </p>
 
-      <button
-        type="button"
-        onClick={onOpenSearch}
-        className="hidden h-field w-[280px] items-center gap-2 rounded-card border border-line bg-deck px-3 text-small text-ink-faint hover:border-line-strong lg:flex"
-      >
-        <Search className="size-4" aria-hidden />
-        <span className="flex-1 text-start">Search clients, yachts, bookings…</span>
-        <kbd className="rounded-pill border border-line bg-hull px-2 text-micro text-ink-faint">⌘K</kbd>
-      </button>
+      <div className="flex flex-1 justify-end lg:justify-center">
+        <button
+          type="button"
+          onClick={onOpenSearch}
+          className={cn(
+            'hidden h-[46px] w-full max-w-[420px] items-center gap-3 rounded-full border border-line bg-hull px-5',
+            'text-body text-ink-faint transition-colors duration-fast ease-std hover:border-line-strong lg:flex',
+          )}
+        >
+          <Search className="size-[18px] shrink-0" aria-hidden />
+          <span className="flex-1 truncate text-start">Search clients, yachts, bookings…</span>
+          <kbd className="shrink-0 rounded-pill border border-line px-2 text-micro text-ink-faint">⌘K</kbd>
+        </button>
+      </div>
 
-      <button
-        type="button"
-        onClick={onOpenSearch}
-        className="rounded-card p-2 text-ink-soft hover:bg-deck lg:hidden"
-        aria-label="Search"
-      >
-        <Search className="size-5" aria-hidden />
-      </button>
+      <div className="flex shrink-0 items-center gap-2 lg:gap-3">
+        <RoundButton label="Search" onClick={onOpenSearch} className="lg:hidden">
+          <Search className="size-[19px]" aria-hidden />
+        </RoundButton>
 
-      <Link
-        href="/tasks/create"
-        className="hidden rounded-card p-2 text-ink-soft hover:bg-deck sm:block"
-        aria-label="Quick create"
-      >
-        <Zap className="size-5" aria-hidden />
-      </Link>
+        {/* The reference's flag is a locale switch; this system is bilingual. */}
+        <RoundButton
+          label={locale === 'ar' ? 'Switch to English' : 'التبديل إلى العربية'}
+          onClick={() => router.post(`/me/locale/${locale === 'ar' ? 'en' : 'ar'}`)}
+          className="hidden sm:grid"
+        >
+          <Languages className="size-[19px]" aria-hidden />
+        </RoundButton>
 
-      <Link href="/notifications" className="relative rounded-card p-2 text-ink-soft hover:bg-deck" aria-label="Alerts">
-        <Bell className="size-5" aria-hidden />
-        <span className="absolute end-2 top-2 size-2 rounded-full bg-danger" aria-hidden />
-      </Link>
+        <RoundButton
+          label={chrome.theme === 'navy' ? 'Switch to light chrome' : 'Switch to navy chrome'}
+          onClick={() => router.post(`/me/chrome/${chrome.theme === 'navy' ? 'light' : 'navy'}`)}
+        >
+          {chrome.theme === 'navy' ? <Sun className="size-[19px]" aria-hidden /> : <Moon className="size-[19px]" aria-hidden />}
+        </RoundButton>
 
-      <Link href="/me/profile" className="flex items-center gap-2 rounded-card p-1 hover:bg-deck">
-        <Avatar name={user?.name} src={user?.avatar_url} size="sm" />
-        <span className="hidden text-h3 text-ink lg:block">{user?.name?.split(' ')[0]}</span>
-      </Link>
+        <RoundButton label="Alerts" href="/notifications">
+          <Bell className="size-[19px]" aria-hidden />
+          <span className="absolute end-[10px] top-[10px] size-2 rounded-full bg-danger ring-2 ring-hull" aria-hidden />
+        </RoundButton>
+
+        <Link href="/me/profile" className="shrink-0 rounded-full" aria-label="Profile and security">
+          <Avatar name={user?.name} src={user?.avatar_url} size="lg" />
+        </Link>
+      </div>
     </header>
   )
 }
