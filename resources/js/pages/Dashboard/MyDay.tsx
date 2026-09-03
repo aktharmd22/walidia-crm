@@ -103,47 +103,56 @@ const TONE_BG: Record<Metric['tone'], string> = {
   warning: 'bg-warning-bg text-warning',
 }
 
-/** The four figures. Each carries its direction, because a number alone is trivia. */
+/**
+ * One figure.
+ *
+ * Composed so it survives an empty database, which is what a new deployment
+ * shows first. The delta sits with the number it describes rather than under
+ * the label; a flat sparkline is drawn as nothing at all, because a straight
+ * line across a card reads as a rendering fault rather than as "no movement
+ * yet"; and the period is stated once above the row instead of four times.
+ */
 function MetricCard({ metric }: { metric: Metric }) {
   const Icon = navIcon(metric.icon)
 
+  // No spread means no trend. Six identical points is not a chart.
+  const hasSignal = metric.spark.length > 1 && new Set(metric.spark).size > 1
+
   return (
     <Card>
-      <CardBody className="flex flex-col gap-4">
-        <div className="flex items-start gap-3">
-          <span className={`grid size-[36px] shrink-0 place-items-center rounded-card ${TONE_BG[metric.tone]}`}>
-            <Icon className="size-[18px]" aria-hidden />
+      <CardBody className="flex flex-col gap-3">
+        <div className="flex items-center gap-[10px]">
+          <span className={`grid size-[34px] shrink-0 place-items-center rounded-card ${TONE_BG[metric.tone]}`}>
+            <Icon className="size-[17px]" aria-hidden />
           </span>
-
-          <span className="min-w-0 flex-1">
-            <span className="block truncate text-h3 text-ink">{metric.label}</span>
-            {metric.change ? (
-              <span
-                className={`flex items-center gap-1 text-small ${
-                  metric.change.direction === 'up' ? 'text-success' : 'text-danger'
-                }`}
-              >
-                {metric.change.direction === 'up' ? (
-                  <ArrowUpRight className="size-[14px]" aria-hidden />
-                ) : (
-                  <ArrowDownRight className="size-[14px]" aria-hidden />
-                )}
-                <span className="numeric">{metric.change.value}%</span>
-                <span className="text-ink-faint">on last month</span>
-              </span>
-            ) : (
-              <span className="block text-small text-ink-faint">This month</span>
-            )}
-          </span>
+          <span className="min-w-0 truncate text-h3 text-ink">{metric.label}</span>
         </div>
 
         <div className="flex items-end justify-between gap-3">
-          <span className="numeric text-h1 leading-none text-ink">
-            {metric.prefix && <span className="me-1 text-body text-ink-faint">{metric.prefix}</span>}
+          <span className="numeric text-display leading-none text-ink">
+            {metric.prefix && <span className="me-[6px] align-baseline text-h3 text-ink-faint">{metric.prefix}</span>}
             {metric.value}
           </span>
-          <Sparkline data={metric.spark} tone={metric.tone} variant={metric.sparkVariant} />
+          {hasSignal && <Sparkline data={metric.spark} tone={metric.tone} variant={metric.sparkVariant} />}
         </div>
+
+        {metric.change ? (
+          <span
+            className={`flex items-center gap-1 text-small ${
+              metric.change.direction === 'up' ? 'text-success' : 'text-danger'
+            }`}
+          >
+            {metric.change.direction === 'up' ? (
+              <ArrowUpRight className="size-[14px]" aria-hidden />
+            ) : (
+              <ArrowDownRight className="size-[14px]" aria-hidden />
+            )}
+            <span className="numeric">{metric.change.value}%</span>
+            <span className="text-ink-faint">on last month</span>
+          </span>
+        ) : (
+          <span className="text-small text-ink-faint">No prior month to compare</span>
+        )}
       </CardBody>
     </Card>
   )
@@ -184,6 +193,9 @@ export default function MyDay({
   expiring?: Expiry[]
 }) {
   const mixTotal = mix.reduce((sum, slice) => sum + slice.value, 0)
+  const hasRevenue = revenue.some((row) =>
+    ['charter', 'brokerage', 'management'].some((key) => Number(row[key] ?? 0) > 0),
+  )
   const compact = (value: number) =>
     value >= 1_000_000 ? `${(value / 1_000_000).toFixed(1)}m` : value >= 1000 ? `${Math.round(value / 1000)}k` : String(value)
 
@@ -204,6 +216,7 @@ export default function MyDay({
       </div>
 
       {/* What we earned */}
+      <p className="mb-2 text-micro uppercase tracking-[0.08em] text-ink-faint">This month</p>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {metrics.map((metric) => (
           <MetricCard key={metric.key} metric={metric} />
@@ -227,7 +240,7 @@ export default function MyDay({
             </span>
           </CardHeader>
           <CardBody>
-            {revenue.length === 0 ? (
+            {!hasRevenue ? (
               <EmptyState title="No revenue yet" description="Cleared payments and completed sales appear here." />
             ) : (
               <TrendChart
