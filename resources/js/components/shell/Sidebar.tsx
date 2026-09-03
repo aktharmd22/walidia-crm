@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, router, usePage } from '@inertiajs/react'
 import { ChevronDown, LogOut, Moon, Palette, Sun, X } from 'lucide-react'
 import { cn } from '@/lib/cn'
@@ -6,6 +6,52 @@ import { navIcon } from '@/lib/icons'
 import { Avatar } from '@/ui/Primitives'
 import { DropdownMenu } from '@/ui/Overlays'
 import type { NavSection, SharedProps } from '@/types'
+
+/**
+ * Whether the list is cut off at the top, the bottom, or neither.
+ *
+ * The sidebar fades where content continues, so a row clipped at the fold
+ * reads as "there is more" rather than as a broken layout — and a list that
+ * fits is not faded at all.
+ */
+function useScrollEdges() {
+  const ref = useRef<HTMLElement | null>(null)
+  const [edges, setEdges] = useState({ top: false, bottom: false })
+
+  useEffect(() => {
+    const element = ref.current
+
+    if (!element) return
+
+    const measure = () => {
+      const { scrollTop, scrollHeight, clientHeight } = element
+      const overflows = scrollHeight - clientHeight > 1
+
+      setEdges({
+        top: overflows && scrollTop > 2,
+        bottom: overflows && scrollTop + clientHeight < scrollHeight - 2,
+      })
+    }
+
+    measure()
+    element.addEventListener('scroll', measure, { passive: true })
+
+    // Expanding a section changes the height without a scroll event.
+    const observer = new ResizeObserver(measure)
+    observer.observe(element)
+
+    for (const child of Array.from(element.children)) {
+      observer.observe(child)
+    }
+
+    return () => {
+      element.removeEventListener('scroll', measure)
+      observer.disconnect()
+    }
+  }, [])
+
+  return { ref, edges }
+}
 
 function isActive(currentUrl: string, href: string | null): boolean {
   if (!href) return false
@@ -148,6 +194,7 @@ export function Sidebar({
 }) {
   const { props, url } = usePage<SharedProps>()
   const { nav, auth, app, chrome } = props
+  const { ref: navRef, edges } = useScrollEdges()
 
   // Preserve the order the server sent, rather than an alphabetical accident.
   const groups: { name: string; sections: NavSection[] }[] = []
@@ -204,7 +251,13 @@ export function Sidebar({
       </div>
 
       {/* Destinations */}
-      <nav className="flex-1 overflow-y-auto px-3 py-4" aria-label="Main">
+      <nav
+        ref={navRef}
+        data-fade-top={edges.top}
+        data-fade-bottom={edges.bottom}
+        className="sidebar-scroll flex-1 overflow-y-auto px-3 py-4"
+        aria-label="Main"
+      >
         {groups.map((group, index) => (
           <div key={group.name} className={cn(index > 0 && 'mt-5')}>
             {collapsed ? (

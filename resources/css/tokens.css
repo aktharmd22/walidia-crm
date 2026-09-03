@@ -63,6 +63,8 @@
   --sidebar-active-bg: rgba(184, 137, 74, 0.16);
   --sidebar-hover-bg: rgba(255, 255, 255, 0.06);
   --sidebar-line: rgba(255, 255, 255, 0.08);
+  --sidebar-scroll: rgba(255, 255, 255, 0.18);
+  --sidebar-scroll-hover: rgba(255, 255, 255, 0.32);
   --sidebar-width: 260px;
   --sidebar-rail: 64px;
 
@@ -111,6 +113,8 @@
   --sidebar-active-bg: #FFFFFF;
   --sidebar-hover-bg: #DED7C9;
   --sidebar-line: #D6CEC0;
+  --sidebar-scroll: rgba(74, 66, 57, 0.22);
+  --sidebar-scroll-hover: rgba(74, 66, 57, 0.38);
 }
 
 /* Blue accent — pair with light chrome to reproduce the reference exactly. */
