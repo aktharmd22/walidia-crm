@@ -135,12 +135,23 @@ class DashboardController extends Controller
             ->whereNotIn('status', ['cancelled', 'no_show'])
             ->count();
 
-        $fleet = max(Yacht::where('status', 'active')->count(), 1);
-        $daysInMonth = max($today->daysInMonth, 1);
-        $charterDays = (int) Booking::whereBetween('starts_at', [$monthStart, $today->endOfMonth()])
+        /*
+         * Utilisation is charter days against the days the charter fleet could
+         * have been sold — the charter fleet, not every hull we touch, and the
+         * days elapsed, not the whole month. Counting a yacht that is only ever
+         * managed, or a Tuesday that has not happened yet, makes the number
+         * look bad for no reason and nobody trusts it twice.
+         */
+        $fleet = max(Yacht::query()->whereHas('charterProfile')->where('status', 'active')->count(), 1);
+        $daysElapsed = max($today->day, 1);
+
+        $charterDays = Booking::query()
+            ->whereBetween('starts_at', [$monthStart, $today->endOfDay()])
             ->whereNotIn('status', ['cancelled', 'no_show'])
-            ->count();
-        $utilisation = min((int) round($charterDays / ($fleet * $daysInMonth) * 100), 100);
+            ->get(['starts_at', 'ends_at'])
+            ->sum(fn (Booking $booking): int => max($booking->starts_at->diffInDays($booking->ends_at), 1));
+
+        $utilisation = min((int) round($charterDays / ($fleet * $daysElapsed) * 100), 100);
 
         $averageValue = $charters > 0 ? $revenue / $charters : 0.0;
         $previousAverage = $previousCharters > 0 ? $previousRevenue / $previousCharters : 0.0;

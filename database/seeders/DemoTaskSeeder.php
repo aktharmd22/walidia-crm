@@ -29,7 +29,7 @@ class DemoTaskSeeder extends Seeder
             return;
         }
 
-        $pick = fn (string $first): ?int => $users->get($first)?->id ?? $users->first()?->id;
+        $pick = fn (string $first): int => (int) ($users->get($first)?->id ?? $users->first()?->id);
 
         // owner, title, type, priority, hours from now, detail
         $tasks = [

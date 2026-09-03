@@ -2,8 +2,9 @@ import { useState, type ReactNode } from 'react'
 import { Head, Link, router } from '@inertiajs/react'
 import { Archive, MoreHorizontal, Pencil } from 'lucide-react'
 import { PageHeader } from '@/components/shell/Page'
+import { cn } from '@/lib/cn'
 import { Button } from '@/ui/Button'
-import { Card, CardBody, CardHeader, CardTitle, DateText, EmptyState } from '@/ui/Primitives'
+import { Card, CardBody, DateText, EmptyState } from '@/ui/Primitives'
 import { StatusPill } from '@/ui/StatusPill'
 import { DropdownMenu, Modal, type MenuItem } from '@/ui/Overlays'
 import type { StatusTone } from '@/types'
@@ -20,6 +21,16 @@ export interface TimelineEntry {
 export interface DetailFact {
   label: string
   value: ReactNode
+}
+
+/** The spine's dots, one per tone. */
+const toneDot: Record<StatusTone, string> = {
+  success: 'bg-success',
+  info: 'bg-info',
+  warning: 'bg-warning',
+  attention: 'bg-attention',
+  danger: 'bg-danger',
+  neutral: 'bg-line-strong',
 }
 
 const typeTone: Record<string, StatusTone> = {
@@ -115,59 +126,71 @@ export function DetailShell({
         }
       />
 
-      <div className="grid gap-5 xl:grid-cols-[1fr_340px]">
-        <div className="flex flex-col gap-5">
+      {/*
+       * The facts read across the top rather than down a column. A record's
+       * key figures are what you came for; putting them in a right-hand rail
+       * pushes them past the fold on a laptop and leaves the main column
+       * carrying one paragraph and a lot of white.
+       */}
+      {facts.length > 0 && (
+        <Card>
+          <CardBody className="grid gap-x-6 gap-5 p-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {facts.map((fact) => (
+              <div key={fact.label} className="min-w-0">
+                <dt className="text-micro uppercase tracking-[0.06em] text-ink-faint">{fact.label}</dt>
+                <dd className="mt-1 truncate text-body text-ink">{fact.value ?? '—'}</dd>
+              </div>
+            ))}
+          </CardBody>
+        </Card>
+      )}
+
+      <div className={cn('grid gap-5', aside ? 'xl:grid-cols-[1fr_340px]' : undefined)}>
+        <div className="flex min-w-0 flex-col gap-5">
           {children}
 
           <Card>
-            <CardHeader>
-              <CardTitle>Timeline</CardTitle>
-              <span className="text-small text-ink-faint">{timeline.length} entries</span>
-            </CardHeader>
-            {timeline.length === 0 ? (
-              <EmptyState
-                title="Nothing logged yet"
-                description="Calls, messages, status changes and gate decisions all appear here."
-              />
-            ) : (
-              <ul className="divide-y divide-line">
-                {timeline.map((entry) => (
-                  <li key={entry.id} className="flex gap-3 px-5 py-4">
-                    <StatusPill tone={typeTone[entry.type] ?? 'neutral'}>{entry.type.replace('_', ' ')}</StatusPill>
-                    <div className="min-w-0 flex-1">
+            <CardBody className="p-6">
+              <div className="mb-5 flex items-center justify-between gap-4">
+                <h2 className="text-h2 text-ink">Timeline</h2>
+                {timeline.length > 0 && (
+                  <span className="numeric text-small text-ink-faint">{timeline.length} entries</span>
+                )}
+              </div>
+
+              {timeline.length === 0 ? (
+                <EmptyState
+                  title="Nothing logged yet"
+                  description="Calls, messages, status changes and gate decisions all appear here."
+                />
+              ) : (
+                /* A thread with a spine: the eye follows the line down and the
+                   dots mark where something actually happened. */
+                <ol className="relative flex flex-col gap-6 ps-6 before:absolute before:inset-y-1 before:start-[5px] before:w-px before:bg-line">
+                  {timeline.map((entry) => (
+                    <li key={entry.id} className="relative min-w-0">
+                      <span
+                        className={cn(
+                          'absolute start-[-24px] top-[5px] size-[11px] rounded-full ring-4 ring-hull',
+                          toneDot[typeTone[entry.type] ?? 'neutral'],
+                        )}
+                        aria-hidden
+                      />
                       <p className="text-h3 text-ink">{entry.summary}</p>
                       {entry.body && <p className="mt-1 text-body text-ink-soft">{entry.body}</p>}
                       <p className="mt-1 text-small text-ink-faint">
-                        {entry.user ?? 'System'} · <DateText value={entry.occurred_at} withTime />
+                        {entry.type.replace(/_/g, ' ')} · {entry.user ?? 'System'} ·{' '}
+                        <DateText value={entry.occurred_at} withTime />
                       </p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
+                    </li>
+                  ))}
+                </ol>
+              )}
+            </CardBody>
           </Card>
         </div>
 
-        <div className="flex flex-col gap-5">
-          {facts.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Details</CardTitle>
-              </CardHeader>
-              <CardBody>
-                <dl className="flex flex-col gap-3">
-                  {facts.map((fact) => (
-                    <div key={fact.label} className="flex items-start justify-between gap-4">
-                      <dt className="text-small text-ink-faint">{fact.label}</dt>
-                      <dd className="text-body text-ink text-end">{fact.value ?? '—'}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </CardBody>
-            </Card>
-          )}
-          {aside}
-        </div>
+        {aside && <div className="flex flex-col gap-5">{aside}</div>}
       </div>
 
       {archiveUrl && (
