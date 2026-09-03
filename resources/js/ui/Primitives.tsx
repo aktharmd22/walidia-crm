@@ -5,7 +5,7 @@ import { formatDate, formatDateTime, formatMoney, formatNumber, formatPercent, i
 /* ── surfaces ───────────────────────────────────────────────────────────── */
 
 export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn('bg-hull border border-line rounded-card', className)} {...props} />
+  return <div className={cn('bg-hull border border-line rounded-card shadow-card', className)} {...props} />
 }
 
 export function CardHeader({ className, ...props }: HTMLAttributes<HTMLDivElement>) {

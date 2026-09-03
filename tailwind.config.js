@@ -94,6 +94,7 @@ export default {
 
     boxShadow: {
       none: 'none',
+      card: 'var(--shadow-card)',
       pop: 'var(--shadow-pop)',
       modal: 'var(--shadow-modal)',
       toast: 'var(--shadow-toast)',

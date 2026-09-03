@@ -2,8 +2,9 @@ import type { ReactNode } from 'react'
 import { Head, Link, useForm } from '@inertiajs/react'
 import type { FormEvent } from 'react'
 import { PageHeader } from '@/components/shell/Page'
+import { cn } from '@/lib/cn'
 import { Button } from '@/ui/Button'
-import { Card, CardBody, CardHeader, CardTitle } from '@/ui/Primitives'
+import { Card, CardBody } from '@/ui/Primitives'
 import { Checkbox, Input, Select, Textarea } from '@/ui/Field'
 
 export type FieldType = 'text' | 'email' | 'tel' | 'number' | 'money' | 'date' | 'datetime' | 'textarea' | 'select' | 'checkbox' | 'multiselect'
@@ -186,56 +187,76 @@ export function ResourceForm({
     }
   }
 
+  const hasAside = Boolean(aside)
+
   return (
     <>
       <Head title={title} />
 
-      <PageHeader title={title} description={description} />
+      {/*
+       * A form is read down a single column, not across a screen. Fields on a
+       * 1400px measure are hard to scan and harder to fill, so the form holds
+       * a readable width and the actions sit at the end of it — where the eye
+       * already is when the last field is done — rather than in a card of
+       * their own beside a column of white space.
+       */}
+      <div className={cn('mx-auto w-full', hasAside ? 'max-w-[1100px]' : 'max-w-[820px]')}>
+        <PageHeader title={title} description={description} className="mb-5" />
 
-      <form onSubmit={submit} className="grid gap-5 xl:grid-cols-[1fr_320px]">
-        <div className="flex flex-col gap-5">
-          {sections.map((section) => (
-            <Card key={section.title}>
-              <CardHeader>
-                <div>
-                  <CardTitle>{section.title}</CardTitle>
-                  {section.description && <p className="mt-1 text-small text-ink-faint">{section.description}</p>}
-                </div>
-              </CardHeader>
-              <CardBody>
-                <div className="grid gap-3 md:grid-cols-2">
-                  {section.fields.map((field) => (
-                    <div key={field.name} className={field.wide ? 'md:col-span-2' : undefined}>
-                      {render(field)}
-                    </div>
-                  ))}
-                </div>
-              </CardBody>
-            </Card>
-          ))}
-        </div>
+        <form onSubmit={submit} className={cn('grid gap-5', hasAside && 'xl:grid-cols-[1fr_300px]')}>
+          <div className="flex min-w-0 flex-col gap-5">
+            {sections.map((section) => (
+              <Card key={section.title}>
+                <CardBody className="p-6">
+                  <div className="mb-5">
+                    <h2 className="text-h2 text-ink">{section.title}</h2>
+                    {section.description && (
+                      <p className="mt-1 max-w-prose text-small text-ink-soft">{section.description}</p>
+                    )}
+                  </div>
 
-        <div className="flex flex-col gap-5">
-          {aside}
-          <Card>
-            <CardBody className="flex flex-col gap-3">
-              <Button type="submit" variant="primary" block loading={form.processing}>
-                {submitLabel}
-              </Button>
-              <Link href={cancelUrl}>
-                <Button variant="ghost" block type="button">
-                  Cancel
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    {section.fields.map((field) => (
+                      <div key={field.name} className={field.wide ? 'sm:col-span-2' : undefined}>
+                        {render(field)}
+                      </div>
+                    ))}
+                  </div>
+                </CardBody>
+              </Card>
+            ))}
+
+            {/*
+             * Sticky, so on a long form the way out is always to hand rather
+             * than a scroll away. Cancel is quiet and on the left; the action
+             * that commits is on the right, where the reading ends.
+             */}
+            <div className="sticky bottom-4 flex flex-wrap items-center justify-between gap-3 rounded-card border border-line bg-hull p-4 shadow-pop">
+              <p
+                className={cn('text-small', form.hasErrors ? 'text-danger' : 'text-ink-faint')}
+                role={form.hasErrors ? 'alert' : undefined}
+              >
+                {form.hasErrors
+                  ? 'Some fields need attention — they are marked above.'
+                  : 'Nothing is saved until you press save.'}
+              </p>
+
+              <span className="flex items-center gap-3">
+                <Link href={cancelUrl}>
+                  <Button variant="ghost" type="button">
+                    Cancel
+                  </Button>
+                </Link>
+                <Button type="submit" variant="primary" loading={form.processing}>
+                  {submitLabel}
                 </Button>
-              </Link>
-              {form.hasErrors && (
-                <p className="text-small text-danger">
-                  Some fields need attention — they are marked above.
-                </p>
-              )}
-            </CardBody>
-          </Card>
-        </div>
-      </form>
+              </span>
+            </div>
+          </div>
+
+          {hasAside && <div className="flex flex-col gap-5">{aside}</div>}
+        </form>
+      </div>
     </>
   )
 }

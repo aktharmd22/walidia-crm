@@ -111,7 +111,7 @@ function ChartTooltip({
   if (!active || !payload?.length) return null
 
   return (
-    <div className="rounded-card border border-line bg-hull px-3 py-2 shadow-sm">
+    <div className="rounded-card border border-line bg-hull px-3 py-2 shadow-pop">
       {label !== undefined && <p className="mb-1 text-micro uppercase tracking-wide text-ink-faint">{label}</p>}
       {payload.map((entry) => (
         <p key={String(entry.name)} className="flex items-center gap-2 text-small text-ink">

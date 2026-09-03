@@ -68,9 +68,9 @@
   --sidebar-width: 260px;
   --sidebar-rail: 64px;
 
-  --radius-pill: 4px;
-  --radius-card: 6px;
-  --radius-shell: 8px;
+  --radius-pill: 8px;
+  --radius-card: 12px;
+  --radius-shell: 16px;
   --radius-full: 999px;
 
   --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
@@ -78,10 +78,13 @@
 
   --row-h: 44px;
   --row-h-rich: 52px;
-  --field-h: 36px;
-  --topbar-h: 56px;
+  --field-h: 40px;
+  --topbar-h: 68px;
   --page-gutter: 24px;
 
+  /* A card keeps its rule and gains a whisper of lift — enough to sit on
+     the page rather than be drawn on it. */
+  --shadow-card: 0 1px 2px rgba(15, 27, 45, 0.04), 0 1px 3px rgba(15, 27, 45, 0.05);
   --shadow-pop: 0 4px 12px rgba(15, 27, 45, 0.10), 0 1px 2px rgba(15, 27, 45, 0.06);
   --shadow-modal: 0 16px 48px rgba(15, 27, 45, 0.18);
   --shadow-toast: 0 8px 24px rgba(15, 27, 45, 0.14);

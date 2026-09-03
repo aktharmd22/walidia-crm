@@ -38,6 +38,65 @@ const SPACING_UTILITIES = [
     'min-w', 'min-h', 'max-w', 'max-h',
 ];
 
+/**
+ * The other closed scales.
+ *
+ * `borderRadius` and `boxShadow` are replaced the same way spacing is, so
+ * `shadow-sm` and `rounded-lg` are not errors — they are nothing. Both had
+ * already shipped by the time this was written.
+ */
+it('never uses a radius or shadow the Tailwind config does not define', function (): void {
+    $scales = [
+        'rounded' => ['none', 'pill', 'card', 'shell', 'full'],
+        'shadow' => ['none', 'card', 'pop', 'modal', 'toast'],
+    ];
+
+    $offenders = [];
+
+    /** @var SplFileInfo $file */
+    foreach (new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator(resource_path('js'), FilesystemIterator::SKIP_DOTS),
+    ) as $file) {
+        if (! in_array($file->getExtension(), ['ts', 'tsx'], true)) {
+            continue;
+        }
+
+        foreach (file($file->getPathname()) as $number => $line) {
+            foreach ($scales as $utility => $allowed) {
+                preg_match_all('/(?<![\w-])'.$utility.'-([a-z0-9\[\]#().,%\/-]+)/', $line, $matches);
+
+                foreach ($matches[1] as $value) {
+                    // Arbitrary values always compile; so do the directional
+                    // forms (rounded-e-card), which carry the scale after them.
+                    if (str_starts_with($value, '[')) {
+                        continue;
+                    }
+
+                    $step = $value;
+
+                    foreach (['t-', 'b-', 's-', 'e-', 'l-', 'r-', 'tl-', 'tr-', 'bl-', 'br-', 'ss-', 'se-', 'es-', 'ee-'] as $side) {
+                        if (str_starts_with($value, $side)) {
+                            $step = substr($value, strlen($side));
+                            break;
+                        }
+                    }
+
+                    if (in_array($step, $allowed, true)) {
+                        continue;
+                    }
+
+                    $relative = str_replace(base_path().DIRECTORY_SEPARATOR, '', $file->getPathname());
+                    $offenders[] = sprintf('%s:%d  %s-%s', $relative, $number + 1, $utility, $value);
+                }
+            }
+        }
+    }
+
+    expect($offenders)->toBe([], 'These compile to nothing:
+'.implode('
+', $offenders));
+});
+
 it('never uses a spacing step the Tailwind config does not define', function (): void {
     $utilities = SPACING_UTILITIES;
     usort($utilities, fn (string $a, string $b): int => strlen($b) <=> strlen($a));
