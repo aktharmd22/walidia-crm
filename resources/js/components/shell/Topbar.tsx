@@ -77,7 +77,9 @@ export function Topbar({
 
   return (
     <header className="sticky top-0 z-sticky flex h-topbar items-center gap-4 border-b border-line bg-hull px-4 lg:px-6">
-      <RoundButton label="Toggle navigation" onClick={onOpenNav}>
+      {/* Below 768px the sidebar is a drawer and this is the only way into it;
+          at desktop width the sidebar is always on screen, so it is not. */}
+      <RoundButton label="Open navigation" onClick={onOpenNav} className="md:hidden">
         <Menu className="size-[19px]" aria-hidden />
       </RoundButton>
 
