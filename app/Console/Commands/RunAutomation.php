@@ -6,6 +6,7 @@ namespace App\Console\Commands;
 
 use App\Domain\Automation\WorkflowEngine;
 use App\Models\Booking;
+use App\Models\Client;
 use App\Models\Listing;
 use App\Models\PaymentScheduleItem;
 use App\Models\Transaction;
@@ -36,6 +37,7 @@ class RunAutomation extends Command
         'due_at' => PaymentScheduleItem::class,
         'agreement_expires_on' => Listing::class,
         'ownership_transferred_at' => Transaction::class,
+        'date_of_birth' => Client::class,
     ];
 
     public function handle(WorkflowEngine $engine): int
@@ -86,14 +88,30 @@ class RunAutomation extends Command
             $from = now()->subDay()->subHours($rule->offset_hours);
             $to = now()->addDay()->subHours($rule->offset_hours);
 
-            $model::query()
-                ->whereNotNull($rule->anchor_field)
-                ->whereBetween($rule->anchor_field, [$from, $to])
-                ->each(function (Model $subject) use ($engine, $rule, &$queued): void {
-                    if ($engine->applies($rule, $subject) && $engine->schedule($rule, $subject) !== null) {
-                        $queued++;
-                    }
-                });
+            $query = $model::query()->whereNotNull($rule->anchor_field);
+
+            if ($rule->recurrence === 'annual') {
+                /*
+                 * An anniversary is a day of the year, not a date. Comparing a
+                 * birth date to a window around today would never match, so
+                 * match the month and the day and let the year fall away.
+                 */
+                // Today's date, not the window's start: an anniversary falls
+                // on one day, and $from is deliberately a day behind it.
+                $query
+                    ->whereMonth($rule->anchor_field, now()->month)
+                    ->whereDay($rule->anchor_field, now()->day);
+            } else {
+                $query->whereBetween($rule->anchor_field, [$from, $to]);
+            }
+
+            $occurrence = $rule->recurrence === 'annual' ? (string) now()->year : null;
+
+            $query->each(function (Model $subject) use ($engine, $rule, $occurrence, &$queued): void {
+                if ($engine->applies($rule, $subject) && $engine->schedule($rule, $subject, $occurrence) !== null) {
+                    $queued++;
+                }
+            });
         }
 
         return $queued;

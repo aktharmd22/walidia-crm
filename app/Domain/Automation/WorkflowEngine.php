@@ -69,7 +69,13 @@ class WorkflowEngine
      * The uniqueness is enforced by the database, not by this check, so two
      * workers racing cannot both win.
      */
-    public function schedule(WorkflowRule $rule, Model $subject): ?WorkflowRun
+    /**
+     * @param  string|null  $occurrence  Distinguishes one turn of a recurring
+     *                                   rule from the next — the year, for an
+     *                                   annual one. Null for a rule that fires
+     *                                   against a subject exactly once.
+     */
+    public function schedule(WorkflowRule $rule, Model $subject, ?string $occurrence = null): ?WorkflowRun
     {
         $anchor = $this->anchor($rule, $subject);
 
@@ -77,11 +83,18 @@ class WorkflowEngine
             return null;
         }
 
+        // An anniversary's anchor is in the past; what falls due is this
+        // year's turn of it.
+        if ($rule->recurrence === 'annual') {
+            $anchor = $anchor->setYear((int) now()->year);
+        }
+
         try {
             return WorkflowRun::create([
                 'workflow_rule_id' => $rule->getKey(),
                 'subject_type' => $subject->getMorphClass(),
                 'subject_id' => $subject->getKey(),
+                'occurrence_key' => $occurrence,
                 'due_at' => $rule->dueAt($anchor),
                 'status' => 'pending',
             ]);

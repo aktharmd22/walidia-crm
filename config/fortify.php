@@ -73,7 +73,9 @@ return [
     |
     */
 
-    'home' => '/home',
+    // The dashboard is the root of this application; Fortify's stock '/home'
+    // is a route that does not exist, so a successful sign-in landed on a 404.
+    'home' => '/',
 
     /*
     |--------------------------------------------------------------------------

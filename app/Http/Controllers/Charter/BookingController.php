@@ -187,6 +187,12 @@ class BookingController extends ResourceController
                 'board' => $gates->forAction($record, 'bookings.board', $user)->toArray(),
             ],
 
+            /*
+             * A booking with no payment schedule must still send an array. The
+             * null-safe operator returns null, and a React default parameter
+             * only fills in for undefined — so null reached the page and
+             * schedule.length threw on render.
+             */
             'schedule' => $record->paymentSchedule?->items->map(fn ($item): array => [
                 'id' => $item->id,
                 'label' => $item->label,
@@ -195,7 +201,7 @@ class BookingController extends ResourceController
                 'status' => $item->status,
                 'cleared' => $item->clearedAmount(),
                 'overdue' => $item->isOverdue(),
-            ]),
+            ])->values() ?? [],
 
             'can' => array_merge($this->recordAbilities($request, $record), [
                 'release' => $user->can('releaseOperations', $record),

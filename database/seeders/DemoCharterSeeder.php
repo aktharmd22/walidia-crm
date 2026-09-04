@@ -111,7 +111,7 @@ class DemoCharterSeeder extends Seeder
                     'operational_release_by' => $agents->first()?->id,
                 ])->save();
 
-                $this->settle($booking, $this->valueFor($booking), $today->subDays(4));
+                $this->settle($booking, $this->valueFor($booking), $today->subDays(4), close: false);
                 $cleared++;
             }
 
@@ -183,7 +183,7 @@ class DemoCharterSeeder extends Seeder
     }
 
     /** The money, and the cost sheet that explains what was left of it. */
-    private function settle(Booking $booking, float $value, CarbonImmutable $receivedAt): void
+    private function settle(Booking $booking, float $value, CarbonImmutable $receivedAt, bool $close = true): void
     {
         Payment::create([
             'client_id' => $booking->client_id,
@@ -207,7 +207,10 @@ class DemoCharterSeeder extends Seeder
             'total_cost' => $cost,
             'total_profit' => round($value - $cost, 2),
             'margin_pct' => round(($value - $cost) / max($value, 1) * 100, 2),
-            'status' => 'closed',
+            // Financial closure follows the charter. An upcoming booking keeps
+            // an open sheet, or the policy quite rightly refuses to let anyone
+            // edit a charter that has not happened yet.
+            'status' => $close ? 'closed' : 'open',
         ]);
     }
 }

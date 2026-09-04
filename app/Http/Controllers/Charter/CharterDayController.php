@@ -9,6 +9,7 @@ use App\Domain\Operations\Actions\RunCharterDay;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BookingResource;
 use App\Models\Booking;
+use App\Models\CharterDayLog;
 use App\Models\ChecklistItem;
 use App\Models\DamageReport;
 use App\Models\Incident;
@@ -139,7 +140,7 @@ class CharterDayController extends Controller
         $this->authorize('view', $booking);
 
         $data = $request->validate([
-            'event_type' => ['required', Rule::in(['departure', 'arrival', 'note', 'fuel', 'status_update'])],
+            'event_type' => ['required', Rule::in(CharterDayLog::EVENTS)],
             'body' => ['required', 'string', 'max:2000'],
             'location' => ['nullable', 'string', 'max:190'],
         ]);

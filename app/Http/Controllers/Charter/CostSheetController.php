@@ -40,7 +40,8 @@ class CostSheetController extends ResourceController
 
     protected ?string $routePrefix = 'charter.cost-sheets';
 
-    protected array $indexWith = ['booking.client:id,full_name', 'booking.yacht:id,name'];
+    // effectivePhase() walks the lines, so the list needs them too.
+    protected array $indexWith = ['booking.client:id,full_name', 'booking.yacht:id,name', 'lines'];
 
     protected array $showWith = ['booking.client', 'booking.yacht', 'lines'];
 

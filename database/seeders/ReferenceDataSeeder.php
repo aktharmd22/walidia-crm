@@ -53,6 +53,8 @@ class ReferenceDataSeeder extends Seeder
         foreach ([
             ['Website enquiry', 'website'],
             ['WhatsApp', 'whatsapp'],
+            ['Phone call', 'phone'],
+            ['Email', 'email'],
             ['Referral — existing client', 'referral'],
             ['Referral — partner or DMC', 'referral'],
             ['Instagram', 'social'],
@@ -126,6 +128,10 @@ class ReferenceDataSeeder extends Seeder
                 'fuel' => 'Fuel and bunkering',
                 'technical' => 'Technical and engineering',
                 'cleaning' => 'Cleaning and laundry',
+                'entertainment' => 'Entertainment',
+                'videography' => 'Videography',
+                'hotel' => 'Hotel and accommodation',
+                'security' => 'Security',
             ],
         ];
 

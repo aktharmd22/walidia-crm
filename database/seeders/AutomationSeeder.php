@@ -136,11 +136,29 @@ class AutomationSeeder extends Seeder
 
             ['brokerage.post_sale_180', 'Six-month post-sale check', 'brokerage', 'schedule', null, 'ownership_transferred_at', 4320,
                 'send_message', 'post_sale_follow_up', 'client', null, null],
+
+            /*
+             * Three the first pass left out. The vendor notice is named beside
+             * the crew and marina ones in charter §19; brokerage §10 lists four
+             * post-sale touches and only three were here; and the birthday
+             * greeting had a template written for it but no rule to send it.
+             */
+            ['charter.vendor_notice', 'Confirm the order with the vendor', 'charter', 'schedule', null, 'starts_at', -72,
+                'send_message', 'vendor_notification', 'vendor', null, null, null],
+
+            ['brokerage.post_sale_30', 'Thirty-day post-sale check', 'brokerage', 'schedule', null, 'ownership_transferred_at', 720,
+                'send_message', 'post_sale_follow_up', 'client', null, null, null],
+
+            ['client.birthday', 'Wish the client a happy birthday', 'crm', 'schedule', null, 'date_of_birth', 9,
+                'send_message', 'birthday', 'client', [['field' => 'status', 'operator' => 'equals', 'value' => 'active']], null, 'annual'],
         ];
 
         $order = 0;
 
-        foreach ($rules as [$key, $name, $line, $triggerType, $event, $anchor, $offset, $action, $templateKey, $audience, $conditions, $params]) {
+        foreach ($rules as $rule) {
+            [$key, $name, $line, $triggerType, $event, $anchor, $offset, $action, $templateKey, $audience, $conditions, $params] = $rule;
+            $recurrence = $rule[12] ?? null;
+
             WorkflowRule::updateOrCreate(
                 ['key' => $key],
                 [
@@ -149,6 +167,7 @@ class AutomationSeeder extends Seeder
                     'trigger_type' => $triggerType,
                     'trigger_event' => $event,
                     'anchor_field' => $anchor,
+                    'recurrence' => $recurrence,
                     'offset_hours' => $offset,
                     'action' => $action,
                     'message_template_id' => $templateKey === null

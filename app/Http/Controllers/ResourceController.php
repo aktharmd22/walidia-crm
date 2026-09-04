@@ -199,7 +199,14 @@ abstract class ResourceController extends Controller
         $this->authorize('export', $this->model);
 
         $filename = Str::slug($this->name).'-'.now()->format('Y-m-d-His').'.csv';
-        $query = $this->filtered($this->baseQuery($request), $request);
+
+        /*
+         * The export builds each row through the same resource the index does,
+         * so it needs the same relations loaded. Without this the first row
+         * that reaches for one throws a lazy-loading violation and the whole
+         * download 500s — which is exactly what the charter exports did.
+         */
+        $query = $this->filtered($this->baseQuery($request), $request)->with($this->indexWith);
 
         return response()->streamDownload(function () use ($query): void {
             $handle = fopen('php://output', 'wb');
