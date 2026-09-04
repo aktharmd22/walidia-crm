@@ -72,8 +72,11 @@ class WorkflowEngine
     /**
      * @param  string|null  $occurrence  Distinguishes one turn of a recurring
      *                                   rule from the next — the year, for an
-     *                                   annual one. Null for a rule that fires
-     *                                   against a subject exactly once.
+     *                                   annual one. A one-shot rule stores the
+     *                                   literal 'once' rather than null,
+     *                                   because two nulls do not collide in a
+     *                                   unique index and the whole guarantee
+     *                                   rests on that collision.
      */
     public function schedule(WorkflowRule $rule, Model $subject, ?string $occurrence = null): ?WorkflowRun
     {
@@ -94,7 +97,7 @@ class WorkflowEngine
                 'workflow_rule_id' => $rule->getKey(),
                 'subject_type' => $subject->getMorphClass(),
                 'subject_id' => $subject->getKey(),
-                'occurrence_key' => $occurrence,
+                'occurrence_key' => $occurrence ?? 'once',
                 'due_at' => $rule->dueAt($anchor),
                 'status' => 'pending',
             ]);
